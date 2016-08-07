@@ -2,6 +2,8 @@
 
 ### SwipeRefreshRecycleView使用
 
+![PullRefresh.gif](http://upload-images.jianshu.io/upload_images/2244299-ea8bb3b32f34f5aa.gif?imageMogr2/auto-orient/strip)
+
     //gradle
     compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.0'
 
