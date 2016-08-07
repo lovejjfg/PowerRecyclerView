@@ -57,6 +57,9 @@
 [戳我戳我](http://www.jianshu.com/p/7396dc6d67f0#)
 
 
+### 相关问题
+
+1. 使用GridLayoutManager spanCount>1的时候加载更多的布局没有适配。。
 
 
 

@@ -1,15 +1,13 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 
 import java.util.ArrayList;
