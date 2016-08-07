@@ -41,12 +41,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        mRecycleView.setItemAnimator(new DefaultAnimator());
+        mRecycleView.setAdapter(adapter);
+        mRecycleView.setOnRefreshListener(this);
         adapter = new MyRecycleAdapter();
         adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
-        mRecycleView.setAdapter(adapter);
-        mRecycleView.setOnRefreshListener(this);
         list = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             list.add("  ");

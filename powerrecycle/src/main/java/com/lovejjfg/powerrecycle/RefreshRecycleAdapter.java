@@ -175,7 +175,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
 
     @Override
-    public final boolean isHasMore() {
+    public  boolean isHasMore() {
         return getItemCount() < totalCount;
     }
 
