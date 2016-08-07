@@ -2,6 +2,9 @@
 
 ### SwipeRefreshRecycleView使用
 
+    //gradle
+    compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.0'
+
 创建：（Adapter 继承 RefreshRecycleAdapter<T>）
 
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
