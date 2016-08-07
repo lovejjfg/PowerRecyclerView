@@ -54,7 +54,6 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
      * color will also be the color of the bar that grows in response to a user
      * swipe gesture.
      *
-     * @param colors
      */
     @ColorInt
     public void setColorSchemeColors(int... colors) {
