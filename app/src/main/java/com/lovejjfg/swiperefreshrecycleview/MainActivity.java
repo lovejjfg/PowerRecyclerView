@@ -1,12 +1,15 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 
@@ -38,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
+        adapter = new MyRecycleAdapter();
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
-        adapter = new MyRecycleAdapter();
         adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
         list = new ArrayList<>();
