@@ -21,16 +21,13 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
     private LinearLayout contaier;
     private ProgressBar pb;
     private TextView content;
-    @Nullable
-    private final SwipeRefreshRecycleView.OnRefreshLoadMoreListener mListener;
 
-    public NewBottomViewHolder(View itemView, SwipeRefreshRecycleView.OnRefreshLoadMoreListener listener) {
+    public NewBottomViewHolder(View itemView) {
 
         super(itemView);
         contaier = (LinearLayout) itemView.findViewById(R.id.footer_container);
         pb = (ProgressBar) itemView.findViewById(R.id.progressbar);
         content = (TextView) itemView.findViewById(R.id.content);
-        mListener = listener;
     }
 
     public void bindDateView(int state) {
@@ -54,9 +51,6 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
                 contaier.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mListener != null) {
-                            mListener.onLoadMore();
-                        }
                         content.setText("加载更多！！");
                         pb.setVisibility(View.VISIBLE);
                     }

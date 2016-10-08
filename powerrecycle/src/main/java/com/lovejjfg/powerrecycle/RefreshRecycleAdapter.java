@@ -21,16 +21,6 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     private View loadMore;
     private int loadState = STATE_LOADING;
 
-    public SwipeRefreshRecycleView.OnRefreshLoadMoreListener getLoadMoreListener() {
-        return loadMoreListener;
-    }
-
-    public void setLoadMoreListener(SwipeRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener) {
-        this.loadMoreListener = loadMoreListener;
-    }
-
-    private SwipeRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener;
-
     public int getTotalCount() {
         return totalCount;
     }
@@ -87,7 +77,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
                     }
                     return holder;
                 } else {
-                    return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false), loadMoreListener);
+                    return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
                 }
             default:
                 return onViewHolderCreate(parent, viewType);
@@ -97,7 +87,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new NewBottomViewHolder(loadMore,loadMoreListener);
+        return new NewBottomViewHolder(loadMore);
     }
 
     @Override

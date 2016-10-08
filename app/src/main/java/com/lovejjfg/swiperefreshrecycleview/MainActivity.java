@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
     private Runnable loadMoreAction;
     private boolean isRun;
     private boolean enable = true;
-    private static final int DEFAULT_TIME = 1000;
+    private static final int DEFAULT_TIME = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
-        adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
         list = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
