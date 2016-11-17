@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.OnItemClickListener;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
@@ -49,10 +50,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new MyRecycleAdapter();
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setMultipleMode(AdapterLoader.SingleMode);
+        adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
-            public void onItemClick(View itemView, int postion) {
-                Log.e("TAG", "onItemClick: " + postion);
+            public void onItemSelected(View view, int position, boolean isChecked) {
+                Log.e("TAG", "onItemSelected: " + position + "::" + isChecked);
+            }
+
+            @Override
+            public void onNothingSelected() {
+                Log.e("TAG", "onNothingSelected: ");
             }
         });
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));

@@ -38,7 +38,7 @@ public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
 
 
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    private static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView mTv;
         private final CheckBox mCheckBox;
