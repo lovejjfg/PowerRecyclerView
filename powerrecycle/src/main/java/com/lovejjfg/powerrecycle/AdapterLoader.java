@@ -80,5 +80,9 @@ public interface AdapterLoader<T> {
      */
     int getItemRealCount();
 
+    void performClick(View itemView, int position);
+
+    boolean performLongClick(View itemView, int position);
+
 
 }

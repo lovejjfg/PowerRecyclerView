@@ -1,5 +1,7 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,8 +12,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.lovejjfg.powerrecycle.OnItemClickListener;
+import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
+import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +32,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
     SwipeRefreshRecycleView mRecycleView;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
-    private MyRecycleAdapter adapter;
+    private SelectRefreshRecycleAdapter adapter;
 
-    private List<String> list;
+    private List<TestBean> list;
     private Runnable refreshAction;
     private Runnable loadMoreAction;
     private boolean isRun;
@@ -42,6 +49,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new MyRecycleAdapter();
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int postion) {
+                Log.e("TAG", "onItemClick: " + postion);
+            }
+        });
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
@@ -49,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         adapter.setTotalCount(10);
         list = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            list.add("  ");
+            list.add(new TestBean("这是" + i));
         }
         refreshAction = new Runnable() {
             @Override
@@ -64,12 +77,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
             public void run() {
                 int i = ((int) (Math.random() * 10)) % 3;
                 if (i == 0 || i == 1) {
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    arrayList.add("ccc1");
-                    arrayList.add("ccc2");
-                    arrayList.add("ccc3");
-                    arrayList.add("ccc4");
-                    arrayList.add("ccc5");
+                    ArrayList<TestBean> arrayList = new ArrayList<>();
+                    arrayList.add(new TestBean("ccc1"));
+                    arrayList.add(new TestBean("ccc2"));
+                    arrayList.add(new TestBean("ccc3"));
+                    arrayList.add(new TestBean("ccc4"));
+                    arrayList.add(new TestBean("ccc5"));
                     adapter.appendList(arrayList);
                     Log.e("TAG", "run: 正常加载更多！！");
                 } else {
@@ -77,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
                     Log.e("TAG", "run: 加载失败！！！");
                 }
                 isRun = false;
-
             }
         };
         mRecycleView.setRefresh(true);
@@ -122,5 +134,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (adapter.isSelectMode()) {
+            adapter.updateSelectMode(false);
+            return;
+        }
+        super.onBackPressed();
     }
 }

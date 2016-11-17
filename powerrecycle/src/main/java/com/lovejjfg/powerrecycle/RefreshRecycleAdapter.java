@@ -1,6 +1,7 @@
 package com.lovejjfg.powerrecycle;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,7 +98,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new NewBottomViewHolder(loadMore,loadMoreListener);
+        return new NewBottomViewHolder(loadMore, loadMoreListener);
     }
 
     @Override
@@ -109,7 +110,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public abstract RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType);
 
     @Override
-    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_BOTTOM) {
             loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
             if (loadMore != null) {
@@ -126,8 +127,32 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
                 }
             }
         } else {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    performClick(v, holder.getAdapterPosition());
+                }
+            });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return performLongClick(v, holder.getAdapterPosition());
+                }
+            });
             onViewHolderBind(holder, position);
         }
+    }
+
+    public void performClick(View itemView, int position) {
+        if (listener != null) {
+            listener.onItemClick(itemView, position);
+        }
+    }
+
+    @Override
+    public boolean performLongClick(View itemView, int position) {
+        return longListener != null && longListener.onItemLongClick(itemView, position);
     }
 
     @Override
@@ -175,7 +200,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
 
     @Override
-    public  boolean isHasMore() {
+    public boolean isHasMore() {
         return getItemCount() < totalCount;
     }
 
@@ -186,5 +211,19 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     public void onRefresh() {
 //        loadState = STATE_LOADING;
+    }
+
+    @Nullable
+    OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    @Nullable
+   private OnItemLongClickListener longListener;
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.longListener = listener;
     }
 }

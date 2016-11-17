@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,10 +52,9 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
      * Set the colors used in the progress animation. The first
      * color will also be the color of the bar that grows in response to a user
      * swipe gesture.
-     *
      */
-    @ColorInt
-    public void setColorSchemeColors(int... colors) {
+
+    public void setColorSchemeColors(@ColorInt int... colors) {
         mRefreshLayout.setColorSchemeColors(colors);
     }
 
@@ -73,6 +71,7 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
 
     /**
      * Enable to pullRefresh
+     *
      * @param enable whether can pull refresh or not...
      */
     @SuppressWarnings("unused")
@@ -157,23 +156,18 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
 
                 int lastVisibleItemPosition = (itemPositions[1] != 0) ? ++itemPositions[1] : ++itemPositions[0];
 
-                if (lastVisibleItemPosition >= adapter.getItemCount()  && adapter.isHasMore()) {
+                if (lastVisibleItemPosition >= adapter.getItemCount() && adapter.isHasMore()) {
                     adapter.isLoadingMore();
                     if (null != listener) {
                         listener.onLoadMore();
                     }
                 }
-
             }
-
-
         }
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
             super.onScrollStateChanged(recyclerView, newState);
-            Log.e("state", newState + "");
         }
     }
 
