@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.lovejjfg.powerrecycle.OnItemClickListener;
-import com.lovejjfg.powerrecycle.RefreshRecycleAdapter;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
@@ -20,7 +18,6 @@ import com.transitionseverywhere.TransitionManager;
  * Email: lovejjfg@163.com
  */
 public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
-
 
 
     @Override
@@ -37,7 +34,6 @@ public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
     }
 
 
-
     private static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView mTv;
@@ -51,7 +47,7 @@ public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
 
         public void bindDateView(TestBean s) {
             TransitionManager.beginDelayedTransition((ViewGroup) itemView, new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_KEEP));
-            mCheckBox.setVisibility(isSelectMode? View.VISIBLE : View.GONE);
+            mCheckBox.setVisibility(isSelectMode ? View.VISIBLE : View.GONE);
             mTv.setText(s.isSelected() ? "选中：" + s.getName() : s.getName());
             mCheckBox.setChecked(s.isSelected());
         }

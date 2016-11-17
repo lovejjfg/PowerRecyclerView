@@ -6,6 +6,7 @@
               android:gravity="center"
               android:orientation="horizontal"
               android:clipToPadding="false"
+              android:background="?attr/selectableItemBackground"
               tools:context="com.lovejjfg.swiperefreshrecycleview.MainActivity">
 
     <TextView

@@ -1,11 +1,12 @@
 package com.lovejjfg.powerrecycle;
 
-import android.content.DialogInterface;
+import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -13,6 +14,15 @@ import java.util.List;
  * Email: lovejjfg@gmail.com
  */
 public interface AdapterLoader<T> {
+
+    @IntDef(flag = true, value = {
+            SingleMode,
+            MultipleMode
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    @interface ChoiceMode {
+    }
+
     /**
      * state about load more..
      */
@@ -97,7 +107,7 @@ public interface AdapterLoader<T> {
      * Interface definition for a callback to be invoked when
      * an item in this view has been selected.
      */
-    public interface OnItemSelectedListener {
+    interface OnItemSelectedListener {
         /**
          * <p>Callback method to be invoked when an item in this view has been
          * selected. This callback is invoked only when the newly selected
@@ -119,5 +129,14 @@ public interface AdapterLoader<T> {
          */
         void onNothingSelected();
     }
+
+    interface OnItemClickListener {
+        void onItemClick(View itemView, int postion);
+    }
+
+    interface OnItemLongClickListener {
+        boolean onItemLongClick(View itemView, int postion);
+    }
+
 
 }

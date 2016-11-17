@@ -1,14 +1,11 @@
 package com.lovejjfg.powerrecycle;
 
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
 import com.lovejjfg.powerrecycle.model.SelectBean;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.HashSet;
 
 /**
@@ -16,15 +13,6 @@ import java.util.HashSet;
  * Email: lovejjfg@gmail.com
  */
 public abstract class SelectRefreshRecycleAdapter<T extends SelectBean> extends RefreshRecycleAdapter<T> {
-
-
-    @IntDef(flag = true, value = {
-            SingleMode,
-            MultipleMode
-    })
-    @Retention(RetentionPolicy.SOURCE)
-    @interface ChoiceMode {
-    }
 
     private int currentMode = 1;
     //    private TestBean pre;
@@ -36,11 +24,6 @@ public abstract class SelectRefreshRecycleAdapter<T extends SelectBean> extends 
     }
 
     private HashSet<T> selectedBeans = new HashSet<>();
-
-
-//    @IntDef(flag = true, value = {
-//            SingleMode, MultipleMode
-//    })
 
     public void updateSelectMode(boolean isSelect) {
         if (isSelectMode != isSelect) {
@@ -114,7 +97,7 @@ public abstract class SelectRefreshRecycleAdapter<T extends SelectBean> extends 
     }
 
     @Nullable
-    OnItemSelectedListener selectedListener;
+    private OnItemSelectedListener selectedListener;
 
     public void setOnItemSelectListener(OnItemSelectedListener listener) {
         this.selectedListener = listener;

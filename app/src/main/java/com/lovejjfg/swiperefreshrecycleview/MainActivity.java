@@ -11,12 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
-import com.lovejjfg.powerrecycle.OnItemClickListener;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
