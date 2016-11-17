@@ -1,10 +1,6 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -30,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
     SwipeRefreshRecycleView mRecycleView;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
-    private SelectRefreshRecycleAdapter adapter;
+    private SelectRefreshRecycleAdapter<TestBean> adapter;
 
     private List<TestBean> list;
     private Runnable refreshAction;
@@ -59,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
+//        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
