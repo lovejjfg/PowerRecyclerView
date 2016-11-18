@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="60dp"
-              android:gravity="center"
-              android:orientation="horizontal"
-              android:clipToPadding="false"
-              android:background="?attr/selectableItemBackground"
-              tools:context="com.lovejjfg.swiperefreshrecycleview.MainActivity">
+<com.lovejjfg.powerrecycle.SwipItemLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="?attr/selectableItemBackground"
+    android:clipToPadding="false"
+    android:gravity="center"
+    tools:context="com.lovejjfg.swiperefreshrecycleview.MainActivity">
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="0dp"
-        android:gravity="center"
+    <LinearLayout
+        android:background="@color/colorSmoke"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:textColor="@color/colorPrimary"
-        android:text="xxxxxxxxxxxxxx"
-        />
-    <CheckBox
-        android:visibility="gone"
-        android:id="@+id/cb"
-        android:background="@null"
-        android:focusable="false"
-        android:clickable="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-</LinearLayout>
+        >
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="xxxxxxxxxxxxxx"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <CheckBox
+            android:id="@+id/cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+</com.lovejjfg.powerrecycle.SwipItemLayout>

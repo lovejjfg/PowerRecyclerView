@@ -13,6 +13,8 @@ import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
  * Created by Joe on 2016-07-27
  * Email: lovejjfg@163.com
