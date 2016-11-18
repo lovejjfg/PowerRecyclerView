@@ -44,7 +44,7 @@ public abstract class SelectRefreshRecycleAdapter<T extends SelectBean> extends 
     }
 
 
-    public void setMultipleMode(@ChoiceMode int mode) {
+    public void setSelectedMode(@ChoiceMode int mode) {
         currentMode = mode;
     }
 
@@ -90,8 +90,9 @@ public abstract class SelectRefreshRecycleAdapter<T extends SelectBean> extends 
     public boolean performLongClick(View itemView, int position) {
         final T testBean = list.get(position);
         updateSelectMode(true);
-        testBean.setSelected(true);
-        dispatchSelected(itemView, position, testBean, true);
+        testBean.setSelected(!testBean.isSelected());
+        dispatchSelected(itemView, position, testBean, testBean.isSelected());
+        notifyItemChanged(position);
         prePos = position;
         return true;
     }

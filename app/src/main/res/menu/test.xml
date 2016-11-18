@@ -10,4 +10,10 @@
     <item
         android:id="@+id/own"
         android:title="自定义加载更多"/>
+    <item
+        android:id="@+id/select_single"
+        android:title="单选模式"/>
+    <item
+        android:id="@+id/select_mul"
+        android:title="多选模式"/>
 </menu>

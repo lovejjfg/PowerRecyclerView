@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new MyRecycleAdapter();
-        adapter.setMultipleMode(AdapterLoader.SingleMode);
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
             public void onItemSelected(View view, int position, boolean isChecked) {
@@ -132,6 +131,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
             case R.id.pull_refresh:
                 enable = !enable;
                 mRecycleView.setPullRefreshEnable(enable);
+                break;
+            case R.id.select_single:
+                adapter.setSelectedMode(AdapterLoader.SingleMode);
+                adapter.updateSelectMode(true);
+
+                break;
+            case R.id.select_mul:
+                adapter.setSelectedMode(AdapterLoader.MultipleMode);
+                adapter.updateSelectMode(true);
                 break;
         }
         return super.onOptionsItemSelected(item);
