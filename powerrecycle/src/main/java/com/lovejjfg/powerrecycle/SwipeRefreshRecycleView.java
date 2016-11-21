@@ -2,16 +2,22 @@ package com.lovejjfg.powerrecycle;
 
 import android.content.Context;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
+import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
 
 /**
  * Created by Joe on 2016-03-11.
@@ -58,8 +64,23 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
         mRefreshLayout.setColorSchemeColors(colors);
     }
 
-    public void setLayoutManager(RecyclerView.LayoutManager manager) {
+    public void setLayoutManager(final RecyclerView.LayoutManager manager) {
         this.manager = manager;
+        if (manager instanceof GridLayoutManager) {
+            ((GridLayoutManager) manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    switch (adapter.getItemViewType(position)) {
+                        case TYPE_BOTTOM:
+                            return ((GridLayoutManager) manager).getSpanCount();
+                        default:
+                            return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);
+                    }
+
+                }
+            });
+        }
+
         mRecyclerView.setLayoutManager(manager);
     }
 
@@ -140,9 +161,9 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
 
                 if (adapter.getItemCount() > 1 && lastCompletelyVisibleItemPosition >= adapter.getItemCount() - 1 && adapter.isHasMore()) {
                     adapter.isLoadingMore();
-                    if (null != listener) {
-                        listener.onLoadMore();
-                    }
+//                    if (null != listener) {
+//                        listener.onLoadMore();
+//                    }
                 }
                 int position = ((LinearLayoutManager) manager).findFirstVisibleItemPosition();
                 if (lastTitlePos == position) {
@@ -158,9 +179,9 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
 
                 if (lastVisibleItemPosition >= adapter.getItemCount() && adapter.isHasMore()) {
                     adapter.isLoadingMore();
-                    if (null != listener) {
-                        listener.onLoadMore();
-                    }
+//                    if (null != listener) {
+//                        listener.onLoadMore();
+//                    }
                 }
             }
         }
@@ -179,6 +200,22 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
 
     public interface OnScrollListener {
         void onScrolled(SwipeRefreshRecycleView recyclerView, int dx, int dy);
+    }
+
+    /**
+     * you should call this method when you want to specified SpanSize.
+     *
+     * @param spanSizeCallBack
+     */
+    public void setSpanSizeCallBack(@NonNull SpanSizeCallBack spanSizeCallBack) {
+        this.spanSizeCallBack = spanSizeCallBack;
+    }
+
+    @Nullable
+    private SpanSizeCallBack spanSizeCallBack;
+
+    public interface SpanSizeCallBack {
+        int getSpanSize(int position);
     }
 
 }

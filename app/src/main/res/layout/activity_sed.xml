@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:clipToPadding="false"
+              tools:context="com.lovejjfg.swiperefreshrecycleview.MainActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.Toolbar>
+    <com.lovejjfg.powerrecycle.SwipeRefreshRecycleView
+        android:layout_below="@id/toolbar"
+        android:id="@+id/recycle_view"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.lovejjfg.powerrecycle.SwipeRefreshRecycleView>
+
+</RelativeLayout>

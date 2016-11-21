@@ -3,6 +3,7 @@ package com.lovejjfg.powerrecycle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
+
 /**
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
-public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack {
+public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack{
 
     private View loadMore;
-    private int loadState = STATE_LOADING;
+    private int loadState ;
 
     public SwipeRefreshRecycleView.OnRefreshLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
@@ -39,6 +42,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
+        notifyDataSetChanged();
     }
 
     private int totalCount;
@@ -161,6 +165,10 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public final void isLoadingMore() {
+        if (loadState == STATE_LOADING) {
+            Log.e("TAG", "isLoadingMore: 正在加载中 !!");
+            return;
+        }
         loadState = STATE_LOADING;
         notifyItemRangeChanged(getItemRealCount(), 1);
     }
@@ -222,7 +230,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     }
 
     @Nullable
-   private OnItemLongClickListener longListener;
+    private OnItemLongClickListener longListener;
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         this.longListener = listener;
