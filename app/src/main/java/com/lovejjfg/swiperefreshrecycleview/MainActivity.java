@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
     private Runnable loadMoreAction;
     private boolean isRun;
     private boolean enable = true;
-    private static final int DEFAULT_TIME = 1000;
+    private static final int DEFAULT_TIME = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
