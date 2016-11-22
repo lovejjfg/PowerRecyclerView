@@ -7,17 +7,6 @@
     android:orientation="horizontal"
    >
 
-
-    <ProgressBar
-        android:id="@+id/progressbar"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_marginRight="8dp"
-        android:layout_width="16dp"
-        android:layout_height="16dp" />
-    <TextView
-        android:id="@+id/content"
-        android:text="正在加载。。。。"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <include layout="@layout/layout_foot"/>
 
 </LinearLayout>
