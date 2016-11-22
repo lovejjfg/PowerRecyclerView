@@ -131,11 +131,11 @@ public interface AdapterLoader<T> {
     }
 
     interface OnItemClickListener {
-        void onItemClick(View itemView, int postion);
+        void onItemClick(View itemView, int position);
     }
 
     interface OnItemLongClickListener {
-        boolean onItemLongClick(View itemView, int postion);
+        boolean onItemLongClick(View itemView, int position);
     }
 
 

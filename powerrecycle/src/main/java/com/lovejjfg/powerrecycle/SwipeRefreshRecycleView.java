@@ -143,7 +143,7 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
 
     private class FinishScrollListener extends RecyclerView.OnScrollListener {
 
-        private int lastTitlePos = -1;
+//        private int lastTitlePos = -1;
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -165,11 +165,11 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
 //                        listener.onLoadMore();
 //                    }
                 }
-                int position = ((LinearLayoutManager) manager).findFirstVisibleItemPosition();
-                if (lastTitlePos == position) {
-                    return;
-                }
-                lastTitlePos = position;
+//                int position = ((LinearLayoutManager) manager).findFirstVisibleItemPosition();
+//                if (lastTitlePos == position) {
+//                    return;
+//                }
+//                lastTitlePos = position;
             }
             if (manager instanceof StaggeredGridLayoutManager) {
                 int[] itemPositions = new int[2];
