@@ -46,6 +46,9 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
                 content.setText("加载更多！！");
                 contaier.setOnClickListener(null);
                 pb.setVisibility(View.VISIBLE);
+                if (mListener != null) {
+                    mListener.onLoadMore();
+                }
                 break;
             case AdapterLoader.STATE_ERROR:
                 contaier.setVisibility(View.VISIBLE);
