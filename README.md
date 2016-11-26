@@ -2,7 +2,7 @@
 
 ### SwipeRefreshRecycleView使用
 
-![PullRefresh.gif](https://raw.githubusercontent.com/lovejjfg/screenshort/36773514d42e8f7cd546ffbdcd1df4b4212b2f47/PullRefresh.gif)
+![PullRefresh.gif](https://raw.githubusercontent.com/lovejjfg/screenshort/36773514d42e8f7cd546ffbdcd1df4b4212b2f47/PullRefresh3.gif)
 
     //gradle
     compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.0'
@@ -57,14 +57,65 @@
         }
     }
 
+5、选择模式，及相关回调：
+
+    adapter.setSelectedMode(AdapterLoader.SingleMode);
+    adapter.updateSelectMode(true);
+    adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(View view, int position, boolean isSelected) {
+            Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
+        }
+
+        @Override
+        public void onNothingSelected() {
+            Log.e("TAG", "onNothingSelected: ");
+        }
+    });
+
+6、GridLayoutManager设置SpanSize
+
+        mRecycleView.setSpanSizeCallBack(new SwipeRefreshRecycleView.SpanSizeCallBack() {
+            @Override
+            public int getSpanSize(int position) {
+                return 1;
+            }
+        });
+
+
+7、使用SpacesItemDecoration添加上下左右留白
+
+    /**
+     *
+     * @param space item之间的空间
+     * @param count 列数
+     * @param showEdge 是否显示左右边缘
+     */
+    public SpacesItemDecoration(int space, int count, boolean showEdge) {
+        this.spacing = space;
+        this.spanCount = count;
+        this.showEdge = showEdge;
+        pre = spacing * 1.0f / spanCount;
+    }
+
+    decor = new SpacesItemDecoration(30, 3, true);
+    mRecycleView.getRecycle().addItemDecoration(decor);
+
+
+
 ### 博客地址
 
-[戳我戳我](http://www.jianshu.com/p/7396dc6d67f0#)
+[Android RecycleView轻松实现下拉刷新、加载更多](http://www.jianshu.com/p/7396dc6d67f0#)
+[Android RecyclerView 定制单选多选模式](http://www.jianshu.com/p/8026bcbd290f)
 
 
-### 相关问题
+### V1.0
+实现下拉刷新加载更多
 
-1. 使用GridLayoutManager spanCount>1的时候加载更多的布局没有适配。。
+### V1.0.1
+加载更多适配`GridLayoutManager`
+
+添加单选和多选模式
 
 
 
