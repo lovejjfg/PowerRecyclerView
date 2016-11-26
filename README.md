@@ -2,12 +2,22 @@
 
 ### SwipeRefreshRecycleView使用
 
-![PullRefresh.gif](https://raw.githubusercontent.com/lovejjfg/screenshort/36773514d42e8f7cd546ffbdcd1df4b4212b2f47/PullRefresh3.gif)
+![PullRefresh.gif](https://raw.githubusercontent.com/lovejjfg/screenshort/master/PullRefresh3.gif)
 
     //gradle
     compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.0'
 
-创建：（Adapter 继承 RefreshRecycleAdapter<T>）
+### V1.0.0
+实现下拉刷新加载更多
+
+### V1.0.1
+加载更多适配`GridLayoutManager`
+
+添加单选和多选模式
+
+--------
+
+0、创建：（Adapter 继承 RefreshRecycleAdapter<T>）
 
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(adapter);
@@ -109,13 +119,7 @@
 [Android RecyclerView 定制单选多选模式](http://www.jianshu.com/p/8026bcbd290f)
 
 
-### V1.0
-实现下拉刷新加载更多
 
-### V1.0.1
-加载更多适配`GridLayoutManager`
-
-添加单选和多选模式
 
 
 
