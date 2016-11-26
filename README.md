@@ -1,6 +1,6 @@
 
 
-### SwipeRefreshRecycleView使用
+### PowerRecyclerView使用
 
 ![PullRefresh.gif](https://raw.githubusercontent.com/lovejjfg/screenshort/master/PullRefresh3.gif)
 
