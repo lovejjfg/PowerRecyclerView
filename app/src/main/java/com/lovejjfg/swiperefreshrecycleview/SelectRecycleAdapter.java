@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
@@ -13,18 +15,16 @@ import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;
 
-import java.util.concurrent.ThreadPoolExecutor;
-
 /**
  * Created by Joe on 2016-07-27
  * Email: lovejjfg@163.com
  */
-public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
+public class SelectRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
 
 
     @Override
     public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.city_item_select, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -38,20 +38,18 @@ public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView mTv;
-        private final CheckBox mCheckBox;
+        private final CheckedTextView mTv;
+//        private final CheckBox mCheckBox;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            mTv = (TextView) itemView.findViewById(R.id.text);
-            mCheckBox = (CheckBox) itemView.findViewById(R.id.cb);
+            mTv = (CheckedTextView) itemView.findViewById(R.id.text);
+//            mCheckBox = (CheckBox) itemView.findViewById(R.id.cb);
         }
 
         public void bindDateView(TestBean s) {
-            TransitionManager.beginDelayedTransition((ViewGroup) itemView, new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_KEEP));
-            mCheckBox.setVisibility(isSelectMode ? View.VISIBLE : View.GONE);
             mTv.setText(s.isSelected() ? "选中：" + s.getName() : s.getName());
-            mCheckBox.setChecked(s.isSelected());
+            mTv.setChecked(s.isSelected());
         }
     }
 }

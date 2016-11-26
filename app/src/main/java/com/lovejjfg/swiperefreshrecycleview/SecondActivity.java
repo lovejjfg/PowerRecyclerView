@@ -2,20 +2,19 @@ package com.lovejjfg.swiperefreshrecycleview;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ListView;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
-import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
@@ -24,7 +23,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener {
+import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
+
+public class SecondActivity extends AppCompatActivity implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener {
 
     @Bind(R.id.recycle_view)
     SwipeRefreshRecycleView mRecycleView;
@@ -43,10 +44,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sed);
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
-        adapter = new MyRecycleAdapter();
+        mToolBar.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                NotificationUtil.sendSimplestNotificationWithAction(SecondActivity.this);
+                return true;
+            }
+        });
+        adapter = new SelectRecycleAdapter();
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
             public void onItemSelected(View view, int position, boolean isChecked) {
@@ -58,8 +66,24 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
+        adapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int postion) {
+
+            }
+        });
 //        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
-        mRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        GridLayoutManager manager = new GridLayoutManager(this, 3);
+        mRecycleView.setLayoutManager(manager);
+        mRecycleView.setSpanSizeCallBack(new SwipeRefreshRecycleView.SpanSizeCallBack() {
+            @Override
+            public int getSpanSize(int position) {
+                return 0;
+            }
+        });
+
+        SpacesItemDecoration decor = new SpacesItemDecoration(30, 3, true);
+        mRecycleView.getRecycle().addItemDecoration(decor);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
         //初始化一个TouchHelperCallback
@@ -119,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
     @Override
     public void onLoadMore() {
         if (isRun) {
+            Log.e("TAG", "onLoadMore:正在执行，直接返回。。。 ");
             return;
         }
         Log.e("TAG", "onLoadMore: ");

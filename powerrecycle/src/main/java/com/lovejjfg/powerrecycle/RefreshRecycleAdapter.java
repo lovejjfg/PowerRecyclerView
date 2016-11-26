@@ -1,7 +1,9 @@
 package com.lovejjfg.powerrecycle;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +12,19 @@ import android.view.ViewGroup;
 import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 
 /**
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
-public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T> {
+public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack{
 
     private View loadMore;
-    private int loadState = STATE_LOADING;
+    private int loadState ;
 
     public SwipeRefreshRecycleView.OnRefreshLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
@@ -37,6 +42,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
+        notifyDataSetChanged();
     }
 
     private int totalCount;
@@ -97,7 +103,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new NewBottomViewHolder(loadMore,loadMoreListener);
+        return new NewBottomViewHolder(loadMore, loadMoreListener);
     }
 
     @Override
@@ -109,7 +115,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public abstract RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType);
 
     @Override
-    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_BOTTOM) {
             loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
             if (loadMore != null) {
@@ -126,8 +132,32 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
                 }
             }
         } else {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    performClick(v, holder.getAdapterPosition());
+                }
+            });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return performLongClick(v, holder.getAdapterPosition());
+                }
+            });
             onViewHolderBind(holder, position);
         }
+    }
+
+    public void performClick(View itemView, int position) {
+        if (listener != null) {
+            listener.onItemClick(itemView, position);
+        }
+    }
+
+    @Override
+    public boolean performLongClick(View itemView, int position) {
+        return longListener != null && longListener.onItemLongClick(itemView, position);
     }
 
     @Override
@@ -135,6 +165,10 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public final void isLoadingMore() {
+        if (loadState == STATE_LOADING) {
+            Log.e("TAG", "isLoadingMore: 正在加载中 !!");
+            return;
+        }
         loadState = STATE_LOADING;
         notifyItemRangeChanged(getItemRealCount(), 1);
     }
@@ -175,7 +209,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
 
     @Override
-    public  boolean isHasMore() {
+    public boolean isHasMore() {
         return getItemCount() < totalCount;
     }
 
@@ -186,5 +220,43 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     public void onRefresh() {
 //        loadState = STATE_LOADING;
+    }
+
+    @Nullable
+    OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    @Nullable
+    private OnItemLongClickListener longListener;
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.longListener = listener;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        list.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition == list.size() || toPosition == list.size()) {
+            return false;
+        }
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(list, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(list, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 }
