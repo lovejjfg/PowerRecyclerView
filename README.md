@@ -1,9 +1,9 @@
 
- [ ![Download](https://api.bintray.com/packages/lovejjfg/maven/powerRecycleView/images/download.svg) ](https://bintray.com/lovejjfg/maven/powerRecycleView/_latestVersion)
-
 ### PowerRecyclerView使用
 
 ![PullRefresh.gif](https://raw.githubusercontent.com/lovejjfg/screenshort/master/PullRefresh3.gif)
+
+ [ ![Download](https://api.bintray.com/packages/lovejjfg/maven/powerRecycleView/images/download.svg) ](https://bintray.com/lovejjfg/maven/powerRecycleView/_latestVersion)
 
     //gradle
     compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.0'
