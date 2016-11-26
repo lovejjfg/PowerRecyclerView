@@ -1,4 +1,5 @@
 
+ [ ![Download](https://api.bintray.com/packages/lovejjfg/maven/powerRecycleView/images/download.svg) ](https://bintray.com/lovejjfg/maven/powerRecycleView/_latestVersion)
 
 ### PowerRecyclerView使用
 

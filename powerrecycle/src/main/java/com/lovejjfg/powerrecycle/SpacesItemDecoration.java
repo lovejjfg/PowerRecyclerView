@@ -11,9 +11,6 @@ import android.view.View;
  *
  */
 
-/**
- * when use {@link android.support.v7.widget.GridLayoutManager},you can use this to add specified space.
- */
 public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
     private int spacing;
