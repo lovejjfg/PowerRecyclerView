@@ -119,8 +119,9 @@ public interface AdapterLoader<T> {
          *
          * @param view     The view within the AdapterView that was clicked
          * @param position The position of the view in the adapter
+         * @param isSelected The state of isSelected
          */
-        void onItemSelected(View view, int position, boolean isChecked);
+        void onItemSelected(View view, int position, boolean isSelected);
 
         /**
          * Callback method to be invoked when the selection disappears from this

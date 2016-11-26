@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
+import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.powerrecycle.model.SelectBean;
 
 import java.util.HashSet;
@@ -12,7 +13,7 @@ import java.util.HashSet;
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
-public abstract class SelectRefreshRecycleAdapter<T extends SelectBean> extends RefreshRecycleAdapter<T> {
+public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends RefreshRecycleAdapter<T> {
 
     private int currentMode = 1;
     //    private TestBean pre;
@@ -34,7 +35,7 @@ public abstract class SelectRefreshRecycleAdapter<T extends SelectBean> extends 
     }
 
     private void resetData() {
-        for (SelectBean bean : list) {
+        for (ISelect bean : list) {
             bean.setSelected(false);
         }
     }
@@ -53,7 +54,6 @@ public abstract class SelectRefreshRecycleAdapter<T extends SelectBean> extends 
         final T testBean = list.get(position);
 
         if (isSelectMode) {
-            // TODO: 2016/11/17 不可见为什么响应点击事件了！！
             Log.e("TAG", "onViewHolderBind: " + position + "点击了！！");
             boolean selected = !testBean.isSelected();
             testBean.setSelected(selected);

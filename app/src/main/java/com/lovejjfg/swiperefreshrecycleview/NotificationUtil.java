@@ -1,5 +1,6 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -30,14 +31,13 @@ public class NotificationUtil {
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
-//                .setTicker("啦啦啦啦啦啦啦啦啦啦啦啦阿拉啦啦啦啦啦啦啦啦啦",)
-                //点击通知后自动清除
                 .setAutoCancel(true)
                 .setContentTitle("我是tittle")
                 .setContentText("我是内容")
                 .setNumber(++number)
                 .setPriority(2)
-                .setContentIntent(mainPendingIntent);
+                .setContentIntent(mainPendingIntent)
+                .setFullScreenIntent(mainPendingIntent, true);
         NotificationCompat.InboxStyle inboxStyle =
                 new NotificationCompat.InboxStyle();
 
@@ -56,6 +56,8 @@ public class NotificationUtil {
 //        builder.setStyle(bigPictureStyle);
 
         //发送通知
-        mNotifyManager.notify(3, builder.build());
+        Notification build = builder.build();
+
+        mNotifyManager.notify(3, build);
     }
 }

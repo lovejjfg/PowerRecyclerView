@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
@@ -38,7 +39,10 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
     private Runnable loadMoreAction;
     private boolean isRun;
     private boolean enable = true;
-    private static final int DEFAULT_TIME = 5000;
+    private static final int DEFAULT_TIME = 1000;
+    private SpacesItemDecoration decor;
+    private boolean flag;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
         setContentView(R.layout.activity_sed);
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         mToolBar.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -57,8 +62,12 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
         adapter = new SelectRecycleAdapter();
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(View view, int position, boolean isChecked) {
-                Log.e("TAG", "onItemSelected: " + position + "::" + isChecked);
+            public void onItemSelected(View view, int position, boolean isSelected) {
+                Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
+                if (isSelected) {
+                    toast.setText(position + "::" + true);
+                    toast.show();
+                }
             }
 
             @Override
@@ -68,7 +77,7 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
         });
         adapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
-            public void onItemClick(View itemView, int postion) {
+            public void onItemClick(View itemView, int position) {
 
             }
         });
@@ -78,11 +87,11 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
         mRecycleView.setSpanSizeCallBack(new SwipeRefreshRecycleView.SpanSizeCallBack() {
             @Override
             public int getSpanSize(int position) {
-                return 0;
+                return 1;
             }
         });
 
-        SpacesItemDecoration decor = new SpacesItemDecoration(30, 3, true);
+        decor = new SpacesItemDecoration(30, 3, true);
         mRecycleView.getRecycle().addItemDecoration(decor);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
@@ -97,13 +106,13 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
 
         adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
-        list = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            list.add(new TestBean("这是" + i));
-        }
         refreshAction = new Runnable() {
             @Override
             public void run() {
+                list = new ArrayList<>();
+                for (int i = 0; i < 30; i++) {
+                    list.add(new TestBean("这是" + i));
+                }
                 adapter.setList(list);
                 mRecycleView.setRefresh(false);
             }
@@ -153,7 +162,7 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.test, menu);
+        getMenuInflater().inflate(R.menu.second, menu);
         return true;
     }
 
@@ -161,7 +170,7 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.load_more:
-                adapter.setTotalCount(100);
+                adapter.setTotalCount(50);
                 break;
             case R.id.own:
 //                adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecycleView, false));
@@ -178,6 +187,17 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
             case R.id.select_mul:
                 adapter.setSelectedMode(AdapterLoader.MultipleMode);
                 adapter.updateSelectMode(true);
+                break;
+            case R.id.showedge:
+                mRecycleView.getRecycle().removeItemDecoration(decor);
+                if (flag) {
+                    decor = new SpacesItemDecoration(30, 3, true);
+                    flag = false;
+                } else {
+                    decor = new SpacesItemDecoration(30, 3, false);
+                    flag = true;
+                }
+                mRecycleView.getRecycle().addItemDecoration(decor);
                 break;
         }
         return super.onOptionsItemSelected(item);

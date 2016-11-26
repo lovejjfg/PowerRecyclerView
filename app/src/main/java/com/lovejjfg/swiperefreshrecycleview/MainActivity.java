@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         adapter = new MyRecycleAdapter();
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(View view, int position, boolean isChecked) {
-                Log.e("TAG", "onItemSelected: " + position + "::" + isChecked);
+            public void onItemSelected(View view, int position, boolean isSelected) {
+                Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
             }
 
             @Override

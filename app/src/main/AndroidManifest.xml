@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.lovejjfg.swiperefreshrecycleview"
           xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!-- 悬浮框权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,12 +17,19 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".SecondActivity">
+
+        </activity>
+
+        <activity-alias
+            android:name="lauchActivity"
+            android:targetActivity=".SecondActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
+
+        </activity-alias>
     </application>
 
 </manifest>

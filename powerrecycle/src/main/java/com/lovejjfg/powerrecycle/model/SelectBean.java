@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * Email lovejjfg@gmail.com
  */
 
-public class SelectBean implements Parcelable {
+public class SelectBean implements ISelect, Parcelable {
     private boolean isSelected;
 
     public boolean isSelected() {
