@@ -30,7 +30,7 @@ public interface AdapterLoader<T> {
     int STATE_LASTED = 2;
     int STATE_ERROR = 3;
 
-    int TYPE_BOTTOM = 400;
+    int TYPE_BOTTOM = 0x80000000;
 
     int SingleMode = 1;
     int MultipleMode = 2;
