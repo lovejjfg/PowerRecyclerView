@@ -145,6 +145,22 @@
         //关联相关的RecycleView
         itemTouchHelper.attachToRecyclerView(mRecycleView.getRecycle());
 
+9、自定义加载更多
+
+	//1、指定对应布局
+    adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.layout_foot_self, mRecycleView, false));
+
+	//2、创建对应的Holder 实现Adapter中的两个方法
+    @Override
+    public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
+        return new BottomViewHolder(loadMore);
+    }
+
+    @Override
+    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, int loadState) {
+        ((BottomViewHolder) holder).onBind(getLoadMoreListener(), loadState);
+    }
+
 PS:**直接使用RecyclerView请注意添加`mRecycleView.setItemAnimator(new DefaultAnimator());`**
 
 

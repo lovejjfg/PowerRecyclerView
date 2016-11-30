@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
         mRecycleView.setLayoutManager(manager);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setItemAnimator(new DefaultAnimator());
+        //自定义加载更多
         adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.layout_foot_self, mRecycleView, false));
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
