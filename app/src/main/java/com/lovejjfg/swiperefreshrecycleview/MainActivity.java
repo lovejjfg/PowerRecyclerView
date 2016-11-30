@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -58,7 +59,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
-//        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
+        adapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Log.e("TAG", "onItemClick: " + position);
+            }
+        });
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
@@ -135,21 +141,25 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            //loadMore
             case R.id.load_more:
                 adapter.setTotalCount(100);
                 break;
+            //yourself LoadMoreView you must impl onBottomViewHolderCreate() and onBottomViewHolderBind() in your adapter!
             case R.id.own:
-//                adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecycleView, false));
+                adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecycleView, false));
                 break;
+            //enable pullRefresh
             case R.id.pull_refresh:
                 enable = !enable;
                 mRecycleView.setPullRefreshEnable(enable);
                 break;
+            //singleChoiceMode
             case R.id.select_single:
                 adapter.setSelectedMode(AdapterLoader.SingleMode);
                 adapter.updateSelectMode(true);
-
                 break;
+            //multipleChoiceMode
             case R.id.select_mul:
                 adapter.setSelectedMode(AdapterLoader.MultipleMode);
                 adapter.updateSelectMode(true);
