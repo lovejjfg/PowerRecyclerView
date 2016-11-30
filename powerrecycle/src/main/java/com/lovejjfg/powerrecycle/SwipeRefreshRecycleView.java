@@ -10,13 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
 
 /**
@@ -47,7 +45,6 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
         View inflate = LayoutInflater.from(context).inflate(R.layout.layout_recycler, this, false);
         mRecyclerView = (RecyclerView) inflate.findViewById(R.id.recycle_view);
         mRefreshLayout = (SwipeRefreshLayout) inflate.findViewById(R.id.container);
-        mRecyclerView.setVerticalScrollBarEnabled(true);
         mRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.setItemAnimator(new DefaultAnimator());
         mRecyclerView.addOnScrollListener(new FinishScrollListener());
@@ -64,8 +61,19 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
         mRefreshLayout.setColorSchemeColors(colors);
     }
 
-    public void setLayoutManager(final RecyclerView.LayoutManager manager) {
+    public void setLayoutManager(final RecyclerView.LayoutManager manager, boolean showScrollBar) {
         this.manager = manager;
+        if (manager instanceof LinearLayoutManager) {
+            int orientation = ((LinearLayoutManager) manager).getOrientation();
+            switch (orientation) {
+                case LinearLayoutManager.HORIZONTAL:
+                    mRecyclerView.setHorizontalScrollBarEnabled(showScrollBar);
+                    break;
+                case LinearLayoutManager.VERTICAL:
+                    mRecyclerView.setVerticalScrollBarEnabled(showScrollBar);
+                    break;
+            }
+        }
         if (manager instanceof GridLayoutManager) {
             ((GridLayoutManager) manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
@@ -80,7 +88,36 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
                 }
             });
         }
+        mRecyclerView.setLayoutManager(manager);
+    }
 
+    public void setLayoutManager(final RecyclerView.LayoutManager manager) {
+        this.manager = manager;
+        if (manager instanceof LinearLayoutManager) {
+            int orientation = ((LinearLayoutManager) manager).getOrientation();
+            switch (orientation) {
+                case LinearLayoutManager.HORIZONTAL:
+                    mRecyclerView.setHorizontalScrollBarEnabled(true);
+                    break;
+                case LinearLayoutManager.VERTICAL:
+                    mRecyclerView.setVerticalScrollBarEnabled(true);
+                    break;
+            }
+        }
+        if (manager instanceof GridLayoutManager) {
+            ((GridLayoutManager) manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    switch (adapter.getItemViewType(position)) {
+                        case TYPE_BOTTOM:
+                            return ((GridLayoutManager) manager).getSpanCount();
+                        default:
+                            return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);
+                    }
+
+                }
+            });
+        }
         mRecyclerView.setLayoutManager(manager);
     }
 
@@ -106,6 +143,7 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
     public void setAdapter(RefreshRecycleAdapter adapter) {
         this.adapter = adapter;
         mRecyclerView.setAdapter(adapter);
+        adapter.attachToRecyclerView(this);
     }
 
     public void setRefresh(final boolean refresh) {
@@ -147,9 +185,6 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if (null != scrollListener) {
-                scrollListener.onScrolled(SwipeRefreshRecycleView.this, dx, dy);
-            }
             if (null == manager) {
                 throw new RuntimeException("you should call setLayoutManager() first!!");
             }
@@ -192,14 +227,8 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
         }
     }
 
-    private OnScrollListener scrollListener;
-
-    public void setOnScrollListener(OnScrollListener listener) {
-        this.scrollListener = listener;
-    }
-
-    public interface OnScrollListener {
-        void onScrolled(SwipeRefreshRecycleView recyclerView, int dx, int dy);
+    public void addOnScrollListener(RecyclerView.OnScrollListener listener) {
+        mRecyclerView.addOnScrollListener(listener);
     }
 
     /**
@@ -217,5 +246,42 @@ public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefresh
     public interface SpanSizeCallBack {
         int getSpanSize(int position);
     }
+
+    public AdapterLoader.OnItemSelectedListener getSelectedListener() {
+        return selectedListener;
+    }
+
+
+    public AdapterLoader.OnItemClickListener getClickListener() {
+        return clickListener;
+    }
+
+
+    public AdapterLoader.OnItemLongClickListener getLongClickListener() {
+        return longClickListener;
+    }
+
+
+    public void setOnItemSelectListener(AdapterLoader.OnItemSelectedListener listener) {
+        this.selectedListener = listener;
+    }
+
+    private AdapterLoader.OnItemSelectedListener selectedListener;
+
+
+    public void setOnItemClickListener(AdapterLoader.OnItemClickListener listener) {
+        this.clickListener = listener;
+    }
+
+
+    public void setOnItemLongClickListener(AdapterLoader.OnItemLongClickListener listener) {
+        this.longClickListener = listener;
+    }
+
+    private AdapterLoader.OnItemClickListener clickListener;
+
+
+    private AdapterLoader.OnItemLongClickListener longClickListener;
+
 
 }
