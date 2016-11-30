@@ -12,13 +12,13 @@
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.Toolbar>
-    <com.lovejjfg.powerrecycle.SwipeRefreshRecycleView
+    <com.lovejjfg.powerrecycle.PowerRecyclerView
         android:layout_below="@id/toolbar"
         android:id="@+id/recycle_view"
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.lovejjfg.powerrecycle.SwipeRefreshRecycleView>
+    </com.lovejjfg.powerrecycle.PowerRecyclerView>
 
 </RelativeLayout>

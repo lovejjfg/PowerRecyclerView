@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.R;
-import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
+import com.lovejjfg.powerrecycle.PowerRecyclerView;
 
 
 /**
@@ -22,9 +22,9 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
     private ProgressBar pb;
     private TextView content;
     @Nullable
-    private final SwipeRefreshRecycleView.OnRefreshLoadMoreListener mListener;
+    private final PowerRecyclerView.OnRefreshLoadMoreListener mListener;
 
-    public NewBottomViewHolder(View itemView, SwipeRefreshRecycleView.OnRefreshLoadMoreListener listener) {
+    public NewBottomViewHolder(View itemView, PowerRecyclerView.OnRefreshLoadMoreListener listener) {
 
         super(itemView);
         contaier = (LinearLayout) itemView.findViewById(R.id.footer_container);

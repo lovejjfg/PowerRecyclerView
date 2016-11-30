@@ -30,8 +30,8 @@ dependencies {
 // This is the library version used when deploying the artifact
 version = "1.0.1"
 
-def siteUrl = 'https://github.com/lovejjfg/SwipeRefreshRecycleView'      // 项目的主页
-def gitUrl = 'https://github.com/lovejjfg/SwipeRefreshRecycleView.git'   // Git仓库的url
+def siteUrl = 'https://github.com/lovejjfg/PowerRecyclerView'      // 项目的主页
+def gitUrl = 'https://github.com/lovejjfg/PowerRecyclerView.git'   // Git仓库的url
 group = "com.lovejjfg.powerrecycle"                                        // Maven Group ID for the artifact，一般填你唯一的包名
 install {
     repositories.mavenInstaller {

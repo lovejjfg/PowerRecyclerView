@@ -38,10 +38,12 @@ public class SelectRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> 
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
         private final CheckedTextView mTv;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             mTv = (CheckedTextView) itemView.findViewById(R.id.text);
         }
+
         public void bindDateView(TestBean s) {
             mTv.setText(s.isSelected() ? "选中：" + s.getName() : s.getName());
             mTv.setChecked(s.isSelected());

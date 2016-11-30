@@ -21,21 +21,21 @@ import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
  * Created by Joe on 2016-03-11.
  * Email lovejjfg@gmail.com
  */
-public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
+public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     @Nullable
     private RecyclerView.LayoutManager manager;
 
-    public SwipeRefreshRecycleView(Context context) {
+    public PowerRecyclerView(Context context) {
         this(context, null);
     }
 
-    public SwipeRefreshRecycleView(Context context, AttributeSet attrs) {
+    public PowerRecyclerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SwipeRefreshRecycleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PowerRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }

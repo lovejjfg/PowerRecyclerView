@@ -3,19 +3,17 @@ package com.lovejjfg.swiperefreshrecycleview;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.powerrecycle.SpacesItemDecoration;
-import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
+import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
@@ -24,12 +22,10 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
-
-public class SecondActivity extends AppCompatActivity implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener {
+public class SecondActivity extends AppCompatActivity implements PowerRecyclerView.OnRefreshLoadMoreListener {
 
     @Bind(R.id.recycle_view)
-    SwipeRefreshRecycleView mRecycleView;
+    PowerRecyclerView mRecycleView;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
     private SelectRefreshRecycleAdapter<TestBean> adapter;
@@ -60,7 +56,7 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
             }
         });
         adapter = new SelectRecycleAdapter();
-        adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
+        mRecycleView.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
             public void onItemSelected(View view, int position, boolean isSelected) {
                 Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
@@ -75,16 +71,17 @@ public class SecondActivity extends AppCompatActivity implements SwipeRefreshRec
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
-        adapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
+        mRecycleView.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-
+                toast.setText("点击了：" + position);
+                toast.show();
             }
         });
 //        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         mRecycleView.setLayoutManager(manager);
-        mRecycleView.setSpanSizeCallBack(new SwipeRefreshRecycleView.SpanSizeCallBack() {
+        mRecycleView.setSpanSizeCallBack(new PowerRecyclerView.SpanSizeCallBack() {
             @Override
             public int getSpanSize(int position) {
                 return 1;

@@ -3,20 +3,16 @@ package com.lovejjfg.swiperefreshrecycleview;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
-import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
-import com.lovejjfg.powerrecycle.TouchHelperCallback;
+import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
@@ -25,10 +21,10 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener {
+public class MainActivity extends AppCompatActivity implements PowerRecyclerView.OnRefreshLoadMoreListener {
 
     @Bind(R.id.recycle_view)
-    SwipeRefreshRecycleView mRecycleView;
+    PowerRecyclerView mRecycleView;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
     private SelectRefreshRecycleAdapter<TestBean> adapter;
@@ -48,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new MyRecycleAdapter();
-        adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
+        mRecycleView.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
             public void onItemSelected(View view, int position, boolean isSelected) {
                 Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
@@ -59,12 +55,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshRecyc
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
-        adapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
+        mRecycleView.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Log.e("TAG", "onItemClick: " + position);
             }
         });
+//        ListView l = new ListView();
+//        l.setAdapter();
+//        l.setOnItemClickListener();
+
+
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);

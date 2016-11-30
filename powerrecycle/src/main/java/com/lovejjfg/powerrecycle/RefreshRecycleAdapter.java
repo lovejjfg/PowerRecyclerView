@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
-
 /**
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
@@ -32,15 +30,15 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Nullable
     OnItemSelectedListener selectedListener;
 
-    public SwipeRefreshRecycleView.OnRefreshLoadMoreListener getLoadMoreListener() {
+    public PowerRecyclerView.OnRefreshLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
     }
 
-    public void setLoadMoreListener(SwipeRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener) {
+    public void setLoadMoreListener(PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener) {
         this.loadMoreListener = loadMoreListener;
     }
 
-    private SwipeRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener;
+    private PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener;
 
     public int getTotalCount() {
         return totalCount;
@@ -262,7 +260,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         return true;
     }
 
-    void attachToRecyclerView(SwipeRefreshRecycleView recycleView) {
+    void attachToRecyclerView(PowerRecyclerView recycleView) {
         longClickListener = recycleView.getLongClickListener();
         clickListener = recycleView.getClickListener();
         selectedListener = recycleView.getSelectedListener();
