@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;
 
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by Joe on 2016-07-27
@@ -35,6 +35,15 @@ public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
     }
 
+    @Override
+    public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
+        return new BottomViewHolder(loadMore);
+    }
+
+    @Override
+    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, int loadState) {
+        ((BottomViewHolder) holder).onBind(getLoadMoreListener(), loadState);
+    }
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -54,4 +63,24 @@ public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
             mCheckBox.setChecked(s.isSelected());
         }
     }
+
+    private static class BottomViewHolder extends RecyclerView.ViewHolder {
+
+        private final View bottomView;
+
+        public BottomViewHolder(View itemView) {
+            super(itemView);
+            bottomView = itemView.findViewById(R.id.progressbar);
+        }
+
+        public void onBind(PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener, int loadState) {
+            if (loadState == STATE_LOADING) {
+                bottomView.setVisibility(View.VISIBLE);
+                loadMoreListener.onLoadMore();
+            } else {
+                bottomView.setVisibility(View.GONE);
+            }
+        }
+    }
+
 }

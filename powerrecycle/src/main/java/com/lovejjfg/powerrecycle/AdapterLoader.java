@@ -23,6 +23,15 @@ public interface AdapterLoader<T> {
     @interface ChoiceMode {
     }
 
+    @IntDef(flag = true, value = {
+            STATE_LOADING,
+            STATE_LASTED,
+            STATE_ERROR
+    })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface LoadState {
+    }
+
     /**
      * state about load more..
      */
@@ -42,7 +51,7 @@ public interface AdapterLoader<T> {
      * @param loadState the current state.
      */
 
-    void onBottomViewHolderBind(RecyclerView.ViewHolder holder, int loadState);
+    void onBottomViewHolderBind(RecyclerView.ViewHolder holder, @LoadState int loadState);
 
     /**
      * If you want to create the specified bottom layout,you must call this method to add your specified layout !
@@ -117,8 +126,8 @@ public interface AdapterLoader<T> {
          * Impelmenters can call getItemAtPosition(position) if they need to access the
          * data associated with the selected item.
          *
-         * @param view     The view within the AdapterView that was clicked
-         * @param position The position of the view in the adapter
+         * @param view       The view within the AdapterView that was clicked
+         * @param position   The position of the view in the adapter
          * @param isSelected The state of isSelected
          */
         void onItemSelected(View view, int position, boolean isSelected);

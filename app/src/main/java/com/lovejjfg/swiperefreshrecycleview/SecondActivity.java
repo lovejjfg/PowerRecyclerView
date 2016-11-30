@@ -1,5 +1,6 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -107,7 +108,7 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
             @Override
             public void run() {
                 list = new ArrayList<>();
-                for (int i = 0; i < 30; i++) {
+                for (int i = 0; i < 40; i++) {
                     list.add(new TestBean("这是" + i));
                 }
                 adapter.setList(list);
@@ -195,6 +196,9 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
                     flag = true;
                 }
                 mRecycleView.getRecycle().addItemDecoration(decor);
+                break;
+            case R.id.normal:
+                startActivity(new Intent(this, MainActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

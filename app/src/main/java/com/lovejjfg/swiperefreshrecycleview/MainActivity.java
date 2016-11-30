@@ -1,8 +1,10 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
+import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
@@ -23,8 +26,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements PowerRecyclerView.OnRefreshLoadMoreListener {
 
-    @Bind(R.id.recycle_view)
-    PowerRecyclerView mRecycleView;
+    @Bind(R.id.recyclerview)
+    RecyclerView mRecycleView;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
     private SelectRefreshRecycleAdapter<TestBean> adapter;
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
     private Runnable loadMoreAction;
     private boolean isRun;
     private boolean enable = true;
-    private static final int DEFAULT_TIME = 5000;
+    private static final int DEFAULT_TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,19 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new MyRecycleAdapter();
-        mRecycleView.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
+//        ListView l = new ListView();
+//        l.setAdapter();
+//        l.setOnItemClickListener();
+
+
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mRecycleView.setLayoutManager(manager);
+        mRecycleView.setAdapter(adapter);
+        //be careful!!!Please remember to specified this!!!!
+        mRecycleView.setItemAnimator(new DefaultAnimator());
+
+        adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.layout_foot_self, mRecycleView, false));
+        adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
             public void onItemSelected(View view, int position, boolean isSelected) {
                 Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
@@ -55,20 +70,12 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
-        mRecycleView.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
+        adapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Log.e("TAG", "onItemClick: " + position);
             }
         });
-//        ListView l = new ListView();
-//        l.setAdapter();
-//        l.setOnItemClickListener();
-
-
-        mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        mRecycleView.setAdapter(adapter);
-        mRecycleView.setOnRefreshListener(this);
         //初始化一个TouchHelperCallback
 //        TouchHelperCallback callback = new TouchHelperCallback();
         //添加一个回调
@@ -84,36 +91,27 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
         for (int i = 0; i < 30; i++) {
             list.add(new TestBean("这是" + i));
         }
-        refreshAction = new Runnable() {
-            @Override
-            public void run() {
-                adapter.setList(list);
-                mRecycleView.setRefresh(false);
-            }
-        };
-
+        adapter.setList(list);
         loadMoreAction = new Runnable() {
             @Override
             public void run() {
                 int i = ((int) (Math.random() * 10)) % 3;
-                if (i == 0 || i == 1) {
-                    ArrayList<TestBean> arrayList = new ArrayList<>();
-                    arrayList.add(new TestBean("ccc1"));
-                    arrayList.add(new TestBean("ccc2"));
-                    arrayList.add(new TestBean("ccc3"));
-                    arrayList.add(new TestBean("ccc4"));
-                    arrayList.add(new TestBean("ccc5"));
-                    adapter.appendList(arrayList);
-                    Log.e("TAG", "run: 正常加载更多！！");
-                } else {
+//                if (i == 0 || i == 1) {
+//                    ArrayList<TestBean> arrayList = new ArrayList<>();
+//                    arrayList.add(new TestBean("ccc1"));
+//                    arrayList.add(new TestBean("ccc2"));
+//                    arrayList.add(new TestBean("ccc3"));
+//                    arrayList.add(new TestBean("ccc4"));
+//                    arrayList.add(new TestBean("ccc5"));
+//                    adapter.appendList(arrayList);
+//                    Log.e("TAG", "run: 正常加载更多！！");
+//                } else {
                     adapter.loadMoreError();
                     Log.e("TAG", "run: 加载失败！！！");
-                }
+//                }
                 isRun = false;
             }
         };
-        mRecycleView.setRefresh(true);
-        mRecycleView.postDelayed(refreshAction, DEFAULT_TIME);
 
     }
 
@@ -135,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.test, menu);
+        getMenuInflater().inflate(R.menu.normal, menu);
         return true;
     }
 
@@ -144,16 +142,16 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
         switch (item.getItemId()) {
             //loadMore
             case R.id.load_more:
-                adapter.setTotalCount(100);
+                adapter.setTotalCount(50);
                 break;
             //yourself LoadMoreView you must impl onBottomViewHolderCreate() and onBottomViewHolderBind() in your adapter!
             case R.id.own:
-                adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecycleView, false));
+
                 break;
             //enable pullRefresh
             case R.id.pull_refresh:
                 enable = !enable;
-                mRecycleView.setPullRefreshEnable(enable);
+//                mRecycleView.setPullRefreshEnable(enable);
                 break;
             //singleChoiceMode
             case R.id.select_single:
@@ -164,6 +162,9 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
             case R.id.select_mul:
                 adapter.setSelectedMode(AdapterLoader.MultipleMode);
                 adapter.updateSelectMode(true);
+                break;
+            case R.id.power:
+                startActivity(new Intent(this, SecondActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

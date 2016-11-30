@@ -107,11 +107,11 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new NewBottomViewHolder(loadMore, loadMoreListener);
+        return null;
     }
 
     @Override
-    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, int loadState) {
+    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, @LoadState int loadState) {
 
     }
 

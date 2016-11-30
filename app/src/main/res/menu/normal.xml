@@ -5,9 +5,6 @@
         android:id="@+id/load_more"
         android:title="加载更多"/>
     <item
-        android:id="@+id/pull_refresh"
-        android:title="下拉刷新"/>
-    <item
         android:id="@+id/own"
         android:title="自定义加载更多"/>
     <item
@@ -16,4 +13,7 @@
     <item
         android:id="@+id/select_mul"
         android:title="多选模式"/>
+    <item
+        android:id="@+id/power"
+        android:title="Power模式"/>
 </menu>

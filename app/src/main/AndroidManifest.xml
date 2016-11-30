@@ -22,7 +22,7 @@
 
         <activity-alias
             android:name="lauchActivity"
-            android:targetActivity=".SecondActivity">
+            android:targetActivity=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -43,7 +43,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
 
     private void init(Context context) {
         View inflate = LayoutInflater.from(context).inflate(R.layout.layout_recycler, this, false);
-        mRecyclerView = (RecyclerView) inflate.findViewById(R.id.recycle_view);
+        mRecyclerView = (RecyclerView) inflate.findViewById(R.id.power_recycle_view);
         mRefreshLayout = (SwipeRefreshLayout) inflate.findViewById(R.id.container);
         mRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.setItemAnimator(new DefaultAnimator());
@@ -98,6 +98,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
             switch (orientation) {
                 case LinearLayoutManager.HORIZONTAL:
                     mRecyclerView.setHorizontalScrollBarEnabled(true);
+                    setPullRefreshEnable(false);
                     break;
                 case LinearLayoutManager.VERTICAL:
                     mRecyclerView.setVerticalScrollBarEnabled(true);
