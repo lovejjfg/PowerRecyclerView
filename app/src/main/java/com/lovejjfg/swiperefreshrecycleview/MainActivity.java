@@ -47,17 +47,10 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new MyRecycleAdapter();
-//        ListView l = new ListView();
-//        l.setAdapter();
-//        l.setOnItemClickListener();
-
-
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mRecycleView.setLayoutManager(manager);
         mRecycleView.setAdapter(adapter);
-        //be careful!!!Please remember to specified this!!!!
         mRecycleView.setItemAnimator(new DefaultAnimator());
-
         adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.layout_foot_self, mRecycleView, false));
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override

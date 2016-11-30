@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
+import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
@@ -93,13 +95,13 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
         mRecycleView.getRecycle().addItemDecoration(decor);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
-        //初始化一个TouchHelperCallback
+//        //初始化一个TouchHelperCallback
 //        TouchHelperCallback callback = new TouchHelperCallback();
-        //添加一个回调
+//        //添加一个回调
 //        callback.setItemDragSwipeCallBack(adapter);
-        //初始化一个ItemTouchHelper
+//        //初始化一个ItemTouchHelper
 //        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        //关联相关的RecycleView
+//        //关联相关的RecycleView
 //        itemTouchHelper.attachToRecyclerView(mRecycleView.getRecycle());
 
         adapter.setLoadMoreListener(this);

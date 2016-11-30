@@ -13,12 +13,22 @@
     compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.1'
 
 ### V1.0.0
-实现下拉刷新加载更多
+
+* 实现下拉刷新加载更多
 
 ### V1.0.1
-加载更多适配`GridLayoutManager`
 
-添加单选和多选模式
+* 加载更多适配`GridLayoutManager`
+
+* 添加单选和多选模式
+
+### V1.0.2
+
+* 更名 `SwipRefreshRecycleView` 为 `PowerRecyclerView`
+* **如果不需要下拉刷新，`Adapter` 可直接适配 `RecycleView`**
+* 可直接通过 `PowerRecyclerView` 设置点击、选择事件的回调
+* 水平方向的 `ScrollBar` 修复
+* 拖拽排序
 
 --------
 
@@ -72,7 +82,15 @@
         }
     }
 
-5、选择模式，及相关回调：
+5、点击 选择模式，及相关回调：
+
+    mRecycleView.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
+        @Override
+        public void onItemClick(View itemView, int position) {
+            toast.setText("点击了：" + position);
+            toast.show();
+        }
+    });
 
     adapter.setSelectedMode(AdapterLoader.SingleMode);
     adapter.updateSelectMode(true);
@@ -116,6 +134,18 @@
     decor = new SpacesItemDecoration(30, 3, true);
     mRecycleView.getRecycle().addItemDecoration(decor);
 
+8、拖拽排序
+
+        //初始化一个TouchHelperCallback
+        TouchHelperCallback callback = new TouchHelperCallback();
+        //添加一个回调
+        callback.setItemDragSwipeCallBack(adapter);
+        //初始化一个ItemTouchHelper
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        //关联相关的RecycleView
+        itemTouchHelper.attachToRecyclerView(mRecycleView.getRecycle());
+
+PS:**直接使用RecyclerView请注意添加`mRecycleView.setItemAnimator(new DefaultAnimator());`**
 
 
 ### 博客地址
