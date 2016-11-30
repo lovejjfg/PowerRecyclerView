@@ -21,10 +21,16 @@ import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
-public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack{
+public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack {
 
     private View loadMore;
-    private int loadState ;
+    private int loadState;
+    @Nullable
+    OnItemLongClickListener longClickListener;
+    @Nullable
+    OnItemClickListener clickListener;
+    @Nullable
+    OnItemSelectedListener selectedListener;
 
     public SwipeRefreshRecycleView.OnRefreshLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
@@ -47,7 +53,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     private int totalCount;
 
-    public RefreshRecycleAdapter() {
+    RefreshRecycleAdapter() {
         list = new ArrayList<>();
     }
 
@@ -150,14 +156,14 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     }
 
     public void performClick(View itemView, int position) {
-        if (listener != null) {
-            listener.onItemClick(itemView, position);
+        if (clickListener != null) {
+            clickListener.onItemClick(itemView, position);
         }
     }
 
     @Override
     public boolean performLongClick(View itemView, int position) {
-        return longListener != null && longListener.onItemLongClick(itemView, position);
+        return longClickListener != null && longClickListener.onItemLongClick(itemView, position);
     }
 
     @Override
@@ -222,18 +228,14 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 //        loadState = STATE_LOADING;
     }
 
-    @Nullable
-    OnItemClickListener listener;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
+        this.clickListener = listener;
     }
 
-    @Nullable
-    private OnItemLongClickListener longListener;
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
-        this.longListener = listener;
+        this.longClickListener = listener;
     }
 
     @Override
@@ -258,5 +260,11 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         }
         notifyItemMoved(fromPosition, toPosition);
         return true;
+    }
+
+    void attachToRecyclerView(SwipeRefreshRecycleView recycleView) {
+        longClickListener = recycleView.getLongClickListener();
+        clickListener = recycleView.getClickListener();
+        selectedListener = recycleView.getSelectedListener();
     }
 }

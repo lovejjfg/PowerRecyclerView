@@ -1,11 +1,9 @@
 package com.lovejjfg.powerrecycle;
 
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
 import com.lovejjfg.powerrecycle.model.ISelect;
-import com.lovejjfg.powerrecycle.model.SelectBean;
 
 import java.util.HashSet;
 
@@ -66,8 +64,8 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
             notifyItemRangeChanged(position, 1);
             prePos = position;
         } else {
-            if (listener != null) {
-                listener.onItemClick(itemView, position);
+            if (clickListener != null) {
+                clickListener.onItemClick(itemView, position);
             }
         }
     }
@@ -97,8 +95,7 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
         return true;
     }
 
-    @Nullable
-    private OnItemSelectedListener selectedListener;
+//    private OnItemSelectedListener selectedListener;
 
     public void setOnItemSelectListener(OnItemSelectedListener listener) {
         this.selectedListener = listener;
