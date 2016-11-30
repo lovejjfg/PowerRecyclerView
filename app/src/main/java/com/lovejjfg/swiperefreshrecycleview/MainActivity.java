@@ -89,19 +89,19 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
             @Override
             public void run() {
                 int i = ((int) (Math.random() * 10)) % 3;
-//                if (i == 0 || i == 1) {
-//                    ArrayList<TestBean> arrayList = new ArrayList<>();
-//                    arrayList.add(new TestBean("ccc1"));
-//                    arrayList.add(new TestBean("ccc2"));
-//                    arrayList.add(new TestBean("ccc3"));
-//                    arrayList.add(new TestBean("ccc4"));
-//                    arrayList.add(new TestBean("ccc5"));
-//                    adapter.appendList(arrayList);
-//                    Log.e("TAG", "run: 正常加载更多！！");
-//                } else {
+                if (i == 0 || i == 1) {
+                    ArrayList<TestBean> arrayList = new ArrayList<>();
+                    arrayList.add(new TestBean("ccc1"));
+                    arrayList.add(new TestBean("ccc2"));
+                    arrayList.add(new TestBean("ccc3"));
+                    arrayList.add(new TestBean("ccc4"));
+                    arrayList.add(new TestBean("ccc5"));
+                    adapter.appendList(arrayList);
+                    Log.e("TAG", "run: 正常加载更多！！");
+                } else {
                     adapter.loadMoreError();
                     Log.e("TAG", "run: 加载失败！！！");
-//                }
+                }
                 isRun = false;
             }
         };
