@@ -24,10 +24,13 @@ before_install:
 script:
   - ./gradlew assembleRelease
 
+before_deploy:
+  - mv app/build/outputs/apk/app-release.apk   
+
 deploy:
   provider: releases
   api_key: "58734053ef214dadcfd3eb4deb2ad6274bae12d3"
   file: "app/build/outputs/apk/app-release.apk"
   skip_cleanup: true
   on:
-    tags: false
+    tags: true
