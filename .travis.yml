@@ -29,8 +29,8 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key: "58734053ef214dadcfd3eb4deb2ad6274bae12d3"
+  api_key: "eb2658cafd3f0c8c60a321fd0c33d52d69b999ec"
   file: "app/build/outputs/apk/app-release.apk"
   skip_cleanup: true
   on:
-    tags: true
+    tags: false
