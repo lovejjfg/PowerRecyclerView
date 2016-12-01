@@ -5,32 +5,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lovejjfg.powerrecycle.annotation.LoadState;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
+
+import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
  * Created by Joe on 2016-07-26
  * Email: lovejjfg@gmail.com
  */
 public interface AdapterLoader<T> {
-
-    @IntDef(flag = true, value = {
-            SingleMode,
-            MultipleMode
-    })
-    @Retention(RetentionPolicy.SOURCE)
-    @interface ChoiceMode {
-    }
-
-    @IntDef(flag = true, value = {
-            STATE_LOADING,
-            STATE_LASTED,
-            STATE_ERROR
-    })
-    @Retention(RetentionPolicy.RUNTIME)
-    @interface LoadState {
-    }
 
     /**
      * state about load more..

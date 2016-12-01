@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.lovejjfg.powerrecycle.annotation.LoadState;
 import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
 
 import java.util.ArrayList;

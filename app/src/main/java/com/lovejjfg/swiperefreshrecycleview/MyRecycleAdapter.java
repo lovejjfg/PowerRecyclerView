@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.annotation.LoadState;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;
@@ -41,7 +43,7 @@ public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
     }
 
     @Override
-    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, int loadState) {
+    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder,@LoadState int loadState) {
         ((BottomViewHolder) holder).onBind(getLoadMoreListener(), loadState);
     }
 

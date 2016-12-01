@@ -3,6 +3,7 @@ package com.lovejjfg.powerrecycle;
 import android.util.Log;
 import android.view.View;
 
+import com.lovejjfg.powerrecycle.annotation.ChoiceMode;
 import com.lovejjfg.powerrecycle.model.ISelect;
 
 import java.util.HashSet;
