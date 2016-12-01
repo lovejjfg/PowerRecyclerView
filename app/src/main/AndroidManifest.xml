@@ -19,10 +19,13 @@
         <activity android:name=".SecondActivity">
 
         </activity>
+        <activity android:name=".PickActivity">
+
+        </activity>
 
         <activity-alias
             android:name="lauchActivity"
-            android:targetActivity=".MainActivity">
+            android:targetActivity=".PickActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

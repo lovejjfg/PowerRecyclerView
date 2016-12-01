@@ -95,14 +95,14 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
         mRecycleView.getRecycle().addItemDecoration(decor);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
-//        //初始化一个TouchHelperCallback
-//        TouchHelperCallback callback = new TouchHelperCallback();
-//        //添加一个回调
-//        callback.setItemDragSwipeCallBack(adapter);
-//        //初始化一个ItemTouchHelper
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-//        //关联相关的RecycleView
-//        itemTouchHelper.attachToRecyclerView(mRecycleView.getRecycle());
+        //初始化一个TouchHelperCallback
+        TouchHelperCallback callback = new TouchHelperCallback();
+        //添加一个回调
+        callback.setItemDragSwipeCallBack(adapter);
+        //初始化一个ItemTouchHelper
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        //关联相关的RecycleView
+        itemTouchHelper.attachToRecyclerView(mRecycleView.getRecycle());
 
         adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);

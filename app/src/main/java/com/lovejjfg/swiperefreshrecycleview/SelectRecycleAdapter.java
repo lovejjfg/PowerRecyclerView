@@ -1,6 +1,8 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,10 @@ public class SelectRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> 
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
     }
 
+    @Override
+    public int getItemViewTypes(int position) {
+        return super.getItemViewTypes(position);
+    }
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
         private final CheckedTextView mTv;
@@ -48,5 +54,18 @@ public class SelectRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> 
             mTv.setText(s.isSelected() ? "选中：" + s.getName() : s.getName());
             mTv.setChecked(s.isSelected());
         }
+    }
+
+    //you should Override this method to control whether the viewHolder can move and swipe or not! by default was impossible!!
+    @NonNull
+    @Override
+    public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        if (viewHolder.getAdapterPosition() % 2 == 0) {
+            return null;
+//            return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN |
+//                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
+        }
+        return super.getMovementFlags(recyclerView, viewHolder);
+
     }
 }

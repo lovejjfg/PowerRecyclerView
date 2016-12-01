@@ -1,3 +1,56 @@
 <resources>
     <string name="app_name">PowerRecyclerView</string>
+
+    <string-array name="items">
+        <item>"啦啦1"</item>
+        <item>"啦啦2"</item>
+        <item>"啦啦4"</item>
+        <item>"啦啦5"</item>
+        <item>"啦啦3"</item>
+        <item>"啦啦4"</item>
+        <item>"啦啦5"</item>
+        <item>"啦啦6"</item>
+        <item>"啦啦7"</item>
+        <item>"啦啦8"</item>
+        <item>"啦啦9"</item>
+        <item>"啦啦10"</item>
+        <item>"啦啦11"</item>
+        <item>"啦啦12"</item>
+        <item>"啦啦13"</item>
+        <item>"啦啦14"</item>
+        <item>"啦啦15"</item>
+        <item>"啦啦16"</item>
+        <item>"啦啦17"</item>
+        <item>"啦啦18"</item>
+        <item>"啦啦19"</item>
+        <item>"啦啦20"</item>
+        <item>"啦啦21"</item>
+        <item>"啦啦22"</item>
+    </string-array>
+    <string-array name="unPickItems">
+        <item>"1啦啦"</item>
+        <item>"2啦啦"</item>
+        <item>"4啦啦"</item>
+        <item>"5啦啦"</item>
+        <item>"3啦啦"</item>
+        <item>"4啦啦"</item>
+        <item>"5啦啦"</item>
+        <item>"6啦啦"</item>
+        <item>"7啦啦"</item>
+        <item>"8啦啦"</item>
+        <item>"9啦啦"</item>
+        <item>"1啦啦0"</item>
+        <item>"1啦啦1"</item>
+        <item>"1啦啦2"</item>
+        <item>"1啦啦3"</item>
+        <item>"1啦啦4"</item>
+        <item>"1啦啦5"</item>
+        <item>"1啦啦6"</item>
+        <item>"1啦啦7"</item>
+        <item>"1啦啦8"</item>
+        <item>"1啦啦9"</item>
+        <item>"2啦啦0"</item>
+        <item>"啦啦21"</item>
+        <item>"啦啦22"</item>
+    </string-array>
 </resources>

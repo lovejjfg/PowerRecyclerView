@@ -266,4 +266,10 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         clickListener = recycleView.getClickListener();
         selectedListener = recycleView.getSelectedListener();
     }
+
+    @NonNull
+    @Override
+    public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        return new int[]{0, 0};
+    }
 }
