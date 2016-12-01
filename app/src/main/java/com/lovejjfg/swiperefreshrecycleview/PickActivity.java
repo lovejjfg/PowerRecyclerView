@@ -60,20 +60,23 @@ public class PickActivity extends AppCompatActivity {
         final PickAdapter pickedAdapter = new PickAdapter();
         PickAdapter unpickedAdapter = new PickAdapter();
         mPickRecyclerView.setAdapter(pickedAdapter);
+        // TODO: 2016/12/1 how to make the first RecyclerView on the top.
+//        mPickRecyclerView.bringToFront();
+//        mPickRecyclerView.invalidate();
 //        pickedAdapter.setSelectedMode(MultipleMode);
         //初始化一个TouchHelperCallback
         TouchHelperCallback callback = new TouchHelperCallback();
         //添加一个回调
-        callback.setItemDragSwipeCallBack(unpickedAdapter);
+        callback.setItemDragSwipeCallBack(pickedAdapter);
         //初始化一个ItemTouchHelper
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         //关联相关的RecycleView
-        itemTouchHelper.attachToRecyclerView(mUnpickRecyclerView);
+        itemTouchHelper.attachToRecyclerView(mPickRecyclerView);
         mPickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         pickedAdapter.setList(pickedBeans);
         mUnpickRecyclerView.setAdapter(unpickedAdapter);
         mUnpickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        pickedAdapter.setList(unPickBeans);
+        unpickedAdapter.setList(unPickBeans);
 
         pickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
