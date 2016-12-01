@@ -23,7 +23,8 @@ import java.util.List;
 public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack {
 
     private View loadMore;
-    private int loadState;
+    public int loadState;
+    public boolean enableLoadMore;
     @Nullable
     OnItemLongClickListener longClickListener;
     @Nullable
@@ -46,6 +47,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     }
 
     public void setTotalCount(int totalCount) {
+        enableLoadMore = true;
         this.totalCount = totalCount;
         notifyDataSetChanged();
     }
@@ -98,7 +100,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
                     }
                     return holder;
                 } else {
-                    return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false), loadMoreListener);
+                    return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
                 }
             default:
                 return onViewHolderCreate(parent, viewType);
@@ -131,7 +133,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
                 }
             } else {
                 try {
-                    ((NewBottomViewHolder) holder).bindDateView(loadState);
+                    ((NewBottomViewHolder) holder).bindDateView(this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -180,7 +182,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public final int getItemCount() {
-        return list.size() == 0 ? 0 : list.size() + 1;
+        return list.size() == 0 ? 0 : enableLoadMore ? list.size() + 1 : list.size();
     }
 
     @Override
@@ -221,6 +223,14 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public final void loadMoreError() {
         loadState = STATE_ERROR;
         notifyItemRangeChanged(getItemRealCount(), 1);
+    }
+
+    @Override
+    public void enableLoadMore(boolean loadMore) {
+        if (enableLoadMore != loadMore) {
+            enableLoadMore = loadMore;
+            notifyDataSetChanged();
+        }
     }
 
     public void onRefresh() {

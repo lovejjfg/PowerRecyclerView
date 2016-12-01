@@ -63,6 +63,8 @@ public interface AdapterLoader<T> {
 
     void loadMoreError();
 
+    void enableLoadMore(boolean loadMore);
+
     /**
      * You can call this method to add data to RecycleView,if you want to append data,you should call {@link #appendList(List)}
      *

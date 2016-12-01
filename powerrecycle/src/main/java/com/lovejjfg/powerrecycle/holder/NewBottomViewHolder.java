@@ -1,8 +1,8 @@
 package com.lovejjfg.powerrecycle.holder;
 
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.R;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
+import com.lovejjfg.powerrecycle.RefreshRecycleAdapter;
 
 
 /**
@@ -18,47 +19,47 @@ import com.lovejjfg.powerrecycle.PowerRecyclerView;
  * Email lovejjfg@gmail.com
  */
 public class NewBottomViewHolder extends RecyclerView.ViewHolder {
-    private LinearLayout contaier;
+    private LinearLayout container;
     private ProgressBar pb;
     private TextView content;
-    @Nullable
-    private final PowerRecyclerView.OnRefreshLoadMoreListener mListener;
+    private int height;
 
-    public NewBottomViewHolder(View itemView, PowerRecyclerView.OnRefreshLoadMoreListener listener) {
+    public NewBottomViewHolder(View itemView) {
 
         super(itemView);
-        contaier = (LinearLayout) itemView.findViewById(R.id.footer_container);
+        container = (LinearLayout) itemView.findViewById(R.id.footer_container);
         pb = (ProgressBar) itemView.findViewById(R.id.progressbar);
         content = (TextView) itemView.findViewById(R.id.content);
-        mListener = listener;
     }
 
-    public void bindDateView(int state) {
-        switch (state) {
+    public void bindDateView(RefreshRecycleAdapter adapter) {
+        final PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener = adapter.getLoadMoreListener();
+        switch (adapter.loadState) {
             case AdapterLoader.STATE_LASTED:
-                contaier.setVisibility(View.VISIBLE);
-                contaier.setOnClickListener(null);
                 pb.setVisibility(View.GONE);
+                container.setVisibility(View.VISIBLE);
+                container.setOnClickListener(null);
                 content.setText("---  没有更多了  ---");
+
                 break;
             case AdapterLoader.STATE_LOADING:
-                contaier.setVisibility(View.VISIBLE);
+                content.setVisibility(View.VISIBLE);
                 content.setText("加载更多！！");
-                contaier.setOnClickListener(null);
+                container.setOnClickListener(null);
                 pb.setVisibility(View.VISIBLE);
-                if (mListener != null) {
-                    mListener.onLoadMore();
+                if (loadMoreListener != null) {
+                    loadMoreListener.onLoadMore();
                 }
                 break;
             case AdapterLoader.STATE_ERROR:
-                contaier.setVisibility(View.VISIBLE);
+                container.setVisibility(View.VISIBLE);
                 pb.setVisibility(View.GONE);
                 content.setText("--- 加载更多失败点击重试 ---");
-                contaier.setOnClickListener(new View.OnClickListener() {
+                container.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mListener != null) {
-                            mListener.onLoadMore();
+                        if (loadMoreListener != null) {
+                            loadMoreListener.onLoadMore();
                         }
                         content.setText("加载更多！！");
                         pb.setVisibility(View.VISIBLE);
