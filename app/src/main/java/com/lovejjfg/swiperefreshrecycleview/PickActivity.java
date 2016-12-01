@@ -1,5 +1,6 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,14 +16,19 @@ import android.widget.CheckedTextView;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static android.R.attr.type;
 import static com.lovejjfg.powerrecycle.AdapterLoader.MultipleMode;
 
 public class PickActivity extends AppCompatActivity {
@@ -30,8 +36,8 @@ public class PickActivity extends AppCompatActivity {
     private static final String TAG = PickActivity.class.getSimpleName();
     @Bind(R.id.rv_picked)
     RecyclerView mPickRecyclerView;
-//    @Bind(R.id.rv_unpick)
-//    RecyclerView mUnpickRecyclerView;
+    @Bind(R.id.rv_unpick)
+    RecyclerView mUnpickRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,32 +46,43 @@ public class PickActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pick);
         ButterKnife.bind(this);
         mPickRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mUnpickRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mUnpickRecyclerView.setItemAnimator(new DefaultItemAnimator());
         String[] items = getResources().getStringArray(R.array.items);
         String[] unPickItems = getResources().getStringArray(R.array.unPickItems);
-        ArrayList<PickedBean> pickedBeans = new ArrayList<>();
-//        ArrayList<PickedBean> unPickBeans = new ArrayList<>();
+        final ArrayList<PickedBean> pickedBeans = new ArrayList<>();
+        ArrayList<PickedBean> unPickBeans = new ArrayList<>();
         for (String s : items) {
-            pickedBeans.add(new PickedBean(s, 1));
+            pickedBeans.add(new PickedBean(s));
         }
         for (String s : unPickItems) {
-            pickedBeans.add(new PickedBean(s, -1));
+            unPickBeans.add(new PickedBean(s));
         }
-        PickAdapter pickedAdapter = new PickAdapter();
+        final PickAdapter pickedAdapter = new PickAdapter();
+        PickAdapter unpickedAdapter = new PickAdapter();
         mPickRecyclerView.setAdapter(pickedAdapter);
-        pickedAdapter.setSelectedMode(MultipleMode);
+//        pickedAdapter.setSelectedMode(MultipleMode);
         //初始化一个TouchHelperCallback
         TouchHelperCallback callback = new TouchHelperCallback();
         //添加一个回调
-        callback.setItemDragSwipeCallBack(pickedAdapter);
+        callback.setItemDragSwipeCallBack(unpickedAdapter);
         //初始化一个ItemTouchHelper
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         //关联相关的RecycleView
-        itemTouchHelper.attachToRecyclerView(mPickRecyclerView);
+        itemTouchHelper.attachToRecyclerView(mUnpickRecyclerView);
         mPickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         pickedAdapter.setList(pickedBeans);
+        mUnpickRecyclerView.setAdapter(unpickedAdapter);
+        mUnpickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        pickedAdapter.setList(unPickBeans);
 
         pickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Log.e(TAG, "onItemClick: " + position);
+                pickedAdapter.removeItem(position);
+            }
+        });
+        unpickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Log.e(TAG, "onItemClick: " + position);
@@ -88,22 +105,23 @@ public class PickActivity extends AppCompatActivity {
             }
         }
 
-        @NonNull
-        @Override
-        public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            int position = viewHolder.getAdapterPosition();
-            if (list.get(position).type == 1) {
-                return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
-            }
-            return super.getMovementFlags(recyclerView, viewHolder);
+        public void removeItem(int position) {
+            list.remove(position);
+            notifyItemRemoved(position);
         }
 
         @Override
         public boolean onItemMove(int fromPosition, int toPosition) {
-            if (list.get(toPosition).type == -1) {
+            if (toPosition == 0) {
                 return false;
             }
             return super.onItemMove(fromPosition, toPosition);
+        }
+
+        @NonNull
+        @Override
+        public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
         }
     }
 
@@ -120,7 +138,16 @@ public class PickActivity extends AppCompatActivity {
             mText.setText(bean.title);
             mText.setChecked(bean.isSelected());
         }
+
     }
+
+//    static class MyTouchHelperCallback extends TouchHelperCallback {
+//        @Override
+//        public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+////            viewHolder.itemView.bringToFront();
+//            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+//        }
+//    }
 
 
 }

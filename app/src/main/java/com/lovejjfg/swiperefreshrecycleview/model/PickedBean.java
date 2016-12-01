@@ -10,12 +10,10 @@ import com.lovejjfg.powerrecycle.model.ISelect;
 public class PickedBean implements ISelect {
 
     public boolean isChecked;
-    public int type;
     public String title;
 
-    public PickedBean(String title, int type) {
+    public PickedBean(String title) {
         this.title = title;
-        this.type = type;
     }
 
     @Override

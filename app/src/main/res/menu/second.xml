@@ -22,5 +22,8 @@
     <item
         android:id="@+id/normal"
         android:title="直接使用RecycleView"/>
+    <item
+        android:id="@+id/showNoData"
+        android:title="是否显示没有更过了"/>
 
 </menu>
