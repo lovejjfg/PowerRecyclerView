@@ -13,13 +13,13 @@ android:
     - android-23
     - extra-android-m2repository
     - extra-android-support
- licenses:
-   - 'android-sdk-preview-license-52d11cd2'
-   - 'android-sdk-license-.+'
-   - 'google-gdk-license-.+'
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
-#before_install:
-# - chmod +x gradlew
+before_install:
+ - chmod +x gradlew
 
 script:
   - ./gradlew test
