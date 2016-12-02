@@ -29,8 +29,7 @@ public interface AdapterLoader<T> {
 
     int TYPE_BOTTOM = 0x80000000;
 
-    int SingleMode = 1;
-    int MultipleMode = 2;
+
 
     /**
      * This method should be called  when you load more !

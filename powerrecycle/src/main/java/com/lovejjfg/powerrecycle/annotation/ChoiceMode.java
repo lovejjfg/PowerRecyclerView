@@ -6,8 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static com.lovejjfg.powerrecycle.AdapterLoader.MultipleMode;
-import static com.lovejjfg.powerrecycle.AdapterLoader.SingleMode;
+import static com.lovejjfg.powerrecycle.model.ISelect.MultipleMode;
+import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
@@ -22,5 +22,6 @@ import static java.lang.annotation.ElementType.PARAMETER;
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface ChoiceMode {
+
 }
 

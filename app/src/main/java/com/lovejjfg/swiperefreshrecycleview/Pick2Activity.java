@@ -30,7 +30,7 @@ import android.widget.CheckedTextView;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
-import com.lovejjfg.powerrecycle.annotation.ChoiceMode;
+import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
@@ -39,15 +39,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static android.os.Build.VERSION_CODES.KITKAT;
-import static com.lovejjfg.powerrecycle.model.ISelect.MultipleMode;
-import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
 
-public class PickActivity extends AppCompatActivity {
-    private static final String TAG = PickActivity.class.getSimpleName();
+public class Pick2Activity extends AppCompatActivity {
+    private static final String TAG = Pick2Activity.class.getSimpleName();
     @Bind(R.id.rv_picked)
     RecyclerView mPickRecyclerView;
-    @Bind(R.id.rv_unpick)
-    RecyclerView mUnpickRecyclerView;
+//    @Bind(R.id.rv_unpick)
+//    RecyclerView mUnpickRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +54,6 @@ public class PickActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pick);
         ButterKnife.bind(this);
         mPickRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mUnpickRecyclerView.setItemAnimator(new DefaultItemAnimator());
         String[] items = getResources().getStringArray(R.array.items);
         String[] unPickItems = getResources().getStringArray(R.array.unPickItems);
         final ArrayList<PickedBean> pickedBeans = new ArrayList<>();
@@ -67,8 +64,8 @@ public class PickActivity extends AppCompatActivity {
         for (String s : unPickItems) {
             unPickBeans.add(new PickedBean(s));
         }
-        final PickAdapter pickedAdapter = new PickAdapter(MultipleMode, false);
-        final PickAdapter unpickedAdapter = new PickAdapter(SingleMode, false);
+        final PickAdapter pickedAdapter = new PickAdapter();
+        final PickAdapter unpickedAdapter = new PickAdapter();
         mPickRecyclerView.setAdapter(pickedAdapter);
         mPickRecyclerView.bringToFront();
         if (Build.VERSION.SDK_INT < KITKAT) {
@@ -87,32 +84,25 @@ public class PickActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(mPickRecyclerView);
         mPickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         pickedAdapter.setList(pickedBeans);
-        mUnpickRecyclerView.setAdapter(unpickedAdapter);
-        mUnpickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         unpickedAdapter.setList(unPickBeans);
         pickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Log.e(TAG, "onItemClick: " + position);
-                PickedBean bean = pickedAdapter.removeItem(position);
+                PickedBean bean = pickedAdapter.list.get(position);
+                pickedAdapter.removeItem(position);
                 unpickedAdapter.insertItem(unpickedAdapter.getItemRealCount(), bean);
-            }
-        });
-        unpickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                Log.e(TAG, "onItemClick: " + position);
-                PickedBean bean = unpickedAdapter.removeItem(position);
-                pickedAdapter.insertItem(pickedAdapter.getItemRealCount(), bean);
             }
         });
 
     }
 
     static class PickAdapter extends SelectRefreshRecycleAdapter<PickedBean> {
+        public PickAdapter() {
+            super(ISelect.SingleMode, false);
+        }
 
-
-        public PickAdapter(@ChoiceMode int currentMode, boolean longTouchEnable) {
+        public PickAdapter(int currentMode, boolean longTouchEnable) {
             super(currentMode, longTouchEnable);
         }
 

@@ -28,7 +28,8 @@
 * **如果不需要下拉刷新，`Adapter` 可直接适配 `RecycleView`**
 * 可直接通过 `PowerRecyclerView` 设置点击、选择事件的回调
 * 水平方向的 `ScrollBar` 修复
-* 拖拽排序
+* 修复拖拽排序存在的bug
+* 增加移除某个Item和添加Item的方法
 
 --------
 

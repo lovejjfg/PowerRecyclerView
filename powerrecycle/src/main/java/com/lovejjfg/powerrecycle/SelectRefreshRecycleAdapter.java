@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2016.  Joe<lovejjfg@163.com>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lovejjfg.powerrecycle;
 
 import android.util.Log;
@@ -8,19 +21,20 @@ import com.lovejjfg.powerrecycle.model.ISelect;
 
 import java.util.HashSet;
 
+import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
+
 /**
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
 
 /**
- * {@link SelectRefreshRecycleAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch {@link #SingleMode} or {@link #MultipleMode}
+ * {@link SelectRefreshRecycleAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch {@link ISelect#SingleMode} or {@link ISelect#MultipleMode}
  * and you can decide whether it's enable the longTouch to jump to  SelectMode, you can call {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
  */
 public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends RefreshRecycleAdapter<T> {
 
     private int currentMode = SingleMode;
-    //    private TestBean pre;
     private int prePos;
     private boolean longTouchEnable = false;
     public static boolean isSelectMode;
@@ -37,6 +51,11 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
             resetData();
             notifyDataSetChanged();
         }
+    }
+
+    public SelectRefreshRecycleAdapter(@ChoiceMode int currentMode, boolean longTouchEnable) {
+        this.currentMode = currentMode;
+        this.longTouchEnable = longTouchEnable;
     }
 
     private void resetData() {
