@@ -87,6 +87,28 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         }
     }
 
+    @Override
+    public T removeItem(int position) {
+        if (position < 0 || position > list.size()) {
+            return null;
+        }
+        T bean = list.remove(position);
+        notifyItemRemoved(position);
+        return bean;
+    }
+
+    @Override
+    public void insertItem(int position, T bean) {
+        if (position < 0 ) {
+            position = 0;
+        }
+        if (position > list.size()) {
+            position = list.size();
+        }
+        list.add(position, bean);
+        notifyItemInserted(position);
+    }
+
     public List<T> list;
 
     @Override

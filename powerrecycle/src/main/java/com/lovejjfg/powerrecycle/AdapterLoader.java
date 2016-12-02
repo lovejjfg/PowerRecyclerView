@@ -78,6 +78,21 @@ public interface AdapterLoader<T> {
     void appendList(List<T> data);
 
     /**
+     * remove the specified position in the list.
+     * @param position he specified position to remove
+     * @return if successful return the removed object,otherwise null
+     */
+    T removeItem(int position);
+
+    /**
+     * remove the specified position in the list.
+     *
+     * @param position he specified position to remove
+     * @return if successful return the removed object,otherwise null
+     */
+    void insertItem(int position, T bean);
+
+    /**
      * @param position the current pos .
      * @return the current Type.
      */
