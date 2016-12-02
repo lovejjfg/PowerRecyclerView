@@ -12,11 +12,17 @@ import java.util.HashSet;
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
+
+/**
+ * {@link SelectRefreshRecycleAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch {@link #SingleMode} or {@link #MultipleMode}
+ * and you can decide whether it's enable the longTouch to jump to  SelectMode, you can call {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
+ */
 public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends RefreshRecycleAdapter<T> {
 
-    private int currentMode = 1;
+    private int currentMode = SingleMode;
     //    private TestBean pre;
     private int prePos;
+    private boolean longTouchEnable = false;
     public static boolean isSelectMode;
 
     public HashSet<T> getSelectedBeans() {
@@ -41,6 +47,10 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
 
     public boolean isSelectMode() {
         return isSelectMode;
+    }
+
+    public void longTouchSelectModeEnable(boolean longTouchSelectModeEnable) {
+        longTouchEnable = longTouchSelectModeEnable;
     }
 
 
@@ -85,16 +95,21 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
         }
     }
 
-//    @Override
-//    public boolean performLongClick(View itemView, int position) {
-//        final T testBean = list.get(position);
-//        updateSelectMode(true);
-//        testBean.setSelected(!testBean.isSelected());
-//        dispatchSelected(itemView, position, testBean, testBean.isSelected());
-//        notifyItemChanged(position);
-//        prePos = position;
-//        return true;
-//    }
+    @Override
+    public boolean performLongClick(View itemView, int position) {
+        if (longTouchEnable) {
+            final T testBean = list.get(position);
+            updateSelectMode(true);
+            testBean.setSelected(!testBean.isSelected());
+            dispatchSelected(itemView, position, testBean, testBean.isSelected());
+            notifyItemChanged(position);
+            prePos = position;
+            return true;
+        } else {
+            return super.performLongClick(itemView, position);
+        }
+
+    }
 
 //    private OnItemSelectedListener selectedListener;
 
