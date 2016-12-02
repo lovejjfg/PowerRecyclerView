@@ -68,6 +68,7 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        super.onSelectedChanged(viewHolder, actionState);
     }
 
     @Override

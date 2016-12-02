@@ -85,16 +85,16 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
         }
     }
 
-    @Override
-    public boolean performLongClick(View itemView, int position) {
-        final T testBean = list.get(position);
-        updateSelectMode(true);
-        testBean.setSelected(!testBean.isSelected());
-        dispatchSelected(itemView, position, testBean, testBean.isSelected());
-        notifyItemChanged(position);
-        prePos = position;
-        return true;
-    }
+//    @Override
+//    public boolean performLongClick(View itemView, int position) {
+//        final T testBean = list.get(position);
+//        updateSelectMode(true);
+//        testBean.setSelected(!testBean.isSelected());
+//        dispatchSelected(itemView, position, testBean, testBean.isSelected());
+//        notifyItemChanged(position);
+//        prePos = position;
+//        return true;
+//    }
 
 //    private OnItemSelectedListener selectedListener;
 

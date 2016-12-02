@@ -1,6 +1,6 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
-import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -16,23 +16,17 @@ import android.widget.CheckedTextView;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
-import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static android.R.attr.type;
-import static com.lovejjfg.powerrecycle.AdapterLoader.MultipleMode;
+import static android.os.Build.VERSION_CODES.KITKAT;
 
 public class PickActivity extends AppCompatActivity {
-
     private static final String TAG = PickActivity.class.getSimpleName();
     @Bind(R.id.rv_picked)
     RecyclerView mPickRecyclerView;
@@ -50,7 +44,7 @@ public class PickActivity extends AppCompatActivity {
         String[] items = getResources().getStringArray(R.array.items);
         String[] unPickItems = getResources().getStringArray(R.array.unPickItems);
         final ArrayList<PickedBean> pickedBeans = new ArrayList<>();
-        ArrayList<PickedBean> unPickBeans = new ArrayList<>();
+        final ArrayList<PickedBean> unPickBeans = new ArrayList<>();
         for (String s : items) {
             pickedBeans.add(new PickedBean(s));
         }
@@ -58,10 +52,13 @@ public class PickActivity extends AppCompatActivity {
             unPickBeans.add(new PickedBean(s));
         }
         final PickAdapter pickedAdapter = new PickAdapter();
-        PickAdapter unpickedAdapter = new PickAdapter();
+        final PickAdapter unpickedAdapter = new PickAdapter();
         mPickRecyclerView.setAdapter(pickedAdapter);
-        // TODO: 2016/12/1 how to make the first RecyclerView on the top.
-//        mPickRecyclerView.bringToFront();
+        mPickRecyclerView.bringToFront();
+        if (Build.VERSION.SDK_INT< KITKAT ) {
+            mPickRecyclerView.requestLayout();
+            mPickRecyclerView.invalidate();
+        }
 //        mPickRecyclerView.invalidate();
 //        pickedAdapter.setSelectedMode(MultipleMode);
         //初始化一个TouchHelperCallback
@@ -77,18 +74,22 @@ public class PickActivity extends AppCompatActivity {
         mUnpickRecyclerView.setAdapter(unpickedAdapter);
         mUnpickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         unpickedAdapter.setList(unPickBeans);
-
         pickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Log.e(TAG, "onItemClick: " + position);
+                PickedBean bean = pickedAdapter.list.get(position);
                 pickedAdapter.removeItem(position);
+                unpickedAdapter.addItem(unpickedAdapter.getItemRealCount(), bean);
             }
         });
         unpickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Log.e(TAG, "onItemClick: " + position);
+                PickedBean bean = unpickedAdapter.list.get(position);
+                unpickedAdapter.removeItem(position);
+                pickedAdapter.addItem(pickedAdapter.getItemRealCount(), bean);
             }
         });
 
@@ -115,16 +116,18 @@ public class PickActivity extends AppCompatActivity {
 
         @Override
         public boolean onItemMove(int fromPosition, int toPosition) {
-            if (toPosition == 0) {
-                return false;
-            }
-            return super.onItemMove(fromPosition, toPosition);
+            return toPosition != 0 && super.onItemMove(fromPosition, toPosition);
         }
 
         @NonNull
         @Override
         public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
+        }
+
+        public void addItem(int position, PickedBean bean) {
+            list.add(position, bean);
+            notifyItemInserted(position);
         }
     }
 

@@ -8,7 +8,7 @@
     android:clipChildren="false"
     tools:context=".PickActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipChildren="false"
@@ -16,24 +16,29 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_picked"
-            android:clipChildren="false"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
 
         </android.support.v7.widget.RecyclerView>
+
         <TextView
+            android:id="@+id/tv_divider"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_below="@+id/rv_picked"
             android:gravity="center_vertical"
             android:text="选择新的用于添加"
             />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_unpick"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_divider">
 
         </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </android.support.v4.widget.NestedScrollView>
