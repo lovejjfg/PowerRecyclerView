@@ -1,13 +1,27 @@
+/*
+ * Copyright (c) 2016.  Joe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lovejjfg.powerrecycle;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import com.lovejjfg.powerrecycle.annotation.LoadState;
 import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
@@ -164,16 +178,24 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    performClick(v, holder.getAdapterPosition());
+                    int position = holder.getAdapterPosition();
+                    if (position == -1 || position >= list.size()) {
+                        return;
+                    }
+                    performClick(v, position);
                 }
             });
 
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return performLongClick(v, holder.getAdapterPosition());
+                    int position = holder.getAdapterPosition();
+                    return !(position == -1 || position >= list.size()) && performLongClick(v, holder.getAdapterPosition());
                 }
             });
+            if (position == -1 || position >= list.size()) {
+                return;
+            }
             onViewHolderBind(holder, position);
         }
     }
@@ -195,7 +217,6 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Override
     public final void isLoadingMore() {
         if (loadState == STATE_LOADING) {
-            Log.e("TAG", "isLoadingMore: 正在加载中 !!");
             return;
         }
         loadState = STATE_LOADING;

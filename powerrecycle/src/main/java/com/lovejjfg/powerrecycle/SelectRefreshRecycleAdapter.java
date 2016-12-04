@@ -1,9 +1,12 @@
 /*
- * Copyright (c) 2016.  Joe<lovejjfg@163.com>
+ * Copyright (c) 2016.  Joe
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,7 +16,6 @@
 
 package com.lovejjfg.powerrecycle;
 
-import android.util.Log;
 import android.view.View;
 
 import com.lovejjfg.powerrecycle.annotation.ChoiceMode;
@@ -82,7 +84,6 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
         final T testBean = list.get(position);
 
         if (isSelectMode) {
-            Log.e("TAG", "onViewHolderBind: " + position + "点击了！！");
             boolean selected = !testBean.isSelected();
             testBean.setSelected(selected);
             dispatchSelected(itemView, position, testBean, selected);

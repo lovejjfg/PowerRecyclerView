@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2016.  Joe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lovejjfg.powerrecycle;
 
 import android.graphics.Canvas;
@@ -5,11 +21,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 
 import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
 
-import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
 
 
@@ -18,8 +32,6 @@ import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
  * Email: lovejjfg@163.com
  */
 public class TouchHelperCallback extends ItemTouchHelper.Callback {
-    //        int swipeFlags =  ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-//        return makeMovementFlags(0, swipeFlags);
     @SuppressWarnings("ConstantConditions")
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
@@ -75,19 +87,6 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
     public void onChildDraw(Canvas c, RecyclerView recyclerView,
                             RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
                             boolean isCurrentlyActive) {
-//        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-//            float width = (float) viewHolder.itemView.getWidth();
-//            float alpha = 1.0f - Math.abs(dX) / width;
-//            viewHolder.itemView.setAlpha(alpha);
-//        } else if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-//            if (isCurrentlyActive) {
-//                viewHolder.itemView.setScaleX(1.2f);
-//                viewHolder.itemView.setScaleY(1.2f);
-//            } else {
-//                viewHolder.itemView.setScaleX(1);
-//                viewHolder.itemView.setScaleY(1);
-//            }
-//        }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY,
                 actionState, isCurrentlyActive);
     }
