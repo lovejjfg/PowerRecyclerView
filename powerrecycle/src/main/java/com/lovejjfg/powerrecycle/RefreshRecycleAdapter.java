@@ -123,7 +123,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         notifyItemInserted(position);
     }
 
-    public List<T> list;
+    public final List<T> list;
 
     @Override
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -248,11 +248,6 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     }
 
     @Override
-    public long getItemId(int position) {
-        return super.getItemId(position);
-    }
-
-    @Override
     public int getItemViewTypes(int position) {
         return 0;
     }
@@ -274,10 +269,6 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
             enableLoadMore = loadMore;
             notifyDataSetChanged();
         }
-    }
-
-    public void onRefresh() {
-//        loadState = STATE_LOADING;
     }
 
 

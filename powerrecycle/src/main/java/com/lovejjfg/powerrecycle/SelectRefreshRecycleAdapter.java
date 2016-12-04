@@ -45,7 +45,7 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
         return selectedBeans;
     }
 
-    private HashSet<T> selectedBeans = new HashSet<>();
+    private final HashSet<T> selectedBeans = new HashSet<>();
 
     public void updateSelectMode(boolean isSelect) {
         if (isSelectMode != isSelect) {

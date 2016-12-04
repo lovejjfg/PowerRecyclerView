@@ -59,11 +59,6 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
-        super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
-    }
-
-    @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         return callBack != null && callBack.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
     }
@@ -79,10 +74,6 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
     }
 
-    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-        super.onSelectedChanged(viewHolder, actionState);
-    }
-
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView,
                             RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
@@ -91,11 +82,6 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
                 actionState, isCurrentlyActive);
     }
 
-
-    @Override
-    public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-    }
 
     public void setItemDragSwipeCallBack(@Nullable ItemDragSwipeCallBack callBack) {
         this.callBack = callBack;

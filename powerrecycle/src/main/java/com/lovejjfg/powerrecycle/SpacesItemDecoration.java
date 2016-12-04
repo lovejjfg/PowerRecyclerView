@@ -16,7 +16,6 @@
 
 package com.lovejjfg.powerrecycle;
 
-import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -29,9 +28,9 @@ import android.view.View;
 
 public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
-    private int spacing;
-    private int spanCount;
-    private boolean showEdge;
+    private final int spacing;
+    private final int spanCount;
+    private final boolean showEdge;
     private final float pre;
 
     /**
@@ -66,16 +65,6 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
             outRect.top = spacing;
         }
         outRect.bottom = spacing; // bottom
-    }
-
-    @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        super.onDraw(c, parent, state);
-    }
-
-    @Override
-    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        super.onDrawOver(c, parent, state);
     }
 
 }

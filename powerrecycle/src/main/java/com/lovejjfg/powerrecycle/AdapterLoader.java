@@ -64,8 +64,6 @@ public interface AdapterLoader<T> {
      */
     RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore);
 
-    void onRefresh();
-
     boolean isHasMore();
 
     void isLoadingMore();
@@ -97,7 +95,6 @@ public interface AdapterLoader<T> {
      * remove the specified position in the list.
      *
      * @param position he specified position to remove
-     * @return if successful return the removed object,otherwise null
      */
     void insertItem(int position, T bean);
 
