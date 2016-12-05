@@ -34,13 +34,13 @@ import java.util.List;
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
-public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack {
+public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack {
 
     private View loadMore;
     public int loadState;
     public boolean enableLoadMore;
     @Nullable
-    OnItemLongClickListener longClickListener;
+    private OnItemLongClickListener longClickListener;
     @Nullable
     OnItemClickListener clickListener;
     @Nullable
@@ -68,7 +68,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     private int totalCount;
 
-    RefreshRecycleAdapter() {
+    PowerAdapter() {
         list = new ArrayList<>();
     }
 
@@ -81,9 +81,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         if (data == null) {
             return;
         }
-        if (list != null) {
-            list.clear();
-        }
+        list.clear();
         appendList(data);
 
     }

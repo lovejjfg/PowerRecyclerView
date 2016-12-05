@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
-import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
@@ -33,7 +33,7 @@ import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
  * Created by Joe on 2016-07-27
  * Email: lovejjfg@163.com
  */
-public class SelectRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
+public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
 
     public SelectRecycleAdapter() {
         super(ISelect.SingleMode, false);

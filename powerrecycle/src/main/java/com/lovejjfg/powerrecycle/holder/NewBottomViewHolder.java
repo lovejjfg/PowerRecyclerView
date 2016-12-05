@@ -23,9 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
+import com.lovejjfg.powerrecycle.PowerAdapter;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.powerrecycle.R;
-import com.lovejjfg.powerrecycle.RefreshRecycleAdapter;
 
 
 /**
@@ -45,7 +45,7 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
         content = (TextView) itemView.findViewById(R.id.content);
     }
 
-    public void bindDateView(RefreshRecycleAdapter adapter) {
+    public void bindDateView(PowerAdapter adapter) {
         final PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener = adapter.getLoadMoreListener();
         switch (adapter.loadState) {
             case AdapterLoader.STATE_LASTED:

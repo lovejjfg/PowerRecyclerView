@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
-import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
@@ -50,7 +50,7 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
     PowerRecyclerView mRecycleView;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
-    private SelectRefreshRecycleAdapter<TestBean> adapter;
+    private SelectPowerAdapter<TestBean> adapter;
 
     private List<TestBean> list;
     private Runnable refreshAction;

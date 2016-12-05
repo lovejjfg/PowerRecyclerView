@@ -155,9 +155,9 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     }
 
 
-    private RefreshRecycleAdapter adapter;
+    private PowerAdapter adapter;
 
-    public void setAdapter(RefreshRecycleAdapter adapter) {
+    public void setAdapter(PowerAdapter adapter) {
         this.adapter = adapter;
         mRecyclerView.setAdapter(adapter);
         adapter.attachToRecyclerView(this);

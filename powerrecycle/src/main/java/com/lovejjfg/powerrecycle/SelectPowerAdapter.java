@@ -31,10 +31,10 @@ import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
  */
 
 /**
- * {@link SelectRefreshRecycleAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch {@link ISelect#SingleMode} or {@link ISelect#MultipleMode}
+ * {@link SelectPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch {@link ISelect#SingleMode} or {@link ISelect#MultipleMode}
  * and you can decide whether it's enable the longTouch to jump to  SelectMode, you can call {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
  */
-public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends RefreshRecycleAdapter<T> {
+public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter<T> {
 
     private int currentMode = SingleMode;
     private int prePos;
@@ -55,7 +55,7 @@ public abstract class SelectRefreshRecycleAdapter<T extends ISelect> extends Ref
         }
     }
 
-    public SelectRefreshRecycleAdapter(@ChoiceMode int currentMode, boolean longTouchEnable) {
+    public SelectPowerAdapter(@ChoiceMode int currentMode, boolean longTouchEnable) {
         this.currentMode = currentMode;
         this.longTouchEnable = longTouchEnable;
     }

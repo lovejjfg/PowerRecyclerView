@@ -18,6 +18,7 @@ package com.lovejjfg.swiperefreshrecycleview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +32,7 @@ import android.view.View;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
-import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
     RecyclerView mRecycleView;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
-    private SelectRefreshRecycleAdapter<TestBean> adapter;
+    private SelectPowerAdapter<TestBean> adapter;
 
     private List<TestBean> list;
     private Runnable refreshAction;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
         adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.layout_foot_self, mRecycleView, false));
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(View view, int position, boolean isSelected) {
+            public void onItemSelected(View view, @ColorInt int position, boolean isSelected) {
                 Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
             }
 

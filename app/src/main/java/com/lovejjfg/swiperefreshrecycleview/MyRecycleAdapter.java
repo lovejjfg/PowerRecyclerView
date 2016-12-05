@@ -25,7 +25,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
-import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.annotation.LoadState;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
@@ -37,7 +37,7 @@ import com.transitionseverywhere.TransitionManager;
  * Created by Joe on 2016-07-27
  * Email: lovejjfg@163.com
  */
-public class MyRecycleAdapter extends SelectRefreshRecycleAdapter<TestBean> {
+public class MyRecycleAdapter extends SelectPowerAdapter<TestBean> {
     public MyRecycleAdapter() {
         super(ISelect.SingleMode, false);
     }

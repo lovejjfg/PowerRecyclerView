@@ -113,7 +113,7 @@ public interface AdapterLoader<T> {
     RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType);
 
     /**
-     * Return the current size about {@link RefreshRecycleAdapter#list}.
+     * Return the current size about {@link PowerAdapter#list}.
      *
      * @return current list size!
      */

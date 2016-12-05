@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
-import com.lovejjfg.powerrecycle.SelectRefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
@@ -100,7 +100,7 @@ public class Pick2Activity extends AppCompatActivity {
 
     }
 
-    static class PickAdapter extends SelectRefreshRecycleAdapter<PickedBean> {
+    static class PickAdapter extends SelectPowerAdapter<PickedBean> {
         public PickAdapter() {
             super(ISelect.SingleMode, false);
         }
