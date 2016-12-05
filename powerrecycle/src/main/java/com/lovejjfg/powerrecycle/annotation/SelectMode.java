@@ -37,7 +37,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
         MultipleMode
 })
 @Retention(RetentionPolicy.SOURCE)
-public @interface ChoiceMode {
+public @interface SelectMode {
 
 }
 

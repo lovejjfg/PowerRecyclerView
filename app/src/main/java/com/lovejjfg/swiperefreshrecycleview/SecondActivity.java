@@ -202,7 +202,7 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
                 mRecycleView.getRecycle().addItemDecoration(decor);
                 break;
             case R.id.normal:
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, NormalActivity.class));
                 break;
             case R.id.showNoData:
                 adapter.enableLoadMore(!adapter.enableLoadMore);

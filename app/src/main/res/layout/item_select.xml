@@ -23,7 +23,7 @@
     android:background="?attr/selectableItemBackground"
     android:clipToPadding="false"
     android:gravity="center"
-    tools:context="com.lovejjfg.swiperefreshrecycleview.MainActivity">
+    tools:context="com.lovejjfg.swiperefreshrecycleview.NormalActivity">
 
 
     <TextView

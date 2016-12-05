@@ -16,12 +16,12 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:clipToPadding="false"
-              tools:context="com.lovejjfg.swiperefreshrecycleview.MainActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:clipToPadding="false"
+                tools:context="com.lovejjfg.swiperefreshrecycleview.NormalActivity">
     <ListView
         android:layout_below="@id/toolbar"
         android:id="@+id/list_view"

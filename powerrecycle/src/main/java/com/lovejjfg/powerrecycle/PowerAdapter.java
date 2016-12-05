@@ -45,6 +45,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     OnItemClickListener clickListener;
     @Nullable
     OnItemSelectedListener selectedListener;
+    private PowerRecyclerView recyclerView;
 
     public PowerRecyclerView.OnRefreshLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
@@ -61,8 +62,8 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     }
 
     public void setTotalCount(int totalCount) {
-        enableLoadMore = true;
         this.totalCount = totalCount;
+        enableLoadMore = totalCount > list.size();
         notifyDataSetChanged();
     }
 
@@ -83,6 +84,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
         }
         list.clear();
         appendList(data);
+        enableLoadMore = totalCount > data.size();
 
     }
 
@@ -127,6 +129,9 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_BOTTOM:
+                if (recyclerView == null) {
+                    throw new IllegalStateException("You must use PowerRecyclerView with load more, include call method setTotalCount()");
+                }
                 if (loadMore != null) {
                     RecyclerView.ViewHolder holder = onBottomViewHolderCreate(loadMore);
                     if (holder == null) {
@@ -298,6 +303,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     }
 
     void attachToRecyclerView(PowerRecyclerView recycleView) {
+        recyclerView = recycleView;
         longClickListener = recycleView.getLongClickListener();
         clickListener = recycleView.getClickListener();
         selectedListener = recycleView.getSelectedListener();

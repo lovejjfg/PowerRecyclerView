@@ -18,7 +18,7 @@ package com.lovejjfg.powerrecycle;
 
 import android.view.View;
 
-import com.lovejjfg.powerrecycle.annotation.ChoiceMode;
+import com.lovejjfg.powerrecycle.annotation.SelectMode;
 import com.lovejjfg.powerrecycle.model.ISelect;
 
 import java.util.HashSet;
@@ -39,7 +39,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     private int currentMode = SingleMode;
     private int prePos;
     private boolean longTouchEnable = false;
-    public static boolean isSelectMode;
+    public boolean isSelectMode;
 
     public HashSet<T> getSelectedBeans() {
         return selectedBeans;
@@ -55,7 +55,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         }
     }
 
-    public SelectPowerAdapter(@ChoiceMode int currentMode, boolean longTouchEnable) {
+    public SelectPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
         this.currentMode = currentMode;
         this.longTouchEnable = longTouchEnable;
     }
@@ -75,7 +75,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
 
-    public void setSelectedMode(@ChoiceMode int mode) {
+    public void setSelectedMode(@SelectMode int mode) {
         currentMode = mode;
     }
 

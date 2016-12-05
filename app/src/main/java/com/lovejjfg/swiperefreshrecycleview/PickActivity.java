@@ -33,7 +33,7 @@ import android.widget.CheckedTextView;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
-import com.lovejjfg.powerrecycle.annotation.ChoiceMode;
+import com.lovejjfg.powerrecycle.annotation.SelectMode;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
@@ -112,7 +112,7 @@ public class PickActivity extends AppCompatActivity {
     static class PickAdapter extends SelectPowerAdapter<PickedBean> {
 
 
-        public PickAdapter(@ChoiceMode int currentMode, boolean longTouchEnable) {
+        public PickAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
             super(currentMode, longTouchEnable);
         }
 

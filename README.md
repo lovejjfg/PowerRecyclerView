@@ -26,7 +26,7 @@
 
 * 更名 `SwipRefreshRecycleView` 为 `PowerRecyclerView`
 * 更名 `RefreshRecycleAdapter` 为 `PowerAdapter`
-* **如果不需要下拉刷新，`Adapter` 可直接适配 `RecycleView`**
+* **如果不需要下拉刷新 加载更多，`Adapter` 可直接适配 `RecycleView`**
 * 可直接通过 `PowerRecyclerView` 设置点击、选择事件的回调
 * 水平方向的 `ScrollBar` 修复
 * 修复拖拽排序存在的bug

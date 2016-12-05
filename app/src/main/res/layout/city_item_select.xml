@@ -26,6 +26,6 @@
     android:text="xxxxxxx"
     android:checkMark="?android:attr/listChoiceIndicatorSingle"
     android:textAlignment="gravity"
-    tools:context="com.lovejjfg.swiperefreshrecycleview.MainActivity">
+    tools:context="com.lovejjfg.swiperefreshrecycleview.NormalActivity">
 
 </CheckedTextView>

@@ -24,10 +24,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.lovejjfg.powerrecycle.PowerRecyclerView;
-import com.lovejjfg.powerrecycle.SelectPowerAdapter;
-import com.lovejjfg.powerrecycle.annotation.LoadState;
-import com.lovejjfg.powerrecycle.model.ISelect;
+import com.lovejjfg.powerrecycle.PowerAdapter;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;
@@ -37,14 +34,8 @@ import com.transitionseverywhere.TransitionManager;
  * Created by Joe on 2016-07-27
  * Email: lovejjfg@163.com
  */
-public class MyRecycleAdapter extends SelectPowerAdapter<TestBean> {
-    public MyRecycleAdapter() {
-        super(ISelect.SingleMode, false);
-    }
+public class NormalAdapter extends PowerAdapter<TestBean> {
 
-    public MyRecycleAdapter(int currentMode, boolean longTouchEnable) {
-        super(currentMode, longTouchEnable);
-    }
 
     @Override
     public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
@@ -59,15 +50,6 @@ public class MyRecycleAdapter extends SelectPowerAdapter<TestBean> {
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
     }
 
-    @Override
-    public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new BottomViewHolder(loadMore);
-    }
-
-    @Override
-    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder,@LoadState int loadState) {
-        ((BottomViewHolder) holder).onBind(getLoadMoreListener(), loadState);
-    }
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -82,29 +64,10 @@ public class MyRecycleAdapter extends SelectPowerAdapter<TestBean> {
 
         public void bindDateView(TestBean s) {
             TransitionManager.beginDelayedTransition((ViewGroup) itemView, new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_KEEP));
-            mCheckBox.setVisibility(isSelectMode ? View.VISIBLE : View.GONE);
-            mTv.setText(s.isSelected() ? "选中：" + s.getName() : s.getName());
-            mCheckBox.setChecked(s.isSelected());
+            mTv.setText(s.getName());
+            mCheckBox.setVisibility(View.GONE);
         }
     }
 
-    private static class BottomViewHolder extends RecyclerView.ViewHolder {
-
-        private final View bottomView;
-
-        public BottomViewHolder(View itemView) {
-            super(itemView);
-            bottomView = itemView.findViewById(R.id.progressbar);
-        }
-
-        public void onBind(PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener, int loadState) {
-            if (loadState == STATE_LOADING) {
-                bottomView.setVisibility(View.VISIBLE);
-                loadMoreListener.onLoadMore();
-            } else {
-                bottomView.setVisibility(View.GONE);
-            }
-        }
-    }
 
 }
