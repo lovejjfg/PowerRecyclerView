@@ -68,7 +68,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     private int totalCount;
 
-    PowerAdapter() {
+    public PowerAdapter() {
         list = new ArrayList<>();
     }
 
@@ -111,7 +111,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public void insertItem(int position, T bean) {
-        if (position < 0 ) {
+        if (position < 0) {
             position = 0;
         }
         if (position > list.size()) {
