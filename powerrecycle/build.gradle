@@ -1,7 +1,11 @@
 apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
+def gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
+def gitCommitCount = 100 +
+        Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -9,8 +13,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0.1"
+        versionCode gitCommitCount
+        versionName gitTag
     }
     buildTypes {
         release {
@@ -48,7 +52,8 @@ dependencies {
  */
 
 // This is the library version used when deploying the artifact
-version = "1.0.1"
+//gradlew bintrayUpload
+version = gitTag
 
 def siteUrl = 'https://github.com/lovejjfg/PowerRecyclerView'      // 项目的主页
 def gitUrl = 'https://github.com/lovejjfg/PowerRecyclerView.git'   // Git仓库的url
@@ -60,7 +65,7 @@ install {
             project {
                 packaging 'aar'
                 // Add your description here
-                name 'multi-format 1D/2D barcode image processing use zxing.'
+                name 'PowerRecycler'
                 url siteUrl
                 // Set your license
                 licenses {
@@ -101,11 +106,11 @@ artifacts {
     archives javadocJar
     archives sourcesJar
 }
-//Properties properties = new Properties()
-//properties.load(project.rootProject.file('local.properties').newDataInputStream())
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 bintray {
-//    user = properties.getProperty("bintray.user")
-//    key = properties.getProperty("bintray.apikey")
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
     configurations = ['archives']
     pkg {
         repo = "maven"
