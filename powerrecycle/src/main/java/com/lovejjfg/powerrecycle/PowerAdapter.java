@@ -173,23 +173,17 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
                 }
             }
         } else {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = holder.getAdapterPosition();
-                    if (position == -1 || position >= list.size()) {
-                        return;
-                    }
-                    performClick(v, position);
+            holder.itemView.setOnClickListener(v -> {
+                int position1 = holder.getAdapterPosition();
+                if (position1 == -1 || position1 >= list.size()) {
+                    return;
                 }
+                performClick(v, position1);
             });
 
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    int position = holder.getAdapterPosition();
-                    return !(position == -1 || position >= list.size()) && performLongClick(v, holder.getAdapterPosition());
-                }
+            holder.itemView.setOnLongClickListener(v -> {
+                int position12 = holder.getAdapterPosition();
+                return !(position12 == -1 || position12 >= list.size()) && performLongClick(v, holder.getAdapterPosition());
             });
             if (position == -1 || position >= list.size()) {
                 return;

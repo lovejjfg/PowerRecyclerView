@@ -68,15 +68,12 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
                 container.setVisibility(View.VISIBLE);
                 pb.setVisibility(View.GONE);
                 content.setText("--- 加载更多失败点击重试 ---");
-                container.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (loadMoreListener != null) {
-                            loadMoreListener.onLoadMore();
-                        }
-                        content.setText("加载更多！！");
-                        pb.setVisibility(View.VISIBLE);
+                container.setOnClickListener(v -> {
+                    if (loadMoreListener != null) {
+                        loadMoreListener.onLoadMore();
                     }
+                    content.setText("加载更多！！");
+                    pb.setVisibility(View.VISIBLE);
                 });
                 break;
         }

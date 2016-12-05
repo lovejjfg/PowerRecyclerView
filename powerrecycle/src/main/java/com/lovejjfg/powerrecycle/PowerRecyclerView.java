@@ -164,12 +164,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     }
 
     public void setRefresh(final boolean refresh) {
-        mRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(refresh);
-            }
-        });
+        mRecyclerView.post(() -> mRefreshLayout.setRefreshing(refresh));
     }
 
     @Override
