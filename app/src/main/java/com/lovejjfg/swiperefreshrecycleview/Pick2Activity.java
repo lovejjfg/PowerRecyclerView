@@ -30,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
-import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.powerrecycle.model.ISelect;
@@ -88,14 +87,11 @@ public class Pick2Activity extends AppCompatActivity {
         mPickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         pickedAdapter.setList(pickedBeans);
         unpickedAdapter.setList(unPickBeans);
-        pickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                Log.e(TAG, "onItemClick: " + position);
-                PickedBean bean = pickedAdapter.list.get(position);
-                pickedAdapter.removeItem(position);
-                unpickedAdapter.insertItem(unpickedAdapter.getItemRealCount(), bean);
-            }
+        pickedAdapter.setOnItemClickListener((itemView, position) -> {
+            Log.e(TAG, "onItemClick: " + position);
+            PickedBean bean = pickedAdapter.list.get(position);
+            pickedAdapter.removeItem(position);
+            unpickedAdapter.insertItem(unpickedAdapter.getItemRealCount(), bean);
         });
 
     }

@@ -45,7 +45,7 @@ import static com.lovejjfg.powerrecycle.model.ISelect.MultipleMode;
 import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
 
 public class MainActivity extends AppCompatActivity implements PowerRecyclerView.OnRefreshLoadMoreListener {
-
+    private static final String TAG = MainActivity.class.getSimpleName();
     @Bind(R.id.recyclerview)
     RecyclerView mRecycleView;
     @Bind(R.id.toolbar)
@@ -84,12 +84,7 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
-        adapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                Log.e("TAG", "onItemClick: " + position);
-            }
-        });
+        adapter.setOnItemClickListener((v, p) -> Log.e(TAG, "onItemClick: " + p));
         //初始化一个TouchHelperCallback
 //        TouchHelperCallback callback = new TouchHelperCallback();
         //添加一个回调
@@ -106,25 +101,22 @@ public class MainActivity extends AppCompatActivity implements PowerRecyclerView
             list.add(new TestBean("这是" + i));
         }
         adapter.setList(list);
-        loadMoreAction = new Runnable() {
-            @Override
-            public void run() {
-                int i = ((int) (Math.random() * 10)) % 3;
-                if (i == 0 || i == 1) {
-                    ArrayList<TestBean> arrayList = new ArrayList<>();
-                    arrayList.add(new TestBean("ccc1"));
-                    arrayList.add(new TestBean("ccc2"));
-                    arrayList.add(new TestBean("ccc3"));
-                    arrayList.add(new TestBean("ccc4"));
-                    arrayList.add(new TestBean("ccc5"));
-                    adapter.appendList(arrayList);
-                    Log.e("TAG", "run: 正常加载更多！！");
-                } else {
-                    adapter.loadMoreError();
-                    Log.e("TAG", "run: 加载失败！！！");
-                }
-                isRun = false;
+        loadMoreAction = () -> {
+            int i = ((int) (Math.random() * 10)) % 3;
+            if (i == 0 || i == 1) {
+                ArrayList<TestBean> arrayList = new ArrayList<>();
+                arrayList.add(new TestBean("ccc1"));
+                arrayList.add(new TestBean("ccc2"));
+                arrayList.add(new TestBean("ccc3"));
+                arrayList.add(new TestBean("ccc4"));
+                arrayList.add(new TestBean("ccc5"));
+                adapter.appendList(arrayList);
+                Log.e("TAG", "run: 正常加载更多！！");
+            } else {
+                adapter.loadMoreError();
+                Log.e("TAG", "run: 加载失败！！！");
             }
+            isRun = false;
         };
 
     }

@@ -93,13 +93,10 @@ public class PickActivity extends AppCompatActivity {
         mUnpickRecyclerView.setAdapter(unpickedAdapter);
         mUnpickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         unpickedAdapter.setList(unPickBeans);
-        pickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                Log.e(TAG, "onItemClick: " + position);
-                PickedBean bean = pickedAdapter.removeItem(position);
-                unpickedAdapter.insertItem(unpickedAdapter.getItemRealCount(), bean);
-            }
+        pickedAdapter.setOnItemClickListener((itemView, position) -> {
+            Log.e(TAG, "onItemClick: " + position);
+            PickedBean bean = pickedAdapter.removeItem(position);
+            unpickedAdapter.insertItem(unpickedAdapter.getItemRealCount(), bean);
         });
         unpickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
             @Override

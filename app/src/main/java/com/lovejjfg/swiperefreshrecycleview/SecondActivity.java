@@ -70,12 +70,9 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-        mToolBar.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                NotificationUtil.sendSimplestNotificationWithAction(SecondActivity.this);
-                return true;
-            }
+        mToolBar.setOnLongClickListener(v -> {
+            NotificationUtil.sendSimplestNotificationWithAction(SecondActivity.this);
+            return true;
         });
         adapter = new SelectRecycleAdapter();
         mRecycleView.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
@@ -93,22 +90,14 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
-        mRecycleView.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                toast.setText("点击了：" + position);
-                toast.show();
-            }
+        mRecycleView.setOnItemClickListener((itemView, position) -> {
+            toast.setText("点击了：" + position);
+            toast.show();
         });
 //        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         mRecycleView.setLayoutManager(manager);
-        mRecycleView.setSpanSizeCallBack(new PowerRecyclerView.SpanSizeCallBack() {
-            @Override
-            public int getSpanSize(int position) {
-                return 1;
-            }
-        });
+        mRecycleView.setSpanSizeCallBack(position -> 1);
 
         decor = new SpacesItemDecoration(30, 3, true);
         mRecycleView.getRecycle().addItemDecoration(decor);
@@ -125,37 +114,31 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
 
         adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
-        refreshAction = new Runnable() {
-            @Override
-            public void run() {
-                list = new ArrayList<>();
-                for (int i = 0; i < 40; i++) {
-                    list.add(new TestBean("这是" + i));
-                }
-                adapter.setList(list);
-                mRecycleView.setRefresh(false);
+        refreshAction = () -> {
+            list = new ArrayList<>();
+            for (int i = 0; i < 40; i++) {
+                list.add(new TestBean("这是" + i));
             }
+            adapter.setList(list);
+            mRecycleView.setRefresh(false);
         };
 
-        loadMoreAction = new Runnable() {
-            @Override
-            public void run() {
-                int i = ((int) (Math.random() * 10)) % 3;
-                if (i == 0 || i == 1) {
-                    ArrayList<TestBean> arrayList = new ArrayList<>();
-                    arrayList.add(new TestBean("ccc1"));
-                    arrayList.add(new TestBean("ccc2"));
-                    arrayList.add(new TestBean("ccc3"));
-                    arrayList.add(new TestBean("ccc4"));
-                    arrayList.add(new TestBean("ccc5"));
-                    adapter.appendList(arrayList);
-                    Log.e("TAG", "run: 正常加载更多！！");
-                } else {
-                    adapter.loadMoreError();
-                    Log.e("TAG", "run: 加载失败！！！");
-                }
-                isRun = false;
+        loadMoreAction = () -> {
+            int i = ((int) (Math.random() * 10)) % 3;
+            if (i == 0 || i == 1) {
+                ArrayList<TestBean> arrayList = new ArrayList<>();
+                arrayList.add(new TestBean("ccc1"));
+                arrayList.add(new TestBean("ccc2"));
+                arrayList.add(new TestBean("ccc3"));
+                arrayList.add(new TestBean("ccc4"));
+                arrayList.add(new TestBean("ccc5"));
+                adapter.appendList(arrayList);
+                Log.e("TAG", "run: 正常加载更多！！");
+            } else {
+                adapter.loadMoreError();
+                Log.e("TAG", "run: 加载失败！！！");
             }
+            isRun = false;
         };
         mRecycleView.setRefresh(true);
         mRecycleView.postDelayed(refreshAction, DEFAULT_TIME);
