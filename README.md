@@ -22,7 +22,7 @@
 
 * 添加单选和多选模式
 
-### V1.1.0 todo
+### V1.0.2
 
 * 更名 `SwipRefreshRecycleView` 为 `PowerRecyclerView`
 * 更名 `RefreshRecycleAdapter` 为 `PowerAdapter`
