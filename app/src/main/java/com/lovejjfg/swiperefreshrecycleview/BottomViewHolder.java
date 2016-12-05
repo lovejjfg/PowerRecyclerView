@@ -37,7 +37,7 @@ public class BottomViewHolder extends RecyclerView.ViewHolder {
         bottomView = itemView.findViewById(R.id.progressbar);
     }
 
-    public void onBind(PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener, int loadState) {
+    public void onBind(PowerRecyclerView.OnLoadMoreListener loadMoreListener, int loadState) {
         if (loadState == STATE_LOADING) {
             // TODO: 2016/12/5 handle error state
             bottomView.setVisibility(View.VISIBLE);

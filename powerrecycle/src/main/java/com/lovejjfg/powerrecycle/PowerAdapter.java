@@ -47,15 +47,15 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     OnItemSelectedListener selectedListener;
     private PowerRecyclerView recyclerView;
 
-    public PowerRecyclerView.OnRefreshLoadMoreListener getLoadMoreListener() {
+    public PowerRecyclerView.OnLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
     }
 
-    public void setLoadMoreListener(PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener) {
+    public <G extends PowerRecyclerView.OnLoadMoreListener> void setLoadMoreListener(G loadMoreListener) {
         this.loadMoreListener = loadMoreListener;
     }
 
-    private PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener;
+    private PowerRecyclerView.OnLoadMoreListener loadMoreListener;
 
     public int getTotalCount() {
         return totalCount;
@@ -129,9 +129,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_BOTTOM:
-                if (recyclerView == null) {
-                    throw new IllegalStateException("You must use PowerRecyclerView with load more, include call method setTotalCount()");
-                }
                 if (loadMore != null) {
                     RecyclerView.ViewHolder holder = onBottomViewHolderCreate(loadMore);
                     if (holder == null) {

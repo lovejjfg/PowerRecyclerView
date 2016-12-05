@@ -46,7 +46,7 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindDateView(PowerAdapter adapter) {
-        final PowerRecyclerView.OnRefreshLoadMoreListener loadMoreListener = adapter.getLoadMoreListener();
+        final PowerRecyclerView.OnLoadMoreListener loadMoreListener = adapter.getLoadMoreListener();
         switch (adapter.loadState) {
             case AdapterLoader.STATE_LASTED:
                 pb.setVisibility(View.GONE);

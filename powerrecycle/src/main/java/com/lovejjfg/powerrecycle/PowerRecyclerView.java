@@ -63,7 +63,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
         mRefreshLayout = (SwipeRefreshLayout) inflate.findViewById(R.id.container);
         mRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.setItemAnimator(new DefaultAnimator());
-        mRecyclerView.addOnScrollListener(new FinishScrollListener());
+        mRecyclerView.addOnScrollListener(new LoadMoreScrollListener(mRecyclerView));
         addView(inflate, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
@@ -184,19 +184,28 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
         return mRecyclerView;
     }
 
-    public interface OnRefreshLoadMoreListener {
-        void onRefresh();
-
+    public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
+    public interface OnRefreshLoadMoreListener extends OnLoadMoreListener {
+        void onRefresh();
+    }
 
-    private class FinishScrollListener extends RecyclerView.OnScrollListener {
+
+    public static class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
+        private final RecyclerView mRecyclerView;
 
 //        private int lastTitlePos = -1;
 
+        public LoadMoreScrollListener(RecyclerView recyclerView) {
+            mRecyclerView = recyclerView;
+        }
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
+            PowerAdapter adapter = (PowerAdapter) mRecyclerView.getAdapter();
             if (null == manager) {
                 throw new RuntimeException("you should call setLayoutManager() first!!");
             }
@@ -241,7 +250,6 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
 
     /**
      * you should call this method when you want to specified SpanSize.
-     *
      */
     public void setSpanSizeCallBack(@NonNull SpanSizeCallBack spanSizeCallBack) {
         this.spanSizeCallBack = spanSizeCallBack;
