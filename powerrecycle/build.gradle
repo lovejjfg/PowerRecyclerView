@@ -125,14 +125,12 @@ artifacts {
     archives sourcesJar
 }
 Properties properties = new Properties()
-boolean isHasFile = false
-if (project.rootProject.findProject('local.properties') != null) {
-    isHasFile = true
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-}
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def userName = properties.getProperty("bintray.user")
+def apiKey = properties.getProperty("bintray.apikey")
 bintray {
-    user = isHasFile ? properties.getProperty("bintray.user") : System.getenv("bintray.user")
-    key = isHasFile ? properties.getProperty("bintray.apikey") : System.getenv("bintray.apikey")
+    user = null != userName ? userName : System.getenv("bintray.user")
+    key = null != apiKey ? apiKey : System.getenv("bintray.apikey")
     configurations = ['archives']
     pkg {
         repo = "maven"
