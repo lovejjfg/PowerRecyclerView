@@ -22,6 +22,9 @@ import com.lovejjfg.powerrecycle.model.ISelect;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.PARAMETER;
 
 
 /**
@@ -29,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
  * Email lovejjfg@gmail.com
  */
 
-//@Target(PARAMETER)
+@Target(PARAMETER)
 @IntDef(flag = true, value = {
         ISelect.SINGLE_MODE,
         ISelect.MULTIPLE_MODE

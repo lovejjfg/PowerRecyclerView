@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -37,11 +36,13 @@ import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class Pick2Activity extends AppCompatActivity {
     private static final String TAG = Pick2Activity.class.getSimpleName();
-    //    @Bind(R.id.rv_picked)
+    @Bind(R.id.rv_picked)
     RecyclerView mPickRecyclerView;
 //    @Bind(R.id.rv_unpick)
 //    RecyclerView mUnpickRecyclerView;
@@ -51,8 +52,7 @@ public class Pick2Activity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick);
-        mPickRecyclerView = (RecyclerView) findViewById(R.id.rv_picked);
-        mPickRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        ButterKnife.bind(this);
         String[] items = getResources().getStringArray(R.array.items);
         String[] unPickItems = getResources().getStringArray(R.array.unPickItems);
         final ArrayList<PickedBean> pickedBeans = new ArrayList<>();
@@ -128,12 +128,12 @@ public class Pick2Activity extends AppCompatActivity {
     }
 
     static class PickHolder extends RecyclerView.ViewHolder {
-        //        @Bind(R.id.text)
+        @Bind(R.id.text)
         CheckedTextView mText;
 
         PickHolder(View itemView) {
             super(itemView);
-            mText = (CheckedTextView) itemView.findViewById(R.id.text);
+            ButterKnife.bind(this, itemView);
         }
 
         void onBind(PickHolder holder, PickedBean bean) {

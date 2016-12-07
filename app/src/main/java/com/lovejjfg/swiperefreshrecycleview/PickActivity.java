@@ -38,13 +38,15 @@ import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class PickActivity extends AppCompatActivity {
     private static final String TAG = PickActivity.class.getSimpleName();
-    //    @Bind(R.id.rv_picked)
+    @Bind(R.id.rv_picked)
     RecyclerView mPickRecyclerView;
-    //    @Bind(R.id.rv_unpick)
+    @Bind(R.id.rv_unpick)
     RecyclerView mUnpickRecyclerView;
 
     @Override
@@ -52,8 +54,7 @@ public class PickActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick);
-        mPickRecyclerView = (RecyclerView) findViewById(R.id.rv_picked);
-        mUnpickRecyclerView = (RecyclerView) findViewById(R.id.rv_unpick);
+        ButterKnife.bind(this);
 
         mPickRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mUnpickRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -137,12 +138,12 @@ public class PickActivity extends AppCompatActivity {
     }
 
     static class PickHolder extends RecyclerView.ViewHolder {
-        //        @Bind(R.id.text)
+        @Bind(R.id.text)
         CheckedTextView mText;
 
         PickHolder(View itemView) {
             super(itemView);
-            mText = (CheckedTextView) itemView.findViewById(R.id.text);
+            ButterKnife.bind(this, itemView);
         }
 
         void onBind(PickHolder holder, PickedBean bean) {

@@ -39,13 +39,15 @@ import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class SecondActivity extends AppCompatActivity implements PowerRecyclerView.OnRefreshLoadMoreListener {
 
-    //    @Bind(R.id.recycle_view)
+    @Bind(R.id.recycle_view)
     PowerRecyclerView mRecycleView;
-    //    @Bind(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolBar;
     private SelectPowerAdapter<TestBean> adapter;
 
@@ -64,8 +66,7 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sed);
-        mRecycleView = (PowerRecyclerView) findViewById(R.id.recyclerview);
-        mToolBar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         mToolBar.setOnLongClickListener(v -> {

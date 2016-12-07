@@ -22,7 +22,9 @@ import com.lovejjfg.powerrecycle.AdapterLoader;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
  * Created by Joe on 2016/12/1.
@@ -33,6 +35,7 @@ import java.lang.annotation.RetentionPolicy;
         AdapterLoader.STATE_LASTED,
         AdapterLoader.STATE_ERROR
 })
+@Target(PARAMETER)
 @Retention(RetentionPolicy.SOURCE)
 public @interface LoadState {
 }

@@ -34,7 +34,7 @@ import com.transitionseverywhere.TransitionManager;
  * Created by Joe on 2016-07-27
  * Email: lovejjfg@163.com
  */
-class NormalAdapter extends PowerAdapter<TestBean> {
+public class NormalAdapter extends PowerAdapter<TestBean> {
 
 
     @Override
