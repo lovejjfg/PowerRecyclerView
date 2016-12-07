@@ -29,9 +29,7 @@ import android.support.v4.app.NotificationCompat;
  * Email lovejjfg@gmail.com
  */
 
-final class NotificationUtil {
-    private NotificationUtil() {
-    }
+class NotificationUtil {
 
     static int NUMBER = 1;
 
@@ -61,8 +59,8 @@ final class NotificationUtil {
 // Sets a title for the Inbox in expanded layout
         inboxStyle.setBigContentTitle("Event tracker details:");
 // Moves events into the expanded layout
-        for (int i = 0; i < events.length; i++) {
-            inboxStyle.addLine(events[i]);
+        for (String event : events) {
+            inboxStyle.addLine(event);
         }
 
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();

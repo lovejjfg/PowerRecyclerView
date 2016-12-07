@@ -21,9 +21,9 @@
     <module name="FileLength"/>
     <module name="FileTabCharacter"/>
 
-    <module name="SuppressionFilter">
-        <property name="file" value="${checkStyleConfigDir}/checkstyle_suppressions.xml"/>
-    </module>
+    <!--<module name="SuppressionFilter">-->
+    <!--<property name="file" value="${checkStyleConfigDir}/checkstyle_suppressions.xml"/>-->
+    <!--</module>-->
 
     <!-- Trailing spaces -->
     <module name="RegexpSingleline">

@@ -96,7 +96,8 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
 
         /**
          * Instead of composing this flag manually, you can use makeMovementFlags(int, int) or makeFlag(int, int).
-         * This flag is composed of 3 sets of 8 bits, where first 8 bits are for IDLE state, next 8 bits are for SWIPE state and third 8 bits are for DRAG state. Each 8 bit sections can be constructed by simply OR'ing direction flags defined in ItemTouchHelper.
+         * This flag is composed of 3 sets of 8 bits, where first 8 bits are for IDLE state, next 8 bits are for SWIPE state and third 8 bits are for DRAG state.
+         * Each 8 bit sections can be constructed by simply OR'ing direction flags defined in ItemTouchHelper.
          * For example, if you want it to allow swiping LEFT and RIGHT but only allow starting to swipe by swiping RIGHT, you can return:
          * <p>
          * <code>new  int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN |
