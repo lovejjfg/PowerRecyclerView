@@ -79,3 +79,9 @@ subprojects { project ->
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+ext {
+    gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
+    gitCommitCount = 100 +
+            Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+
+}
