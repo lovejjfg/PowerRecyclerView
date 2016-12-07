@@ -19,9 +19,10 @@ package com.lovejjfg.swiperefreshrecycleview;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
 
-import static com.lovejjfg.powerrecycle.AdapterLoader.STATE_LOADING;
+
 
 /**
  * Created by Joe on 2016/12/5.
@@ -38,7 +39,7 @@ public class BottomViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void onBind(PowerRecyclerView.OnLoadMoreListener loadMoreListener, int loadState) {
-        if (loadState == STATE_LOADING) {
+        if (loadState == AdapterLoader.STATE_LOADING) {
             // TODO: 2016/12/5 handle error state
             bottomView.setVisibility(View.VISIBLE);
             loadMoreListener.onLoadMore();

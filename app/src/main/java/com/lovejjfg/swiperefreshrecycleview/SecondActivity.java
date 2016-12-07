@@ -33,6 +33,7 @@ import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
+import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
@@ -41,8 +42,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static com.lovejjfg.powerrecycle.model.ISelect.MultipleMode;
-import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
 
 public class SecondActivity extends AppCompatActivity implements PowerRecyclerView.OnRefreshLoadMoreListener {
 
@@ -182,12 +181,12 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
                 mRecycleView.setPullRefreshEnable(enable);
                 break;
             case R.id.select_single:
-                adapter.setSelectedMode(SingleMode);
+                adapter.setSelectedMode(ISelect.SINGLE_MODE);
                 adapter.updateSelectMode(true);
 
                 break;
             case R.id.select_mul:
-                adapter.setSelectedMode(MultipleMode);
+                adapter.setSelectedMode(ISelect.MULTIPLE_MODE);
                 adapter.updateSelectMode(true);
                 break;
             case R.id.showedge:

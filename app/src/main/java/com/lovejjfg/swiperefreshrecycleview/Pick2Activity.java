@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static android.os.Build.VERSION_CODES.KITKAT;
 
 public class Pick2Activity extends AppCompatActivity {
     private static final String TAG = Pick2Activity.class.getSimpleName();
@@ -70,12 +69,12 @@ public class Pick2Activity extends AppCompatActivity {
         final PickAdapter unpickedAdapter = new PickAdapter();
         mPickRecyclerView.setAdapter(pickedAdapter);
         mPickRecyclerView.bringToFront();
-        if (Build.VERSION.SDK_INT < KITKAT) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             mPickRecyclerView.requestLayout();
             mPickRecyclerView.invalidate();
         }
 //        mPickRecyclerView.invalidate();
-//        pickedAdapter.setSelectedMode(MultipleMode);
+//        pickedAdapter.setSelectedMode(MULTIPLE_MODE);
         //初始化一个TouchHelperCallback
         TouchHelperCallback callback = new TouchHelperCallback();
         //添加一个回调
@@ -97,13 +96,16 @@ public class Pick2Activity extends AppCompatActivity {
     }
 
     static class PickAdapter extends SelectPowerAdapter<PickedBean> {
-        public PickAdapter() {
-            super(ISelect.SingleMode, false);
+        PickAdapter() {
+            super(ISelect.SINGLE_MODE, false);
         }
 
         @Override
         public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
-            return new PickHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.city_item_select, parent, false));
+            return new PickHolder(LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(R.layout.city_item_select,
+                            parent, false));
         }
 
         @Override
@@ -121,7 +123,7 @@ public class Pick2Activity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder holder) {
             return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
         }
 
@@ -131,25 +133,16 @@ public class Pick2Activity extends AppCompatActivity {
         @Bind(R.id.text)
         CheckedTextView mText;
 
-        public PickHolder(View itemView) {
+        PickHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void onBind(PickHolder holder, PickedBean bean) {
+        void onBind(PickHolder holder, PickedBean bean) {
             mText.setText(bean.title);
             mText.setChecked(bean.isSelected());
         }
 
     }
-
-//    static class MyTouchHelperCallback extends TouchHelperCallback {
-//        @Override
-//        public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-////            viewHolder.itemView.bringToFront();
-//            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-//        }
-//    }
-
 
 }

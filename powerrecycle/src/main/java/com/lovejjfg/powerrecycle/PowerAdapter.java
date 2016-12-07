@@ -45,7 +45,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     OnItemClickListener clickListener;
     @Nullable
     OnItemSelectedListener selectedListener;
-    private PowerRecyclerView recyclerView;
 
     public PowerRecyclerView.OnLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
@@ -300,7 +299,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     }
 
     void attachToRecyclerView(PowerRecyclerView recycleView) {
-        recyclerView = recycleView;
         longClickListener = recycleView.getLongClickListener();
         clickListener = recycleView.getClickListener();
         selectedListener = recycleView.getSelectedListener();

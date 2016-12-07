@@ -1,9 +1,5 @@
 language: android
 jdk: oraclejdk8
-
-notifications:
-  email: false
-
 sudo: false
 
 android:
@@ -22,7 +18,7 @@ before_install:
  - chmod +x gradlew
 
 script:
-  - ./gradlew test
+  - ./gradlew build
 # 部署之前
 #before_deploy:
   # - mv app/build/outputs/apk/app-release.apk

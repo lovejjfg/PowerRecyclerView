@@ -38,7 +38,7 @@ import com.transitionseverywhere.TransitionManager;
  */
 public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
     public SelectModeAdapter() {
-        super(ISelect.SingleMode, false);
+        super(ISelect.SINGLE_MODE, false);
     }
 
     public SelectModeAdapter(int currentMode, boolean longTouchEnable) {
@@ -73,13 +73,13 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
         private final TextView mTv;
         private final CheckBox mCheckBox;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             mTv = (TextView) itemView.findViewById(R.id.text);
             mCheckBox = (CheckBox) itemView.findViewById(R.id.cb);
         }
 
-        public void bindDateView(boolean isSelectMode, TestBean s) {
+        void bindDateView(boolean isSelectMode, TestBean s) {
             TransitionManager.beginDelayedTransition((ViewGroup) itemView, new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_KEEP));
             mCheckBox.setVisibility(isSelectMode ? View.VISIBLE : View.GONE);
             mTv.setText(s.isSelected() ? "选中：" + s.getName() : s.getName());

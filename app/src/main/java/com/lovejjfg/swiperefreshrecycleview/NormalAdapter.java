@@ -34,7 +34,7 @@ import com.transitionseverywhere.TransitionManager;
  * Created by Joe on 2016-07-27
  * Email: lovejjfg@163.com
  */
-public class NormalAdapter extends PowerAdapter<TestBean> {
+class NormalAdapter extends PowerAdapter<TestBean> {
 
 
     @Override
@@ -56,13 +56,13 @@ public class NormalAdapter extends PowerAdapter<TestBean> {
         private final TextView mTv;
         private final CheckBox mCheckBox;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             mTv = (TextView) itemView.findViewById(R.id.text);
             mCheckBox = (CheckBox) itemView.findViewById(R.id.cb);
         }
 
-        public void bindDateView(TestBean s) {
+        void bindDateView(TestBean s) {
             TransitionManager.beginDelayedTransition((ViewGroup) itemView, new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_KEEP));
             mTv.setText(s.getName());
             mCheckBox.setVisibility(View.GONE);

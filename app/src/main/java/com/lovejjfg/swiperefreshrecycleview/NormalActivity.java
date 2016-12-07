@@ -24,7 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.lovejjfg.powerrecycle.DefaultAnimator;
-import com.lovejjfg.powerrecycle.PowerRecyclerView;
+import com.lovejjfg.powerrecycle.LoadMoreScrollListener;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
@@ -57,10 +57,12 @@ public class NormalActivity extends AppCompatActivity {
         setSupportActionBar(mToolBar);
         adapter = new NormalAdapter();
         LinearLayoutManager manager = new LinearLayoutManager(this);
+        //1.setLayoutManager
         mRecycleView.setLayoutManager(manager);
+        //2.setAdapter
         mRecycleView.setAdapter(adapter);
         mRecycleView.setItemAnimator(new DefaultAnimator());
-        mRecycleView.addOnScrollListener(new PowerRecyclerView.LoadMoreScrollListener(mRecycleView));
+        mRecycleView.addOnScrollListener(new LoadMoreScrollListener(mRecycleView));
         adapter.setOnItemClickListener((v, p) -> Log.e(TAG, "onItemClick: " + p));
 //        adapter.setTotalCount(100);
         adapter.setLoadMoreListener(() -> {
@@ -77,6 +79,7 @@ public class NormalActivity extends AppCompatActivity {
         for (int i = 0; i < 30; i++) {
             this.list.add(new TestBean("这是" + i));
         }
+        //3.initData
         adapter.setList(this.list);
         loadMoreAction = () -> {
             int i = ((int) (Math.random() * 10)) % 3;

@@ -22,8 +22,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static com.lovejjfg.powerrecycle.model.ISelect.MultipleMode;
-import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
+import static com.lovejjfg.powerrecycle.model.ISelect.MULTIPLE_MODE;
+import static com.lovejjfg.powerrecycle.model.ISelect.SINGLE_MODE;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
@@ -33,8 +33,8 @@ import static java.lang.annotation.ElementType.PARAMETER;
 
 @Target(PARAMETER)
 @IntDef(flag = true, value = {
-        SingleMode,
-        MultipleMode
+        SINGLE_MODE,
+        MULTIPLE_MODE
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface SelectMode {

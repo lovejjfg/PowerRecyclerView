@@ -40,14 +40,12 @@ public interface AdapterLoader<T> {
     int TYPE_BOTTOM = 0x80000000;
 
 
-
     /**
      * This method should be called  when you load more !
      *
      * @param holder    the current holder.
      * @param loadState the current state.
      */
-
     void onBottomViewHolderBind(RecyclerView.ViewHolder holder, @LoadState int loadState);
 
     /**
@@ -86,6 +84,7 @@ public interface AdapterLoader<T> {
 
     /**
      * remove the specified position in the list.
+     *
      * @param position he specified position to remove
      * @return if successful return the removed object,otherwise null
      */

@@ -30,10 +30,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
-import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.powerrecycle.annotation.SelectMode;
+import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
@@ -41,9 +41,6 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static android.os.Build.VERSION_CODES.KITKAT;
-import static com.lovejjfg.powerrecycle.model.ISelect.MultipleMode;
-import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
 
 public class PickActivity extends AppCompatActivity {
     private static final String TAG = PickActivity.class.getSimpleName();
@@ -70,16 +67,16 @@ public class PickActivity extends AppCompatActivity {
         for (String s : unPickItems) {
             unPickBeans.add(new PickedBean(s));
         }
-        final PickAdapter pickedAdapter = new PickAdapter(MultipleMode, false);
-        final PickAdapter unpickedAdapter = new PickAdapter(SingleMode, false);
+        final PickAdapter pickedAdapter = new PickAdapter(ISelect.MULTIPLE_MODE, false);
+        final PickAdapter unpickedAdapter = new PickAdapter(ISelect.SINGLE_MODE, false);
         mPickRecyclerView.setAdapter(pickedAdapter);
         mPickRecyclerView.bringToFront();
-        if (Build.VERSION.SDK_INT < KITKAT) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             mPickRecyclerView.requestLayout();
             mPickRecyclerView.invalidate();
         }
 //        mPickRecyclerView.invalidate();
-//        pickedAdapter.setSelectedMode(MultipleMode);
+//        pickedAdapter.setSelectedMode(MULTIPLE_MODE);
         //初始化一个TouchHelperCallback
         TouchHelperCallback callback = new TouchHelperCallback();
         //添加一个回调
@@ -98,13 +95,10 @@ public class PickActivity extends AppCompatActivity {
             PickedBean bean = pickedAdapter.removeItem(position);
             unpickedAdapter.insertItem(unpickedAdapter.getItemRealCount(), bean);
         });
-        unpickedAdapter.setOnItemClickListener(new AdapterLoader.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                Log.e(TAG, "onItemClick: " + position);
-                PickedBean bean = unpickedAdapter.removeItem(position);
-                pickedAdapter.insertItem(pickedAdapter.getItemRealCount(), bean);
-            }
+        unpickedAdapter.setOnItemClickListener((itemView, position) -> {
+            Log.e(TAG, "onItemClick: " + position);
+            PickedBean bean = unpickedAdapter.removeItem(position);
+            pickedAdapter.insertItem(pickedAdapter.getItemRealCount(), bean);
         });
 
     }
@@ -112,7 +106,7 @@ public class PickActivity extends AppCompatActivity {
     static class PickAdapter extends SelectPowerAdapter<PickedBean> {
 
 
-        public PickAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
+        PickAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
             super(currentMode, longTouchEnable);
         }
 
@@ -146,12 +140,12 @@ public class PickActivity extends AppCompatActivity {
         @Bind(R.id.text)
         CheckedTextView mText;
 
-        public PickHolder(View itemView) {
+        PickHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void onBind(PickHolder holder, PickedBean bean) {
+        void onBind(PickHolder holder, PickedBean bean) {
             mText.setText(bean.title);
             mText.setChecked(bean.isSelected());
         }

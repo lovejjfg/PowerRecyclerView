@@ -29,9 +29,11 @@ import android.support.v4.app.NotificationCompat;
  * Email lovejjfg@gmail.com
  */
 
-public class NotificationUtil {
+final class NotificationUtil {
+    private NotificationUtil() {
+    }
 
-    static int number = 1;
+    static int NUMBER = 1;
 
     /**
      * 发送一个点击跳转到MainActivity的消息
@@ -48,14 +50,14 @@ public class NotificationUtil {
                 .setAutoCancel(true)
                 .setContentTitle("我是tittle")
                 .setContentText("我是内容")
-                .setNumber(++number)
+                .setNumber(++NUMBER)
                 .setPriority(2)
                 .setContentIntent(mainPendingIntent)
                 .setFullScreenIntent(mainPendingIntent, true);
         NotificationCompat.InboxStyle inboxStyle =
                 new NotificationCompat.InboxStyle();
 
-        String[] events = new String[]{"CCCCCCCCCCCCCCCCC","DDDDDDDDDDDDDDDDDDDDD","EEEEEEEEEEEEEEEEEEEE","FFFFFFFFFFFFFFFFFFFF","HHHHHHHHHHHHHHHHHHH",};
+        String[] events = new String[]{"CCCCCCCCCCCCCCCCC", "DDDDDDDDDDDDDDDDDDDDD", "EEEEEEEEEEEEEEEEEEEE", "FFFFFFFFFFFFFFFFFFFF", "HHHHHHHHHHHHHHHHHHH"};
 // Sets a title for the Inbox in expanded layout
         inboxStyle.setBigContentTitle("Event tracker details:");
 // Moves events into the expanded layout

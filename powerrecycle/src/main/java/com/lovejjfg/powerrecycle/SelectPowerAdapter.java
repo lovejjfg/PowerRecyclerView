@@ -23,7 +23,7 @@ import com.lovejjfg.powerrecycle.model.ISelect;
 
 import java.util.HashSet;
 
-import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
+import static com.lovejjfg.powerrecycle.model.ISelect.SINGLE_MODE;
 
 /**
  * Created by Joe on 2016-03-11
@@ -31,12 +31,12 @@ import static com.lovejjfg.powerrecycle.model.ISelect.SingleMode;
  */
 
 /**
- * {@link SelectPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch {@link ISelect#SingleMode} or {@link ISelect#MultipleMode}
+ * {@link SelectPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch {@link ISelect#SINGLE_MODE} or {@link ISelect#MULTIPLE_MODE}
  * and you can decide whether it's enable the longTouch to jump to  SelectMode, you can call {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
  */
 public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter<T> {
 
-    private int currentMode = SingleMode;
+    private int currentMode = SINGLE_MODE;
     private int prePos;
     private boolean longTouchEnable = false;
     public boolean isSelectMode;
@@ -87,7 +87,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
             boolean selected = !testBean.isSelected();
             testBean.setSelected(selected);
             dispatchSelected(itemView, position, testBean, selected);
-            if (currentMode == SingleMode && position != prePos && testBean.isSelected()) {
+            if (currentMode == SINGLE_MODE && position != prePos && testBean.isSelected()) {
                 list.get(prePos).setSelected(false);
                 dispatchSelected(itemView, prePos, testBean, false);
                 notifyItemChanged(prePos);

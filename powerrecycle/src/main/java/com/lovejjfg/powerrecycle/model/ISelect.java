@@ -22,8 +22,8 @@ package com.lovejjfg.powerrecycle.model;
  */
 
 public interface ISelect {
-    int SingleMode = 1;
-    int MultipleMode = 2;
+    int SINGLE_MODE = 1;
+    int MULTIPLE_MODE = 2;
 
     boolean isSelected();
 

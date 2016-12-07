@@ -9,8 +9,7 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PowerRecycerView-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/4745)
  [ ![Download](https://api.bintray.com/packages/lovejjfg/maven/powerRecycleView/images/download.svg) ](https://bintray.com/lovejjfg/maven/powerRecycleView/_latestVersion)
 
-    //gradle
-    compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.1'
+
 
 ### V1.0.0
 
@@ -26,11 +25,15 @@
 
 * 更名 `SwipRefreshRecycleView` 为 `PowerRecyclerView`
 * 更名 `RefreshRecycleAdapter` 为 `PowerAdapter`
-* **如果不需要下拉刷新 加载更多，`Adapter` 可直接适配 `RecycleView`**
+* **如果不需要下拉刷新 ，`Adapter` 可直接适配 `RecycleView`**
 * 可直接通过 `PowerRecyclerView` 设置点击、选择事件的回调
 * 水平方向的 `ScrollBar` 修复
 * 修复拖拽排序存在的bug
 * 增加移除某个Item和添加Item的方法
+
+### V1.0.3
+
+* `PowerAdapter` 修复构造方法
 
 --------
 

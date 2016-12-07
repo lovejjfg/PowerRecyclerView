@@ -24,7 +24,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +83,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
             switch (orientation) {
                 case LinearLayoutManager.HORIZONTAL:
                     mRecyclerView.setHorizontalScrollBarEnabled(showScrollBar);
+                    setPullRefreshEnable(false);
                     break;
                 case LinearLayoutManager.VERTICAL:
                     mRecyclerView.setVerticalScrollBarEnabled(showScrollBar);
@@ -107,13 +107,18 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
         mRecyclerView.setLayoutManager(manager);
     }
 
+    /**
+     * show horizontalScrollBar default state is false,show verticalScrollBar default state is true.
+     *
+     * @param manager LayoutManager
+     */
     public void setLayoutManager(final RecyclerView.LayoutManager manager) {
         this.manager = manager;
         if (manager instanceof LinearLayoutManager) {
             int orientation = ((LinearLayoutManager) manager).getOrientation();
             switch (orientation) {
                 case LinearLayoutManager.HORIZONTAL:
-                    mRecyclerView.setHorizontalScrollBarEnabled(true);
+                    mRecyclerView.setHorizontalScrollBarEnabled(false);
                     setPullRefreshEnable(false);
                     break;
                 case LinearLayoutManager.VERTICAL:
@@ -192,57 +197,6 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
         void onRefresh();
     }
 
-
-    public static class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
-        private final RecyclerView mRecyclerView;
-
-//        private int lastTitlePos = -1;
-
-        public LoadMoreScrollListener(RecyclerView recyclerView) {
-            mRecyclerView = recyclerView;
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
-            PowerAdapter adapter = (PowerAdapter) mRecyclerView.getAdapter();
-            if (null == manager) {
-                throw new RuntimeException("you should call setLayoutManager() first!!");
-            }
-            if (null == adapter) {
-                throw new RuntimeException("you should call setAdapter() first!!");
-            }
-            if (manager instanceof LinearLayoutManager) {
-                int lastCompletelyVisibleItemPosition = ((LinearLayoutManager) manager).findLastCompletelyVisibleItemPosition();
-
-                if (adapter.getItemCount() > 1 && lastCompletelyVisibleItemPosition >= adapter.getItemCount() - 1 && adapter.isHasMore()) {
-                    adapter.isLoadingMore();
-//                    if (null != listener) {
-//                        listener.onLoadMore();
-//                    }
-                }
-//                int position = ((LinearLayoutManager) manager).findFirstVisibleItemPosition();
-//                if (lastTitlePos == position) {
-//                    return;
-//                }
-//                lastTitlePos = position;
-            }
-            if (manager instanceof StaggeredGridLayoutManager) {
-                int[] itemPositions = new int[2];
-                ((StaggeredGridLayoutManager) manager).findLastVisibleItemPositions(itemPositions);
-
-                int lastVisibleItemPosition = (itemPositions[1] != 0) ? ++itemPositions[1] : ++itemPositions[0];
-
-                if (lastVisibleItemPosition >= adapter.getItemCount() && adapter.isHasMore()) {
-                    adapter.isLoadingMore();
-//                    if (null != listener) {
-//                        listener.onLoadMore();
-//                    }
-                }
-            }
-        }
-
-    }
 
     public void addOnScrollListener(RecyclerView.OnScrollListener listener) {
         mRecyclerView.addOnScrollListener(listener);

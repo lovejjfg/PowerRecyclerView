@@ -35,6 +35,46 @@ allprojects {
         jcenter()
     }
 }
+subprojects {
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+subprojects { project ->
+////    repositories {
+////        jcenter()
+////        maven {
+////            url "https://oss.sonatype.org/content/repositories/snapshots"
+////        }
+////    }
+    apply plugin: 'checkstyle'
+//
+//
+    task checkstyle(type: Checkstyle) {
+        configFile file("${project.rootDir}/checkstyle.xml")
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+        classpath = files()
+    }
+    checkstyle {
+        toolVersion = '6.12.1'
+        configFile = rootProject.file('checkstyle.xml')
+        configProperties.checkStyleConfigDir = rootProject.rootDir
+    }
+//
+//    afterEvaluate {
+//        if (project.tasks.findByName('check')) {
+//            check.dependsOn('checkstyle')
+//        }
+//    }
+//    gradle.projectsEvaluated {
+//        tasks.withType(JavaCompile) {
+//            options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+//        }
+//    }
+}
 
 task clean(type: Delete) {
     delete rootProject.buildDir

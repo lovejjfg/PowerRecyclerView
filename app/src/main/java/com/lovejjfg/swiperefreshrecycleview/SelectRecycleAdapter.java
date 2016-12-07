@@ -36,7 +36,7 @@ import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
 
     public SelectRecycleAdapter() {
-        super(ISelect.SingleMode, false);
+        super(ISelect.SINGLE_MODE, false);
     }
 
     public SelectRecycleAdapter(int currentMode, boolean longTouchEnable) {
@@ -64,12 +64,12 @@ public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
     private static class MyViewHolder extends RecyclerView.ViewHolder {
         private final CheckedTextView mTv;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             mTv = (CheckedTextView) itemView.findViewById(R.id.text);
         }
 
-        public void bindDateView(TestBean s) {
+        void bindDateView(TestBean s) {
             mTv.setText(s.isSelected() ? "选中：" + s.getName() : s.getName());
             mTv.setChecked(s.isSelected());
         }
@@ -80,8 +80,8 @@ public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
     @Override
     public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         if (viewHolder.getAdapterPosition() % 2 == 0) {
-            return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN |
-                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
+            return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN
+                    | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
         }
         return super.getMovementFlags(recyclerView, viewHolder);
 
