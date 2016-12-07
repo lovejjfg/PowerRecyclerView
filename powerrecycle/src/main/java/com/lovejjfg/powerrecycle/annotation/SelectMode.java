@@ -18,23 +18,21 @@ package com.lovejjfg.powerrecycle.annotation;
 
 import android.support.annotation.IntDef;
 
+import com.lovejjfg.powerrecycle.model.ISelect;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
-import static com.lovejjfg.powerrecycle.model.ISelect.MULTIPLE_MODE;
-import static com.lovejjfg.powerrecycle.model.ISelect.SINGLE_MODE;
-import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
  * Created by Joe on 2016/12/1.
  * Email lovejjfg@gmail.com
  */
 
-@Target(PARAMETER)
+//@Target(PARAMETER)
 @IntDef(flag = true, value = {
-        SINGLE_MODE,
-        MULTIPLE_MODE
+        ISelect.SINGLE_MODE,
+        ISelect.MULTIPLE_MODE
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface SelectMode {

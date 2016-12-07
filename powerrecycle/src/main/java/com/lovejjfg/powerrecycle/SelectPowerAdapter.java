@@ -23,7 +23,6 @@ import com.lovejjfg.powerrecycle.model.ISelect;
 
 import java.util.HashSet;
 
-import static com.lovejjfg.powerrecycle.model.ISelect.SINGLE_MODE;
 
 /**
  * Created by Joe on 2016-03-11
@@ -36,7 +35,7 @@ import static com.lovejjfg.powerrecycle.model.ISelect.SINGLE_MODE;
  */
 public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter<T> {
 
-    private int currentMode = SINGLE_MODE;
+    private int currentMode = ISelect.SINGLE_MODE;
     private int prePos;
     private boolean longTouchEnable = false;
     public boolean isSelectMode;
@@ -87,7 +86,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
             boolean selected = !testBean.isSelected();
             testBean.setSelected(selected);
             dispatchSelected(itemView, position, testBean, selected);
-            if (currentMode == SINGLE_MODE && position != prePos && testBean.isSelected()) {
+            if (currentMode == ISelect.SINGLE_MODE && position != prePos && testBean.isSelected()) {
                 list.get(prePos).setSelected(false);
                 dispatchSelected(itemView, prePos, testBean, false);
                 notifyItemChanged(prePos);

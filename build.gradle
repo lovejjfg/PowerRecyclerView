@@ -59,7 +59,7 @@ subprojects { project ->
         classpath = files()
     }
     checkstyle {
-        toolVersion = '6.12.1'
+        toolVersion = '7.3'
         configFile = rootProject.file('checkstyle.xml')
         configProperties.checkStyleConfigDir = rootProject.rootDir
     }

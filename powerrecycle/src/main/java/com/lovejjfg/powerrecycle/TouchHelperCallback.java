@@ -24,7 +24,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
 
-import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
 
 
 /**
@@ -35,7 +34,7 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
     @SuppressWarnings("ConstantConditions")
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        if (viewHolder.getItemViewType() == TYPE_BOTTOM) {
+        if (viewHolder.getItemViewType() == AdapterLoader.TYPE_BOTTOM) {
             return makeMovementFlags(0, 0);
         }
         if (callBack != null) {

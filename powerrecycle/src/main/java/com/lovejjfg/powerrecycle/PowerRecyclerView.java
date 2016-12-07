@@ -30,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import static com.lovejjfg.powerrecycle.AdapterLoader.TYPE_BOTTOM;
 
 /**
  * Created by Joe on 2016-03-11.
@@ -95,7 +94,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
                 @Override
                 public int getSpanSize(int position) {
                     switch (adapter.getItemViewType(position)) {
-                        case TYPE_BOTTOM:
+                        case AdapterLoader.TYPE_BOTTOM:
                             return ((GridLayoutManager) manager).getSpanCount();
                         default:
                             return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);
@@ -131,7 +130,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
                 @Override
                 public int getSpanSize(int position) {
                     switch (adapter.getItemViewType(position)) {
-                        case TYPE_BOTTOM:
+                        case AdapterLoader.TYPE_BOTTOM:
                             return ((GridLayoutManager) manager).getSpanCount();
                         default:
                             return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);

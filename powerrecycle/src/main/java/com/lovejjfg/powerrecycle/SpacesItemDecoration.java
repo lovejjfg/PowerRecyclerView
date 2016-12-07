@@ -54,17 +54,17 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
         }
         int column = position % spanCount;
         if (showEdge) {
-            outRect.left = (int) (spacing - column * pre);//left
-            outRect.right = (int) ((column + 1) * pre);//right
+            outRect.left = (int) (spacing - column * pre);
+            outRect.right = (int) ((column + 1) * pre);
         } else {
             outRect.left = (int) (column * pre);
             outRect.right = (int) (spacing - (column + 1) * pre);
         }
 
-        if (position < spanCount) { // top
+        if (position < spanCount) {
             outRect.top = spacing;
         }
-        outRect.bottom = spacing; // bottom
+        outRect.bottom = spacing;
     }
 
 }
