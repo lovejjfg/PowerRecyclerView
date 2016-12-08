@@ -206,6 +206,8 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
             case R.id.showNoData:
                 adapter.enableLoadMore(!adapter.enableLoadMore);
                 break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

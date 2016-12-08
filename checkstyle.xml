@@ -209,5 +209,9 @@
         <!--检查switch中case后是否加入了跳出语句，例如：return、break、throw、continue -->
         <module name="FallThrough"/>
 
+
+        <module name="MissingSwitchDefault"/>
+
+
     </module>
 </module>

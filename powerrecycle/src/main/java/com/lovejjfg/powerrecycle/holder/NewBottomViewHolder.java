@@ -76,6 +76,8 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
                     pb.setVisibility(View.VISIBLE);
                 });
                 break;
+            default:
+                break;
         }
     }
 

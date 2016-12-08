@@ -27,8 +27,8 @@
         <Class name="com.lovejjfg.swiperefreshrecycleview.model.PickedBean"/>
         <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
     </Match>
-    <Match>
-        <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
-    </Match>
+    <!--<Match>-->
+    <!--<Bug pattern="SF_SWITCH_NO_DEFAULT"/>-->
+    <!--</Match>-->
 
 </FindBugsFilter>

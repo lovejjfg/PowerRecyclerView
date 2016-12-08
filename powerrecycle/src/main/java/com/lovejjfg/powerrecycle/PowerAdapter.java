@@ -126,21 +126,19 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case TYPE_BOTTOM:
-                if (loadMore != null) {
-                    RecyclerView.ViewHolder holder = onBottomViewHolderCreate(loadMore);
-                    if (holder == null) {
-                        throw new RuntimeException("You must impl onBottomViewHolderCreate() and return your own holder ");
-                    }
-                    return holder;
-                } else {
-                    return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
+        if (TYPE_BOTTOM == viewType) {
+            if (loadMore != null) {
+                RecyclerView.ViewHolder holder = onBottomViewHolderCreate(loadMore);
+                if (holder == null) {
+                    throw new RuntimeException("You must impl onBottomViewHolderCreate() and return your own holder ");
                 }
-            default:
-                return onViewHolderCreate(parent, viewType);
+                return holder;
+            } else {
+                return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
+            }
+        } else {
+            return onViewHolderCreate(parent, viewType);
         }
-
     }
 
     @Override
@@ -150,7 +148,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, @LoadState int loadState) {
-
+        //todoNothing
     }
 
     @Override
@@ -170,7 +168,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
                 try {
                     ((NewBottomViewHolder) holder).bindDateView(this);
                 } catch (Exception e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         } else {
@@ -218,7 +216,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public final int getItemCount() {
-        return list.size() == 0 ? 0 : enableLoadMore ? list.size() + 1 : list.size();
+        return list.isEmpty() ? 0 : enableLoadMore ? list.size() + 1 : list.size();
     }
 
     @Override
@@ -233,7 +231,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public final int getItemViewType(int position) {
-        if (list.size() > 0 && position < list.size()) {
+        if (!list.isEmpty() && position < list.size()) {
             return getItemViewTypes(position);
         } else {
             return TYPE_BOTTOM;

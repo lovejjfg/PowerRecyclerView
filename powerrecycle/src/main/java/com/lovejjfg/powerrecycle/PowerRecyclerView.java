@@ -76,31 +76,30 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     public void setLayoutManager(final RecyclerView.LayoutManager manager, boolean showScrollBar) {
         if (manager instanceof LinearLayoutManager) {
             int orientation = ((LinearLayoutManager) manager).getOrientation();
-            switch (orientation) {
-                case LinearLayoutManager.HORIZONTAL:
-                    mRecyclerView.setHorizontalScrollBarEnabled(showScrollBar);
-                    setPullRefreshEnable(false);
-                    break;
-                case LinearLayoutManager.VERTICAL:
-                    mRecyclerView.setVerticalScrollBarEnabled(showScrollBar);
-                    break;
+            if (LinearLayoutManager.HORIZONTAL == orientation) {
+                mRecyclerView.setHorizontalScrollBarEnabled(showScrollBar);
+                setPullRefreshEnable(false);
+            } else {
+                mRecyclerView.setVerticalScrollBarEnabled(showScrollBar);
             }
         }
         if (manager instanceof GridLayoutManager) {
             ((GridLayoutManager) manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    switch (adapter.getItemViewType(position)) {
-                        case AdapterLoader.TYPE_BOTTOM:
-                            return ((GridLayoutManager) manager).getSpanCount();
-                        default:
-                            return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);
-                    }
-
+                    return initSpanSize(position, (GridLayoutManager) manager);
                 }
             });
         }
         mRecyclerView.setLayoutManager(manager);
+    }
+
+    private int initSpanSize(int position, GridLayoutManager manager) {
+        int itemViewType = adapter.getItemViewType(position);
+        if (AdapterLoader.TYPE_BOTTOM == itemViewType) {
+            return manager.getSpanCount();
+        }
+        return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);
     }
 
     /**
@@ -111,27 +110,18 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     public void setLayoutManager(final RecyclerView.LayoutManager manager) {
         if (manager instanceof LinearLayoutManager) {
             int orientation = ((LinearLayoutManager) manager).getOrientation();
-            switch (orientation) {
-                case LinearLayoutManager.HORIZONTAL:
-                    mRecyclerView.setHorizontalScrollBarEnabled(false);
-                    setPullRefreshEnable(false);
-                    break;
-                case LinearLayoutManager.VERTICAL:
-                    mRecyclerView.setVerticalScrollBarEnabled(true);
-                    break;
+            if (LinearLayoutManager.HORIZONTAL == orientation) {
+                mRecyclerView.setHorizontalScrollBarEnabled(false);
+                setPullRefreshEnable(false);
+            } else {
+                mRecyclerView.setVerticalScrollBarEnabled(true);
             }
         }
         if (manager instanceof GridLayoutManager) {
             ((GridLayoutManager) manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    switch (adapter.getItemViewType(position)) {
-                        case AdapterLoader.TYPE_BOTTOM:
-                            return ((GridLayoutManager) manager).getSpanCount();
-                        default:
-                            return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);
-                    }
-
+                    return initSpanSize(position, (GridLayoutManager) manager);
                 }
             });
         }

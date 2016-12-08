@@ -56,6 +56,9 @@ public class GuideActivity extends AppCompatActivity {
             case R.id.bt_choice:
                 intent = new Intent(this, SecondActivity.class);
                 break;
+            default:
+                intent = new Intent(this, NormalActivity.class);
+                break;
         }
         startActivity(intent);
     }

@@ -45,7 +45,7 @@ public class SelectBean implements ISelect, Parcelable {
         dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
     }
 
-    public SelectBean() {
+    protected SelectBean() {
     }
 
     protected SelectBean(Parcel in) {
