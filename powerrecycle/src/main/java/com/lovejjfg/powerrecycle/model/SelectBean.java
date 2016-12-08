@@ -48,6 +48,7 @@ public class SelectBean implements ISelect, Parcelable {
     protected SelectBean() {
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected SelectBean(Parcel in) {
         this.isSelected = in.readByte() != 0;
     }

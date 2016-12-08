@@ -19,6 +19,7 @@ package com.lovejjfg.powerrecycle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,6 +158,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_BOTTOM) {
+            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+            if (params instanceof StaggeredGridLayoutManager.LayoutParams) {
+                ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
+            }
             loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
             if (loadMore != null) {
                 try {

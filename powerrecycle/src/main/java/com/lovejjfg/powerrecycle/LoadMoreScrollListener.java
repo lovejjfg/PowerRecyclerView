@@ -60,12 +60,16 @@ public class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
 //                lastTitlePos = position;
         }
         if (manager instanceof StaggeredGridLayoutManager) {
-            int[] itemPositions = new int[2];
+            int count = ((StaggeredGridLayoutManager) manager).getSpanCount();
+            int[] itemPositions = new int[count];
             ((StaggeredGridLayoutManager) manager).findLastVisibleItemPositions(itemPositions);
-
-            int lastVisibleItemPosition = (itemPositions[1] != 0) ? ++itemPositions[1] : ++itemPositions[0];
-
-            if (lastVisibleItemPosition >= adapter.getItemCount() && adapter.isHasMore()) {
+            int lastVisibleItemPosition = itemPositions[0];
+            for (int i = count - 1; i > 0; i--) {
+                if (lastVisibleItemPosition < itemPositions[i]) {
+                    lastVisibleItemPosition = itemPositions[i];
+                }
+            }
+            if (lastVisibleItemPosition >= adapter.getItemCount() - 1 && adapter.isHasMore()) {
                 adapter.isLoadingMore();
 //                    if (null != listener) {
 //                        listener.onLoadMore();

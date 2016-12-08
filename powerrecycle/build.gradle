@@ -75,7 +75,7 @@ afterEvaluate {
     findbugs {
         toolVersion = '3.0.1'
     }
-    task findbugs(type: FindBugs, dependsOn: assembleDebug) {
+    task findbugs(type: FindBugs) {
 
         description 'Run findbugs'
         group 'verification'
@@ -101,7 +101,7 @@ afterEvaluate {
     }
 
     task pmd(type: Pmd) {
-        targetJdk = TargetJdk.VERSION_1_7
+//        targetJdk = TargetJdk.VERSION_1_7
 
         description 'Run pmd'
         group 'verification'
