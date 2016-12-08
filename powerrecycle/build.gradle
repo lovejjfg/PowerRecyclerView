@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'findbugs'
 /*
  * Copyright (c) 2016.  Joe
  *
@@ -67,6 +68,32 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
+}
+
+afterEvaluate {
+    findbugs {
+        toolVersion = '3.0.1'
+    }
+    task findbugs(type: FindBugs, dependsOn: assembleDebug) {
+
+        description 'Run findbugs'
+        group 'verification'
+
+        classes = fileTree('build/intermediates/classes/debug/')
+        source = fileTree('src/main/java')
+        classpath = project.configurations.compile
+
+        effort = 'max'
+
+        excludeFilter = file("findbugs-exclude.xml")
+
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+
+    check.dependsOn('findbugs')
 }
 
 // This is the library version used when deploying the artifact

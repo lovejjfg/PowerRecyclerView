@@ -38,8 +38,6 @@ import android.widget.FrameLayout;
 public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
-    @Nullable
-    private RecyclerView.LayoutManager manager;
 
     public PowerRecyclerView(Context context) {
         this(context, null);
@@ -76,7 +74,6 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     }
 
     public void setLayoutManager(final RecyclerView.LayoutManager manager, boolean showScrollBar) {
-        this.manager = manager;
         if (manager instanceof LinearLayoutManager) {
             int orientation = ((LinearLayoutManager) manager).getOrientation();
             switch (orientation) {
@@ -112,7 +109,6 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
      * @param manager LayoutManager
      */
     public void setLayoutManager(final RecyclerView.LayoutManager manager) {
-        this.manager = manager;
         if (manager instanceof LinearLayoutManager) {
             int orientation = ((LinearLayoutManager) manager).getOrientation();
             switch (orientation) {
