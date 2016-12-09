@@ -23,10 +23,11 @@ script:
 #before_deploy:
   # - mv app/build/outputs/apk/app-release.apk
 
-#deploy:
-#  provider: releases
-#  api_key: "eb2658cafd3f0c8c60a321fd0c33d52d69b999ec"
-#  file: "app/build/outputs/apk/app-release.apk"
-#  skip_cleanup: true
-#  on:
-#    tags: false
+deploy:
+  provider: releases
+  api_key: "7f86620f79422f2e4ae8fbb18754a17dac5ed6db"
+  file: "app/build/outputs/apk/app-release.apk"
+  skip_cleanup: true
+  on:
+    tags: true
+    rvm: 2.0.0
