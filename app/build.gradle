@@ -28,19 +28,34 @@ android {
         applicationId "com.lovejjfg.swiperefreshrecycleview"
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode rootProject.ext.gitCommitCount
-        versionName rootProject.ext.gitTag
+        versionCode project.gitCommitCount
+        versionName project.gitTag
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {}
+
     }
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+//    applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            // oldName
+//            def outputFile = output.outputFile
+//            def newName = "app_"+project.ext.gitTag+"_"+System.currentTimeMillis()+".apk"
+//            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                output.outputFile = new File(outputFile.parent, newName)
+//            }
+//        }
+//    }
+
+
 }
 
 dependencies {
