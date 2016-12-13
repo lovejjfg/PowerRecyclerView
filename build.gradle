@@ -30,7 +30,7 @@ buildscript {
     }
 }
 
-allprojects {
+allprojects { project ->
     repositories {
         jcenter()
     }

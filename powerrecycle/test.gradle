@@ -46,7 +46,7 @@ String testMethod(def str) {
 //省略括号的情况
 task test2 {
     afterEvaluate {
-        println "hahahah"
+        println "test2 afterEvaluate-> hahahah"
     }
 }
 

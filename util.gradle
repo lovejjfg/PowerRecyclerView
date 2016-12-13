@@ -13,6 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+def initMinshengGradleEnvironment() {
+
+    Properties properties = new Properties()
+    boolean isHasFile = false
+    File propertyFile = new File(rootDir.getAbsolutePath() + "/local.properties")
+    if (propertyFile != null) {
+        isHasFile = true
+        properties.load(propertyFile.newDataInputStream())
+    }
+    //gradle就是gradle对象。它默认是Settings和Project的成员变量。可直接获取
+    //ext前缀，表明操作的是外置属性。api是一个新的属性名。前面说过，只在
+    //第一次定义或者设置它的时候需要ext前缀
+    gradle.ext.isHasFile = isHasFile
+    gradle.ext.user = properties.getProperty('bintray.user')
+    gradle.ext.apikey = properties.getProperty('bintray.apikey')
+}
+
+initMinshengGradleEnvironment()
 ext {
     gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
     gitCommitCount = 100 +
