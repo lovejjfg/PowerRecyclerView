@@ -19,7 +19,7 @@ def initMinshengGradleEnvironment() {
     Properties properties = new Properties()
     boolean isHasFile = false
     File propertyFile = new File(rootDir.getAbsolutePath() + "/local.properties")
-    if (propertyFile != null) {
+    if (propertyFile.exists()) {
         isHasFile = true
         properties.load(propertyFile.newDataInputStream())
     }
