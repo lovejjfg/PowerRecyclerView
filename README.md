@@ -174,7 +174,7 @@ PS:**直接使用RecyclerView请注意添加`mRecycleView.setItemAnimator(new De
 [Android RecycleView轻松实现下拉刷新、加载更多](http://www.jianshu.com/p/7396dc6d67f0#)
 [Android RecyclerView 定制单选多选模式](http://www.jianshu.com/p/8026bcbd290f)
 
-
+[编译不过？！](https://github.com/lovejjfg/PowerRecyclerView/issues/1)
 
 
 
