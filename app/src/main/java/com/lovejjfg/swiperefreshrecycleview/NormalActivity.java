@@ -21,10 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.LoadMoreScrollListener;
+import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
 import java.util.ArrayList;
@@ -57,12 +59,21 @@ public class NormalActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new NormalAdapter();
+        //初始化一个TouchHelperCallback
+        TouchHelperCallback callback = new TouchHelperCallback();
+        //添加一个回调
+        callback.setItemDragSwipeCallBack(adapter);
+        //初始化一个ItemTouchHelper
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        //关联相关的RecycleView
+        itemTouchHelper.attachToRecyclerView(mRecycleView);
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         //1.setLayoutManager
         mRecycleView.setLayoutManager(manager);
         //2.setAdapter
         mRecycleView.setAdapter(adapter);
-        mRecycleView.setItemAnimator(new DefaultAnimator());
+//        mRecycleView.setItemAnimator(new DefaultAnimator());
         mRecycleView.addOnScrollListener(new LoadMoreScrollListener(mRecycleView));
         adapter.setOnItemClickListener((v, p) -> Log.e(TAG, "onItemClick: " + p));
 //        adapter.setTotalCount(100);

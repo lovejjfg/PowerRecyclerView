@@ -16,7 +16,9 @@
 
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,11 @@ public class NormalAdapter extends PowerAdapter<TestBean> {
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
     }
 
+    @NonNull
+    @Override
+    public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
+    }
 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
 

@@ -16,18 +16,19 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.antfortune.freeline'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
         applicationId "com.lovejjfg.swiperefreshrecycleview"
-        minSdkVersion 14
-        targetSdkVersion 24
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
         versionCode project.gitCommitCount
         versionName project.gitTag
     }
@@ -60,9 +61,15 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile "com.android.support:appcompat-v7:$project.supportLibraryVersion"
+    compile "com.android.support:support-v4:$project.supportLibraryVersion"
     compile 'com.jakewharton:butterknife:7.0.1'
     compile "com.andkulikov:transitionseverywhere:1.7.0"
     compile project(':powerrecycle')
+
+    // Dependencies for local unit tests
+    testCompile "junit:junit:$project.ext.junitVersion"
+
+
+
 }
