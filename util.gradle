@@ -33,6 +33,15 @@ def initMinshengGradleEnvironment() {
 
 initMinshengGradleEnvironment()
 ext {
+    // Sdk and tools
+    minSdkVersion = 16
+    targetSdkVersion = 24
+    compileSdkVersion = 24
+    buildToolsVersion = '24.0.2'
+
+    // App dependencies
+    supportLibraryVersion = '24.2.0'
+    junitVersion = '4.12'
     gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
     gitCommitCount = 100 +
             Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())

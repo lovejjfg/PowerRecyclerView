@@ -26,15 +26,15 @@ apply plugin: 'pmd'
 //def gitCommitCount = 100 +
 //        Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
 
     lintOptions {
         abortOnError false
     }
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 24
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
         versionCode project.gitCommitCount
         versionName project.gitTag
     }
@@ -49,26 +49,11 @@ android {
         sourceCompatibility 1.8
     }
 }
-//task checkstyle(type: Checkstyle) {
-//    configFile file("${project.rootDir}/checkstyle.xml")
-//    configProperties.checkStyleConfigDir = rootProject.rootDir
-//    source 'src'
-//    include '**/*.java'
-//    exclude '**/gen/**'
-//    classpath = files()
-//}
-//checkstyle {
-//    toolVersion = '7.2'
-//    configFile = rootProject.file('checkstyle.xml')
-//
-//}
-
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile "com.android.support:recyclerview-v7:$project.supportLibraryVersion"
+    compile "com.android.support:appcompat-v7:$project.supportLibraryVersion"
 }
 
 afterEvaluate {
@@ -121,84 +106,4 @@ afterEvaluate {
     check.dependsOn('pmd')
 }
 apply from: 'bintray.gradle'
-// This is the library version used when deploying the artifact
-//gradlew bintrayUpload
-//version = rootProject.ext.gitTag
-//
-//def siteUrl = 'https://github.com/lovejjfg/PowerRecyclerView'      // 项目的主页
-//def gitUrl = 'https://github.com/lovejjfg/PowerRecyclerView.git'   // Git仓库的url
-//group = "com.lovejjfg.powerrecycle"                                        // Maven Group ID for the artifact，一般填你唯一的包名
-//install {
-//    repositories.mavenInstaller {
-//        // This generates POM.xml with proper parameters
-//        pom {
-//            project {
-//                packaging 'aar'
-//                // Add your description here
-//                name 'PowerRecycler'
-//                url siteUrl
-//                // Set your license
-//                licenses {
-//                    license {
-//                        name 'The Apache Software License, Version 2.0'
-//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//                developers {
-//                    developer {
-//                        id 'lovejjfg'        //填写的一些基本信息
-//                        name 'joe'
-//                        email 'lovejjfg@163.com'
-//                    }
-//                }
-//                scm {
-//                    connection gitUrl
-//                    developerConnection gitUrl
-//                    url siteUrl
-//                }
-//            }
-//        }
-//    }
-//}
-//task sourcesJar(type: Jar) {
-//    from android.sourceSets.main.java.srcDirs
-//    classifier = 'sources'
-//}
-//task javadoc(type: Javadoc) {
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//}
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    classifier = 'javadoc'
-//    from javadoc.destinationDir
-//}
-//artifacts {
-//    archives javadocJar
-//    archives sourcesJar
-//}
-//Properties properties = new Properties()
-//boolean isHasFile = false
-//if (project.rootProject.findProject('local.properties') != null) {
-//    isHasFile = true
-//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//}
-//bintray {
-//    user = isHasFile ? properties.getProperty("bintray.user") : System.getenv("bintray.user")
-//    key = isHasFile ? properties.getProperty("bintray.apikey") : System.getenv("bintray.apikey")
-//    configurations = ['archives']
-//    pkg {
-//        repo = "maven"
-//        name = "powerRecycleView"    //发布到JCenter上的项目名字
-//        websiteUrl = siteUrl
-//        vcsUrl = gitUrl
-//        licenses = ["Apache-2.0"]
-//        publish = true
-//    }
-//}
-//javadoc { //jav doc采用utf-8编码否则会报“GBK的不可映射字符”错误
-//    options {
-//        encoding "UTF-8"
-//        charSet 'UTF-8'
-//    }
-//}
 

@@ -27,6 +27,7 @@ import java.util.List;
  * Email: lovejjfg@163.com
  */
 public class DefaultAnimator extends DefaultItemAnimator {
+    @Override
     public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, @NonNull List<Object> payloads) {
         return true;
     }
