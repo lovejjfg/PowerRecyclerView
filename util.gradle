@@ -37,10 +37,10 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 24
     compileSdkVersion = 24
-    buildToolsVersion = '24.0.2'
+    buildToolsVersion = '24.0.3'
 
     // App dependencies
-    supportLibraryVersion = '24.2.0'
+    supportLibraryVersion = '24.2.1'
     junitVersion = '4.12'
     gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
     gitCommitCount = 100 +
