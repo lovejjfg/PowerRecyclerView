@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-def initMinshengGradleEnvironment() {
+def initProperties() {
 
     Properties properties = new Properties()
     boolean isHasFile = false
@@ -31,7 +31,34 @@ def initMinshengGradleEnvironment() {
     gradle.ext.apikey = properties.getProperty('bintray.apikey')
 }
 
-initMinshengGradleEnvironment()
+String initTag() {
+    try {
+        def versionName = 'git describe --tags'.execute([], project.rootDir).text.trim()
+        def indexOf = versionName.indexOf("-", 0)
+        versionName = indexOf != -1 ? versionName.substring(0, indexOf) : versionName
+        println versionName
+        return versionName
+    } catch (e) {
+        println e.toString()
+        return  "1.0.0(未获取git版本)"
+    }
+
+}
+
+int initCount() {
+    try {
+        return 100 +
+                Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+    } catch (e) {
+        println e.toString()
+        return 100
+    }
+}
+
+
+initProperties()
+
+
 ext {
     // Sdk and tools
     minSdkVersion = 16
@@ -42,7 +69,6 @@ ext {
     // App dependencies
     supportLibraryVersion = '24.2.1'
     junitVersion = '4.12'
-    gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
-    gitCommitCount = 100 +
-            Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+    gitTag = initTag()
+    gitCommitCount = initCount()
 }
