@@ -34,13 +34,13 @@ def initProperties() {
 String initTag() {
     try {
         def versionName = 'git describe --tags'.execute([], project.rootDir).text.trim()
-        def indexOf = versionName.indexOf("-", 0)
+        def indexOf = versionName.lastIndexOf("-", 0)
         versionName = indexOf != -1 ? versionName.substring(0, indexOf) : versionName
         println versionName
         return versionName
     } catch (e) {
         println e.toString()
-        return  "1.0.0(未获取git版本)"
+        return "1.0.0(未获取git版本)"
     }
 
 }

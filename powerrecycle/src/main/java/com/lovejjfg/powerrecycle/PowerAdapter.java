@@ -220,7 +220,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     }
 
     @Override
-    public final int getItemCount() {
+    public int getItemCount() {
         return list.isEmpty() ? 0 : enableLoadMore ? list.size() + 1 : list.size();
     }
 
