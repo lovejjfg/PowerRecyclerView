@@ -171,7 +171,7 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.load_more:
-                adapter.setTotalCount(50);
+                adapter.setTotalCount(500);
                 break;
             case R.id.own:
 //                adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecycleView, false));

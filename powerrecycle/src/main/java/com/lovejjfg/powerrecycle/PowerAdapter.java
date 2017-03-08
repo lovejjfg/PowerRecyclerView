@@ -305,6 +305,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
         longClickListener = recycleView.getLongClickListener();
         clickListener = recycleView.getClickListener();
         selectedListener = recycleView.getSelectedListener();
+        loadMoreListener = recycleView.getLoadMoreClickListener();
     }
 
     @NonNull

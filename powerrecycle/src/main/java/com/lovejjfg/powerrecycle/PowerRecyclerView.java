@@ -168,6 +168,9 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
 
     public void setOnRefreshListener(OnRefreshLoadMoreListener listener) {
         this.listener = listener;
+        if (adapter != null) {
+            adapter.setLoadMoreListener(listener);
+        }
     }
 
     public RecyclerView getRecycle() {
@@ -214,10 +217,16 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     public AdapterLoader.OnItemLongClickListener getLongClickListener() {
         return longClickListener;
     }
+    public OnLoadMoreListener getLoadMoreClickListener() {
+        return listener;
+    }
 
 
     public void setOnItemSelectListener(AdapterLoader.OnItemSelectedListener listener) {
         this.selectedListener = listener;
+        if (adapter != null && adapter instanceof SelectPowerAdapter) {
+            ((SelectPowerAdapter) adapter).setOnItemSelectListener(selectedListener);
+        }
     }
 
     private AdapterLoader.OnItemSelectedListener selectedListener;
@@ -225,11 +234,17 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
 
     public void setOnItemClickListener(AdapterLoader.OnItemClickListener listener) {
         this.clickListener = listener;
+        if (adapter != null) {
+            adapter.setOnItemClickListener(clickListener);
+        }
     }
 
 
     public void setOnItemLongClickListener(AdapterLoader.OnItemLongClickListener listener) {
         this.longClickListener = listener;
+        if (adapter != null) {
+            adapter.setOnItemLongClickListener(longClickListener);
+        }
     }
 
     private AdapterLoader.OnItemClickListener clickListener;
