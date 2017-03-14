@@ -52,12 +52,12 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
                 pb.setVisibility(View.GONE);
                 container.setVisibility(View.VISIBLE);
                 container.setOnClickListener(null);
-                content.setText("---  没有更多了  ---");
+                content.setText(R.string.text_no_more);
 
                 break;
             case AdapterLoader.STATE_LOADING:
                 content.setVisibility(View.VISIBLE);
-                content.setText("加载更多！！");
+                content.setText(R.string.text_load_more);
                 container.setOnClickListener(null);
                 pb.setVisibility(View.VISIBLE);
                 if (loadMoreListener != null) {
@@ -67,12 +67,12 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
             case AdapterLoader.STATE_ERROR:
                 container.setVisibility(View.VISIBLE);
                 pb.setVisibility(View.GONE);
-                content.setText("--- 加载更多失败点击重试 ---");
+                content.setText(R.string.text_load_error);
                 container.setOnClickListener(v -> {
                     if (loadMoreListener != null) {
                         loadMoreListener.onLoadMore();
                     }
-                    content.setText("加载更多！！");
+                    content.setText(R.string.text_load_more);
                     pb.setVisibility(View.VISIBLE);
                 });
                 break;

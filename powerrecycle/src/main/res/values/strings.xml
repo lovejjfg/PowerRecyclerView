@@ -16,5 +16,8 @@
 
 <resources>
     <string name="app_name">PowerRecycleView</string>
-    <string name="loading">正在加载。。。。</string>
+    <string name="loading">Loading…</string>
+    <string name="text_no_more">---  No More  ---</string>
+    <string name="text_load_more">Load More ! !</string>
+    <string name="text_load_error">--- Load Error Try Again ---</string>
 </resources>
