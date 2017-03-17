@@ -224,7 +224,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
 
     public void setOnItemSelectListener(AdapterLoader.OnItemSelectedListener listener) {
         this.selectedListener = listener;
-        if (adapter != null && adapter instanceof SelectPowerAdapter) {
+        if (adapter instanceof SelectPowerAdapter) {
             ((SelectPowerAdapter) adapter).setOnItemSelectListener(selectedListener);
         }
     }

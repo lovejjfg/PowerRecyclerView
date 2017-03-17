@@ -59,8 +59,10 @@ dependencies {
 afterEvaluate {
     findbugs {
         toolVersion = '3.0.1'
+        sourceSets = []
+        ignoreFailures = true
     }
-    task findbugs(type: FindBugs) {
+    task findbugs(type: FindBugs, dependsOn: assembleDebug) {
 
         description 'Run findbugs'
         group 'verification'
