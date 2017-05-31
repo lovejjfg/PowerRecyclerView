@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 
 import com.lovejjfg.powerrecycle.annotation.LoadState;
 import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +39,8 @@ import java.util.List;
 public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack {
 
     private View loadMore;
+    private View errorView;
+    private View emptyView;
     public int loadState;
     public boolean enableLoadMore;
     @Nullable
@@ -46,6 +49,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     OnItemClickListener clickListener;
     @Nullable
     OnItemSelectedListener selectedListener;
+    private int currentType;
 
     public PowerRecyclerView.OnLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
@@ -85,7 +89,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
         list.clear();
         appendList(data);
         enableLoadMore = totalCount > data.size();
+    }
 
+    public final void clearList() {
+        list.clear();
     }
 
     @Override
@@ -127,20 +134,33 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (TYPE_BOTTOM == viewType) {
-            if (loadMore != null) {
-                RecyclerView.ViewHolder holder = onBottomViewHolderCreate(loadMore);
-                if (holder == null) {
-                    throw new RuntimeException("You must impl onBottomViewHolderCreate() and return your own holder ");
+        switch (viewType) {
+            case TYPE_BOTTOM:
+                if (loadMore != null) {
+                    RecyclerView.ViewHolder holder = onBottomViewHolderCreate(loadMore);
+                    if (holder == null) {
+                        throw new RuntimeException("You must impl onBottomViewHolderCreate() and return your own holder ");
+                    }
+                    return holder;
+                } else {
+                    return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
                 }
-                return holder;
-            } else {
-                return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
-            }
-        } else {
-            return onViewHolderCreate(parent, viewType);
+            case TYPE_ERROR:
+                if (errorView == null) {
+                    throw new NullPointerException("Did you forget init errorView?");
+                }
+                return new PowerHolder<String>(errorView);
+            case TYPE_EMPT:
+                if (emptyView == null) {
+                    throw new NullPointerException("Did you forget init EmptyView?");
+                }
+                return new PowerHolder<String>(emptyView);
+            default:
+                return onViewHolderCreate(parent, viewType);
         }
+
     }
+
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
@@ -157,43 +177,62 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == TYPE_BOTTOM) {
-            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-            if (params instanceof StaggeredGridLayoutManager.LayoutParams) {
-                ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
-            }
-            loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
-            if (loadMore != null) {
-                try {
-                    onBottomViewHolderBind(holder, loadState);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        int viewType = getItemViewType(position);
+        switch (viewType) {
+            case TYPE_BOTTOM:
+                ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                if (params instanceof StaggeredGridLayoutManager.LayoutParams) {
+                    ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
                 }
-            } else {
-                try {
-                    ((NewBottomViewHolder) holder).bindDateView(this);
-                } catch (Exception e) {
+                loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
+                if (loadMore != null) {
+                    try {
+                        onBottomViewHolderBind(holder, loadState);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        ((NewBottomViewHolder) holder).bindDateView(this);
+                    } catch (Exception e) {
 //                    e.printStackTrace();
+                    }
                 }
-            }
-        } else {
-            holder.itemView.setOnClickListener(v -> {
-                int position1 = holder.getAdapterPosition();
-                if (position1 == -1 || position1 >= list.size()) {
+                break;
+
+            case TYPE_EMPT:
+                onEmptyHolderBind(holder);
+                break;
+            case TYPE_ERROR:
+                onErrorHolderBind(holder);
+                break;
+            default:
+                holder.itemView.setOnClickListener(v -> {
+                    int position1 = holder.getAdapterPosition();
+                    if (position1 == -1 || position1 >= list.size()) {
+                        return;
+                    }
+                    performClick(v, position1);
+                });
+
+                holder.itemView.setOnLongClickListener(v -> {
+                    int position12 = holder.getAdapterPosition();
+                    return !(position12 == -1 || position12 >= list.size()) && performLongClick(v, holder.getAdapterPosition());
+                });
+                if (position == -1 || position >= list.size()) {
                     return;
                 }
-                performClick(v, position1);
-            });
-
-            holder.itemView.setOnLongClickListener(v -> {
-                int position12 = holder.getAdapterPosition();
-                return !(position12 == -1 || position12 >= list.size()) && performLongClick(v, holder.getAdapterPosition());
-            });
-            if (position == -1 || position >= list.size()) {
-                return;
-            }
-            onViewHolderBind(holder, position);
+                onViewHolderBind(holder, position);
+                break;
         }
+    }
+
+    protected void onErrorHolderBind(RecyclerView.ViewHolder holder) {
+
+    }
+
+    protected void onEmptyHolderBind(RecyclerView.ViewHolder holder) {
+
     }
 
     public void performClick(View itemView, int position) {
@@ -221,7 +260,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public int getItemCount() {
-        return list.isEmpty() ? 0 : enableLoadMore ? list.size() + 1 : list.size();
+        return list.isEmpty() ? (emptyView == null && errorView == null) ? 0 : 1 : enableLoadMore ? list.size() + 1 : list.size();
     }
 
     @Override
@@ -235,7 +274,34 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     }
 
     @Override
+    public final void setEmptyView(View emptyView) {
+        this.emptyView = emptyView;
+    }
+
+    @Override
+    public final void setErrorView(View errorView) {
+        this.errorView = errorView;
+    }
+
+    @Override
+    public void showEmpty() {
+        list.clear();
+        currentType = TYPE_EMPT;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void showError() {
+        list.clear();
+        currentType = TYPE_ERROR;
+        notifyDataSetChanged();
+    }
+
+    @Override
     public final int getItemViewType(int position) {
+        if (list.isEmpty()) {
+            return currentType;
+        }
         if (!list.isEmpty() && position < list.size()) {
             return getItemViewTypes(position);
         } else {

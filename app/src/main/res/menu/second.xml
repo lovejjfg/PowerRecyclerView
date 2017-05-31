@@ -42,4 +42,11 @@
         android:id="@+id/showNoData"
         android:title="是否显示没有更过了"/>
 
+    <item
+        android:id="@+id/empty"
+        android:title="显示空的"/>
+    <item
+        android:id="@+id/error"
+        android:title="显示error"/>
+
 </menu>

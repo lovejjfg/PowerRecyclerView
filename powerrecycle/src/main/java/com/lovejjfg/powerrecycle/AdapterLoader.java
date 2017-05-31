@@ -38,6 +38,8 @@ public interface AdapterLoader<T> {
     int STATE_ERROR = 3;
 
     int TYPE_BOTTOM = 0x80000000;
+    int TYPE_EMPT = 0x80000001;
+    int TYPE_ERROR = 0x80000010;
 
 
     /**
@@ -54,6 +56,14 @@ public interface AdapterLoader<T> {
      * @param view the specified bottom layout
      */
     void setLoadMoreView(View view);
+
+    void setEmptyView(View emptyView);
+
+    void setErrorView(View errorView);
+
+    void showEmpty();
+
+    void showError();
 
     /**
      * If you want to create the specified bottom layout ,you should implements this method to create your own bottomViewHolder
@@ -76,6 +86,8 @@ public interface AdapterLoader<T> {
      * @param data the data you want to add
      */
     void setList(List<T> data);
+
+    void clearList();
 
     /**
      * @param data the data you want to add

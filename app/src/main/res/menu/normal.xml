@@ -32,4 +32,10 @@
     <item
         android:id="@+id/power"
         android:title="Power模式"/>
+    <item
+        android:id="@+id/empty"
+        android:title="显示空的"/>
+    <item
+        android:id="@+id/error"
+        android:title="显示error"/>
 </menu>

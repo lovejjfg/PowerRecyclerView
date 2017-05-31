@@ -96,10 +96,14 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
 
     private int initSpanSize(int position, GridLayoutManager manager) {
         int itemViewType = adapter.getItemViewType(position);
-        if (AdapterLoader.TYPE_BOTTOM == itemViewType) {
-            return manager.getSpanCount();
+        switch (itemViewType) {
+            case AdapterLoader.TYPE_BOTTOM:
+            case AdapterLoader.TYPE_EMPT:
+            case AdapterLoader.TYPE_ERROR:
+                return manager.getSpanCount();
+            default:
+                return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);
         }
-        return (spanSizeCallBack != null ? spanSizeCallBack.getSpanSize(position) : 0) == 0 ? 1 : spanSizeCallBack.getSpanSize(position);
     }
 
     /**
@@ -217,6 +221,7 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     public AdapterLoader.OnItemLongClickListener getLongClickListener() {
         return longClickListener;
     }
+
     public OnLoadMoreListener getLoadMoreClickListener() {
         return listener;
     }

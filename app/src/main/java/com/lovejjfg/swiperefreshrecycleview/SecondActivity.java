@@ -23,6 +23,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -205,6 +206,19 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
                 break;
             case R.id.showNoData:
                 adapter.enableLoadMore(!adapter.enableLoadMore);
+                break;
+            case R.id.error:
+                try {
+                    adapter.showError();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.empty:
+                View inflate = LayoutInflater.from(this).inflate(R.layout.layout_empty, mRecycleView, false);
+                inflate.findViewById(R.id.iv_empty).setOnClickListener((v -> Log.e("TAG", "onOptionsItemSelected: 点击了！！")));
+                adapter.setEmptyView(inflate);
+                adapter.showEmpty();
                 break;
             default:
                 break;
