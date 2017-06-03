@@ -35,6 +35,14 @@
 
 * `PowerAdapter` 修复构造方法
 
+### V1.2.0
+
+* 废除了 `PowerRecyclerView` ,如果需要使用 `SwipeRefreshLayout` 请自己手动添加，聚合比组合更加灵活，如果需要自定义下拉刷新 `Header` ,可以使用
+[PowerRefresh](https://github.com/lovejjfg/PowerRefresh)  
+* 在点击回调方法中增加Item的返回。
+* 增加了 `PowerHolder` 作为默认的 `Holder`
+* 增加设置 错误页面 和 空白页面 的两个方法
+
 --------
 
 0、创建：（Adapter 继承 RefreshRecycleAdapter<T>）
@@ -172,7 +180,10 @@ PS:**直接使用RecyclerView请注意添加`mRecycleView.setItemAnimator(new De
 ### 博客地址
 
 [Android RecycleView轻松实现下拉刷新、加载更多](http://www.jianshu.com/p/7396dc6d67f0#)
+
 [Android RecyclerView 定制单选多选模式](http://www.jianshu.com/p/8026bcbd290f)
+
+[Android 打造专属的下拉刷新 加载更多](http://www.jianshu.com/p/e46f72ce69c4)
 
 [编译不过？！](https://github.com/lovejjfg/PowerRecyclerView/issues/1)
 
