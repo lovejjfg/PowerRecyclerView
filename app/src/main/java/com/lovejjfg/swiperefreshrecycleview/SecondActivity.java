@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
+import com.lovejjfg.powerrecycle.OnRefreshLoadMoreListener;
 import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.SpacesItemDecoration;
@@ -44,7 +45,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class SecondActivity extends AppCompatActivity implements PowerRecyclerView.OnRefreshLoadMoreListener {
+public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMoreListener {
 
     @Bind(R.id.recycle_view)
     PowerRecyclerView mRecycleView;
@@ -90,7 +91,7 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
-        mRecycleView.setOnItemClickListener((itemView, position) -> {
+        mRecycleView.setOnItemClickListener((itemView, position, item) -> {
             toast.setText("点击了：" + position);
             toast.show();
         });
@@ -209,7 +210,7 @@ public class SecondActivity extends AppCompatActivity implements PowerRecyclerVi
                 break;
             case R.id.error:
                 try {
-                    adapter.showError();
+                    adapter.showError(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

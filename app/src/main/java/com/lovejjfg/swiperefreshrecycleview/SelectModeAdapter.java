@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.annotation.LoadState;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
@@ -46,9 +47,9 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
+    public PowerHolder<TestBean> onViewHolderCreate(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder<>(view);
     }
 
     @Override
@@ -59,8 +60,8 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new BottomViewHolder(loadMore);
+    public PowerHolder<TestBean> onBottomViewHolderCreate(View loadMore) {
+        return new BottomViewHolder<>(loadMore);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
         ((BottomViewHolder) holder).onBind(getLoadMoreListener(), loadState);
     }
 
-    private static class MyViewHolder extends RecyclerView.ViewHolder {
+    private static class MyViewHolder<T> extends PowerHolder<T> {
 
         private final TextView mTv;
         private final CheckBox mCheckBox;

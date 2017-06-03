@@ -33,6 +33,7 @@ import android.widget.CheckedTextView;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.powerrecycle.annotation.SelectMode;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
@@ -91,12 +92,12 @@ public class PickActivity extends AppCompatActivity {
         mUnpickRecyclerView.setAdapter(unpickedAdapter);
         mUnpickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         unpickedAdapter.setList(unPickBeans);
-        pickedAdapter.setOnItemClickListener((itemView, position) -> {
+        pickedAdapter.setOnItemClickListener((itemView, position, item) -> {
             Log.e(TAG, "onItemClick: " + position);
             PickedBean bean = pickedAdapter.removeItem(position);
             unpickedAdapter.insertItem(unpickedAdapter.getItemRealCount(), bean);
         });
-        unpickedAdapter.setOnItemClickListener((itemView, position) -> {
+        unpickedAdapter.setOnItemClickListener((itemView, position, item) -> {
             Log.e(TAG, "onItemClick: " + position);
             PickedBean bean = unpickedAdapter.removeItem(position);
             pickedAdapter.insertItem(pickedAdapter.getItemRealCount(), bean);
@@ -112,8 +113,8 @@ public class PickActivity extends AppCompatActivity {
         }
 
         @Override
-        public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
-            return new PickHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.city_item_select, parent, false));
+        public PowerHolder<PickedBean> onViewHolderCreate(ViewGroup parent, int viewType) {
+            return new PickHolder<>(LayoutInflater.from(parent.getContext()).inflate(R.layout.city_item_select, parent, false));
         }
 
         @Override
@@ -137,7 +138,7 @@ public class PickActivity extends AppCompatActivity {
 
     }
 
-    static class PickHolder extends RecyclerView.ViewHolder {
+    static class PickHolder<T> extends PowerHolder<T> {
         @Bind(R.id.text)
         CheckedTextView mText;
 

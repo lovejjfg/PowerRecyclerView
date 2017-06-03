@@ -34,7 +34,12 @@ import android.widget.FrameLayout;
 /**
  * Created by Joe on 2016-03-11.
  * Email lovejjfg@gmail.com
+ * <p>
+ * <p>Deprecated at v1.5.0</p>
+ * Split RecyclerView and SwipeRefreshLayout,If you want to refresh,you should add SwipeRefreshLayout by hand.
+ * and if you want to design yourself header,see https://github.com/lovejjfg/PowerRefresh
  */
+@Deprecated
 public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -181,14 +186,6 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
         return mRecyclerView;
     }
 
-    public interface OnLoadMoreListener {
-        void onLoadMore();
-    }
-
-    public interface OnRefreshLoadMoreListener extends OnLoadMoreListener {
-        void onRefresh();
-    }
-
 
     public void addOnScrollListener(RecyclerView.OnScrollListener listener) {
         mRecyclerView.addOnScrollListener(listener);
@@ -204,21 +201,18 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     @Nullable
     private SpanSizeCallBack spanSizeCallBack;
 
-    public interface SpanSizeCallBack {
-        int getSpanSize(int position);
-    }
-
     public AdapterLoader.OnItemSelectedListener getSelectedListener() {
         return selectedListener;
     }
 
 
-    public AdapterLoader.OnItemClickListener getClickListener() {
+    @SuppressWarnings("unchecked")
+    public <T> AdapterLoader.OnItemClickListener<T> getClickListener() {
         return clickListener;
     }
 
-
-    public AdapterLoader.OnItemLongClickListener getLongClickListener() {
+    @SuppressWarnings("unchecked")
+    public <T> AdapterLoader.OnItemLongClickListener<T> getLongClickListener() {
         return longClickListener;
     }
 
@@ -237,17 +231,19 @@ public class PowerRecyclerView extends FrameLayout implements SwipeRefreshLayout
     private AdapterLoader.OnItemSelectedListener selectedListener;
 
 
-    public void setOnItemClickListener(AdapterLoader.OnItemClickListener listener) {
+    public <T> void setOnItemClickListener(AdapterLoader.OnItemClickListener<T> listener) {
         this.clickListener = listener;
         if (adapter != null) {
+            //noinspection unchecked
             adapter.setOnItemClickListener(clickListener);
         }
     }
 
 
-    public void setOnItemLongClickListener(AdapterLoader.OnItemLongClickListener listener) {
+    public <T> void setOnItemLongClickListener(AdapterLoader.OnItemLongClickListener<T> listener) {
         this.longClickListener = listener;
         if (adapter != null) {
+            //noinspection unchecked
             adapter.setOnItemLongClickListener(longClickListener);
         }
     }

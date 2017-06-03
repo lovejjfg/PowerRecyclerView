@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 
@@ -44,9 +45,9 @@ public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
+    public PowerHolder<TestBean> onViewHolderCreate(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.city_item_select, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder<>(view);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
         return super.getItemViewTypes(position);
     }
 
-    private static class MyViewHolder extends RecyclerView.ViewHolder {
+    private static class MyViewHolder<T> extends PowerHolder<T> {
         private final CheckedTextView mTv;
 
         MyViewHolder(View itemView) {

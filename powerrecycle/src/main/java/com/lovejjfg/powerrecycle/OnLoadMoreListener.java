@@ -14,30 +14,15 @@
  * limitations under the License.
  */
 
-package com.lovejjfg.powerrecycle.holder;
-
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+package com.lovejjfg.powerrecycle;
 
 /**
- * Created by Joe on 2017/5/31.
+ * Created by Joe on 2017/6/3..
  * Email lovejjfg@gmail.com
- * <p> Impl ViewHolder ,you can get Context and finish DataBind with onBind</p>
  */
 
-public class PowerHolder<T> extends RecyclerView.ViewHolder {
-    public PowerHolder(View itemView) {
-        super(itemView);
-    }
 
-    public void onBind(T t) {
-    }
-
-
-    public Context getContext() {
-        return itemView.getContext();
-    }
+public interface OnLoadMoreListener {
+    void onLoadMore();
 
 }
-

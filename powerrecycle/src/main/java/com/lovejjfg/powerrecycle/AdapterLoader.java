@@ -16,11 +16,13 @@
 
 package com.lovejjfg.powerrecycle;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lovejjfg.powerrecycle.annotation.LoadState;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 
 import java.util.List;
 
@@ -63,14 +65,19 @@ public interface AdapterLoader<T> {
 
     void showEmpty();
 
-    void showError();
+    /**
+     * show the error view when load data error.
+     *
+     * @param force true would show the error view don't care there was data before.false would care about.
+     */
+    void showError(boolean force);
 
     /**
      * If you want to create the specified bottom layout ,you should implements this method to create your own bottomViewHolder
      *
      * @param loadMore whether is loadingMore or not..
      */
-    RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore);
+    PowerHolder<T> onBottomViewHolderCreate(View loadMore);
 
     boolean isHasMore();
 
@@ -102,6 +109,9 @@ public interface AdapterLoader<T> {
      */
     T removeItem(int position);
 
+
+    T getItem(int position);
+
     /**
      * remove the specified position in the list.
      *
@@ -121,7 +131,7 @@ public interface AdapterLoader<T> {
      */
     void onViewHolderBind(RecyclerView.ViewHolder holder, int position);
 
-    RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType);
+    PowerHolder<T> onViewHolderCreate(ViewGroup parent, int viewType);
 
     /**
      * Return the current size about {@link PowerAdapter#list}.
@@ -130,9 +140,14 @@ public interface AdapterLoader<T> {
      */
     int getItemRealCount();
 
-    void performClick(View itemView, int position);
+    void performClick(View itemView, int position, T item);
 
-    boolean performLongClick(View itemView, int position);
+    boolean performLongClick(View itemView, int position, T item);
+
+    /**
+     * call this method after init RecyclerView(set LayoutManager)
+     */
+    void attachRecyclerView(@NonNull RecyclerView recyclerView);
 
     /**
      * Interface definition for a callback to be invoked when
@@ -162,12 +177,12 @@ public interface AdapterLoader<T> {
         void onNothingSelected();
     }
 
-    interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
+    interface OnItemClickListener<T> {
+        void onItemClick(View itemView, int position, T item);
     }
 
-    interface OnItemLongClickListener {
-        boolean onItemLongClick(View itemView, int position);
+    interface OnItemLongClickListener<T> {
+        boolean onItemLongClick(View itemView, int position, T item);
     }
 
 

@@ -16,15 +16,14 @@
 
 package com.lovejjfg.powerrecycle.holder;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
+import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.PowerAdapter;
-import com.lovejjfg.powerrecycle.PowerRecyclerView;
 import com.lovejjfg.powerrecycle.R;
 
 
@@ -32,7 +31,7 @@ import com.lovejjfg.powerrecycle.R;
  * Created by Joe on 2016-03-11.
  * Email lovejjfg@gmail.com
  */
-public class NewBottomViewHolder extends RecyclerView.ViewHolder {
+public class NewBottomViewHolder<T> extends PowerHolder<T> {
     private final LinearLayout container;
     private final ProgressBar pb;
     private final TextView content;
@@ -46,7 +45,7 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindDateView(PowerAdapter adapter) {
-        final PowerRecyclerView.OnLoadMoreListener loadMoreListener = adapter.getLoadMoreListener();
+        final OnLoadMoreListener loadMoreListener = adapter.getLoadMoreListener();
         switch (adapter.loadState) {
             case AdapterLoader.STATE_LASTED:
                 pb.setVisibility(View.GONE);

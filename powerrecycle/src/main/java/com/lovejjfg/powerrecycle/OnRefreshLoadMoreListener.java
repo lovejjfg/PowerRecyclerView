@@ -17,9 +17,11 @@
 package com.lovejjfg.powerrecycle;
 
 /**
- * Created by Joe on 2016/12/12.
+ * Created by Joe on 2017/6/3..
  * Email lovejjfg@gmail.com
  */
 
-public class Test {
+
+public interface OnRefreshLoadMoreListener extends OnLoadMoreListener {
+    void onRefresh();
 }

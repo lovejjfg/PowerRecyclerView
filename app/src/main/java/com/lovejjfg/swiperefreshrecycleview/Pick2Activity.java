@@ -31,6 +31,7 @@ import android.widget.CheckedTextView;
 
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
@@ -84,7 +85,7 @@ public class Pick2Activity extends AppCompatActivity {
         mPickRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         pickedAdapter.setList(pickedBeans);
         unpickedAdapter.setList(unPickBeans);
-        pickedAdapter.setOnItemClickListener((itemView, position) -> {
+        pickedAdapter.setOnItemClickListener((itemView, position, item) -> {
             Log.e(TAG, "onItemClick: " + position);
             PickedBean bean = pickedAdapter.list.get(position);
             pickedAdapter.removeItem(position);
@@ -99,8 +100,8 @@ public class Pick2Activity extends AppCompatActivity {
         }
 
         @Override
-        public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
-            return new PickHolder(LayoutInflater
+        public PowerHolder<PickedBean> onViewHolderCreate(ViewGroup parent, int viewType) {
+            return new PickHolder<>(LayoutInflater
                     .from(parent.getContext())
                     .inflate(R.layout.city_item_select,
                             parent, false));
@@ -127,7 +128,7 @@ public class Pick2Activity extends AppCompatActivity {
 
     }
 
-    static class PickHolder extends RecyclerView.ViewHolder {
+    static class PickHolder<T> extends PowerHolder<T> {
         @Bind(R.id.text)
         CheckedTextView mText;
 

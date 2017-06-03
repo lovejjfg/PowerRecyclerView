@@ -27,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.PowerAdapter;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;
@@ -40,7 +41,7 @@ public class NormalAdapter extends PowerAdapter<TestBean> {
 
 
     @Override
-    public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
+    public PowerHolder<TestBean> onViewHolderCreate(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
         return new MyViewHolder(view);
     }
@@ -58,7 +59,7 @@ public class NormalAdapter extends PowerAdapter<TestBean> {
         return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
     }
 
-    private static class MyViewHolder extends RecyclerView.ViewHolder {
+    private static class MyViewHolder extends PowerHolder<TestBean> {
 
         private final TextView mTv;
         private final CheckBox mCheckBox;

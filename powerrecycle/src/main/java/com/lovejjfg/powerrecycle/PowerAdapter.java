@@ -18,6 +18,7 @@ package com.lovejjfg.powerrecycle;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -36,7 +37,7 @@ import java.util.List;
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
-public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T>, TouchHelperCallback.ItemDragSwipeCallBack {
+public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements AdapterLoader<T>, SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
 
     private View loadMore;
     private View errorView;
@@ -44,22 +45,22 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     public int loadState;
     public boolean enableLoadMore;
     @Nullable
-    private OnItemLongClickListener longClickListener;
+    private OnItemLongClickListener<T> longClickListener;
     @Nullable
-    OnItemClickListener clickListener;
+    OnItemClickListener<T> clickListener;
     @Nullable
     OnItemSelectedListener selectedListener;
     private int currentType;
 
-    public PowerRecyclerView.OnLoadMoreListener getLoadMoreListener() {
+    public OnLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
     }
 
-    public <G extends PowerRecyclerView.OnLoadMoreListener> void setLoadMoreListener(G loadMoreListener) {
+    public void setLoadMoreListener(OnLoadMoreListener loadMoreListener) {
         this.loadMoreListener = loadMoreListener;
     }
 
-    private PowerRecyclerView.OnLoadMoreListener loadMoreListener;
+    private OnLoadMoreListener loadMoreListener;
 
     public int getTotalCount() {
         return totalCount;
@@ -119,6 +120,14 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     }
 
     @Override
+    public T getItem(int position) {
+        if (position < 0 || position > list.size()) {
+            return null;
+        }
+        return list.get(position);
+    }
+
+    @Override
     public void insertItem(int position, T bean) {
         if (position < 0) {
             position = 0;
@@ -133,28 +142,28 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     public final List<T> list;
 
     @Override
-    public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final PowerHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_BOTTOM:
                 if (loadMore != null) {
-                    RecyclerView.ViewHolder holder = onBottomViewHolderCreate(loadMore);
+                    PowerHolder<T> holder = onBottomViewHolderCreate(loadMore);
                     if (holder == null) {
                         throw new RuntimeException("You must impl onBottomViewHolderCreate() and return your own holder ");
                     }
                     return holder;
                 } else {
-                    return new NewBottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
+                    return new NewBottomViewHolder<>(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
                 }
             case TYPE_ERROR:
                 if (errorView == null) {
                     throw new NullPointerException("Did you forget init errorView?");
                 }
-                return new PowerHolder<String>(errorView);
+                return new PowerHolder<T>(errorView);
             case TYPE_EMPT:
                 if (emptyView == null) {
                     throw new NullPointerException("Did you forget init EmptyView?");
                 }
-                return new PowerHolder<String>(emptyView);
+                return new PowerHolder<T>(emptyView);
             default:
                 return onViewHolderCreate(parent, viewType);
         }
@@ -163,7 +172,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
 
     @Override
-    public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
+    public PowerHolder<T> onBottomViewHolderCreate(View loadMore) {
         return null;
     }
 
@@ -173,10 +182,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     }
 
     @Override
-    public abstract RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType);
+    public abstract PowerHolder<T> onViewHolderCreate(ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final PowerHolder<T> holder, int position) {
         int viewType = getItemViewType(position);
         switch (viewType) {
             case TYPE_BOTTOM:
@@ -207,18 +216,21 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
                 onErrorHolderBind(holder);
                 break;
             default:
-                holder.itemView.setOnClickListener(v -> {
-                    int position1 = holder.getAdapterPosition();
-                    if (position1 == -1 || position1 >= list.size()) {
-                        return;
-                    }
-                    performClick(v, position1);
-                });
-
-                holder.itemView.setOnLongClickListener(v -> {
-                    int position12 = holder.getAdapterPosition();
-                    return !(position12 == -1 || position12 >= list.size()) && performLongClick(v, holder.getAdapterPosition());
-                });
+                if (clickListener != null) {
+                    holder.itemView.setOnClickListener(v -> {
+                        int position1 = holder.getAdapterPosition();
+                        if (position1 == -1 || position1 >= list.size()) {
+                            return;
+                        }
+                        performClick(v, position1, getItem(position));
+                    });
+                }
+                if (longClickListener != null) {
+                    holder.itemView.setOnLongClickListener(v -> {
+                        int position12 = holder.getAdapterPosition();
+                        return !(position12 == -1 || position12 >= list.size()) && performLongClick(v, holder.getAdapterPosition(), getItem(position12));
+                    });
+                }
                 if (position == -1 || position >= list.size()) {
                     return;
                 }
@@ -235,15 +247,15 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     }
 
-    public void performClick(View itemView, int position) {
+    public void performClick(View itemView, int position, T item) {
         if (clickListener != null) {
-            clickListener.onItemClick(itemView, position);
+            clickListener.onItemClick(itemView, position, item);
         }
     }
 
     @Override
-    public boolean performLongClick(View itemView, int position) {
-        return longClickListener != null && longClickListener.onItemLongClick(itemView, position);
+    public boolean performLongClick(View itemView, int position, T item) {
+        return longClickListener != null && longClickListener.onItemLongClick(itemView, position, item);
     }
 
     @Override
@@ -260,7 +272,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
 
     @Override
     public int getItemCount() {
-        return list.isEmpty() ? (emptyView == null && errorView == null) ? 0 : 1 : enableLoadMore ? list.size() + 1 : list.size();
+        return list.isEmpty() ? (currentType == 0) ? 0 : 1 : enableLoadMore ? list.size() + 1 : list.size();
     }
 
     @Override
@@ -291,7 +303,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
     }
 
     @Override
-    public void showError() {
+    public void showError(boolean force) {
+        if (!force && !list.isEmpty()) {
+            return;
+        }
         list.clear();
         currentType = TYPE_ERROR;
         notifyDataSetChanged();
@@ -333,13 +348,46 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter implements Ad
         }
     }
 
+    @Override
+    public void attachRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.setAdapter(this);
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager == null) {
+            throw new NullPointerException("Did you forget call setLayoutManager() at first?");
+        }
+        if (manager instanceof GridLayoutManager) {
+            ((GridLayoutManager) manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return initSpanSize(position, (GridLayoutManager) manager);
+                }
+            });
+        }
+    }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    private int initSpanSize(int position, GridLayoutManager manager) {
+        int itemViewType = getItemViewType(position);
+        switch (itemViewType) {
+            case AdapterLoader.TYPE_BOTTOM:
+            case AdapterLoader.TYPE_EMPT:
+            case AdapterLoader.TYPE_ERROR:
+                return manager.getSpanCount();
+            default:
+                return getSpanSize(position);
+        }
+    }
+
+    @Override
+    public int getSpanSize(int position) {
+        return 1;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener<T> listener) {
         this.clickListener = listener;
     }
 
 
-    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+    public void setOnItemLongClickListener(OnItemLongClickListener<T> listener) {
         this.longClickListener = listener;
     }
 

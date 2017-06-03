@@ -79,7 +79,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     @Override
-    public void performClick(final View itemView, final int position) {
+    public void performClick(final View itemView, final int position, T item) {
         final T testBean = list.get(position);
 
         if (isSelectMode) {
@@ -95,7 +95,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
             prePos = position;
         } else {
             if (clickListener != null) {
-                clickListener.onItemClick(itemView, position);
+                clickListener.onItemClick(itemView, position, getItem(position));
             }
         }
     }
@@ -115,7 +115,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     @Override
-    public boolean performLongClick(View itemView, int position) {
+    public boolean performLongClick(View itemView, int position, T item) {
         if (longTouchEnable) {
             final T testBean = list.get(position);
             updateSelectMode(true);
@@ -125,7 +125,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
             prePos = position;
             return true;
         } else {
-            return super.performLongClick(itemView, position);
+            return super.performLongClick(itemView, position, item);
         }
 
     }

@@ -16,12 +16,11 @@
 
 package com.lovejjfg.swiperefreshrecycleview;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
-import com.lovejjfg.powerrecycle.PowerRecyclerView;
-
+import com.lovejjfg.powerrecycle.OnLoadMoreListener;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 
 
 /**
@@ -29,7 +28,7 @@ import com.lovejjfg.powerrecycle.PowerRecyclerView;
  * Email lovejjfg@gmail.com
  */
 
-public class BottomViewHolder extends RecyclerView.ViewHolder {
+public class BottomViewHolder<T> extends PowerHolder<T> {
 
     private final View bottomView;
 
@@ -38,7 +37,7 @@ public class BottomViewHolder extends RecyclerView.ViewHolder {
         bottomView = itemView.findViewById(R.id.progressbar);
     }
 
-    public void onBind(PowerRecyclerView.OnLoadMoreListener loadMoreListener, int loadState) {
+    public void onBind(OnLoadMoreListener loadMoreListener, int loadState) {
         if (loadState == AdapterLoader.STATE_LOADING) {
             // TODO: 2016/12/5 handle error state
             bottomView.setVisibility(View.VISIBLE);

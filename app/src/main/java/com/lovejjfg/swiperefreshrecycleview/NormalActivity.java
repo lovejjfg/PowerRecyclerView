@@ -18,6 +18,7 @@ package com.lovejjfg.swiperefreshrecycleview;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -56,15 +57,17 @@ public class NormalActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new NormalAdapter();
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        LinearLayoutManager manager = new GridLayoutManager(this, 2);
         //1.setLayoutManager
         mRecycleView.setLayoutManager(manager);
-        //2.setAdapter
-        mRecycleView.setAdapter(adapter);
+        //2.setAdapter after setLayoutManager
+        adapter.attachRecyclerView(mRecycleView);
 //        mRecycleView.setItemAnimator(new DefaultAnimator());
+        //3.setLoadMoreScrollListener
         mRecycleView.addOnScrollListener(new LoadMoreScrollListener(mRecycleView));
-        adapter.setOnItemClickListener((v, p) -> Log.e(TAG, "onItemClick: " + p));
-//        adapter.setTotalCount(100);
+        adapter.setOnItemClickListener((v, p, item) -> Log.e(TAG, "onItemClick: " + p));
+        //4.setTotalCount
+        adapter.setTotalCount(100);
         adapter.setLoadMoreListener(() -> {
             if (isRun) {
                 Log.e("TAG", "onLoadMore:正在执行，直接返回。。。 ");
