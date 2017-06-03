@@ -26,15 +26,15 @@ apply plugin: 'pmd'
 //def gitCommitCount = 100 +
 //        Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 android {
-    compileSdkVersion project.ext.compileSdkVersion
-    buildToolsVersion project.ext.buildToolsVersion
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOLS_VERSION as String
 
     lintOptions {
         abortOnError false
     }
     defaultConfig {
-        minSdkVersion project.ext.minSdkVersion
-        targetSdkVersion project.ext.targetSdkVersion
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
         versionCode project.gitCommitCount
         versionName project.gitTag
     }
@@ -52,17 +52,16 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:recyclerview-v7:$project.supportLibraryVersion"
-    compile "com.android.support:appcompat-v7:$project.supportLibraryVersion"
+    testCompile 'junit:junit:4.12'
+    compile "com.android.support:appcompat-v7:${SUPPORT_V7_VERSION}"
+    compile "com.android.support:recyclerview-v7:${SUPPORT_V7_VERSION}"
 }
 
 afterEvaluate {
     findbugs {
         toolVersion = '3.0.1'
-        sourceSets = []
-        ignoreFailures = true
     }
-    task findbugs(type: FindBugs, dependsOn: assembleDebug) {
+    task findbugs(type: FindBugs) {
 
         description 'Run findbugs'
         group 'verification'

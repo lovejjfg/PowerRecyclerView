@@ -16,19 +16,18 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.antfortune.freeline'
 
 android {
-    compileSdkVersion project.ext.compileSdkVersion
-    buildToolsVersion project.ext.buildToolsVersion
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOLS_VERSION as String
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
         applicationId "com.lovejjfg.swiperefreshrecycleview"
-        minSdkVersion project.ext.minSdkVersion
-        targetSdkVersion project.ext.targetSdkVersion
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
         versionCode project.gitCommitCount
         versionName project.gitTag
     }
@@ -45,31 +44,13 @@ android {
         sourceCompatibility 1.8
     }
 
-//    applicationVariants.all { variant ->
-//        variant.outputs.each { output ->
-//            // oldName
-//            def outputFile = output.outputFile
-//            def newName = "app_"+project.ext.gitTag+"_"+System.currentTimeMillis()+".apk"
-//            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-//                output.outputFile = new File(outputFile.parent, newName)
-//            }
-//        }
-//    }
-
-
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:$project.supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$project.supportLibraryVersion"
+    testCompile 'junit:junit:4.12'
+    compile "com.android.support:appcompat-v7:${SUPPORT_V7_VERSION}"
     compile 'com.jakewharton:butterknife:7.0.1'
     compile "com.andkulikov:transitionseverywhere:1.7.0"
     compile project(':powerrecycle')
-
-    // Dependencies for local unit tests
-    testCompile "junit:junit:$project.ext.junitVersion"
-
-
-
 }
