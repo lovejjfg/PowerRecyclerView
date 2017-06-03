@@ -193,7 +193,7 @@
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
-        <module name="UnnecessaryParentheses"/>
+        <!--<module name="UnnecessaryParentheses"/>-->
         <module name="LineLength">
             <property name="max" value="200"/>
         </module>
