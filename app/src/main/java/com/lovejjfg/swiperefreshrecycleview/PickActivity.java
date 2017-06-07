@@ -118,7 +118,7 @@ public class PickActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onViewHolderBind(RecyclerView.ViewHolder holder, int position) {
+        public void onViewHolderBind(PowerHolder<PickedBean> holder, int position) {
             if (holder instanceof PickHolder) {
                 ((PickHolder) holder).onBind((PickHolder) holder, list.get(position));
             }

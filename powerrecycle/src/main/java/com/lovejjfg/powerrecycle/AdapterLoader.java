@@ -50,7 +50,7 @@ public interface AdapterLoader<T> {
      * @param holder    the current holder.
      * @param loadState the current state.
      */
-    void onBottomViewHolderBind(RecyclerView.ViewHolder holder, @LoadState int loadState);
+    void onBottomViewHolderBind(PowerHolder<T> holder, @LoadState int loadState);
 
     /**
      * If you want to create the specified bottom layout,you must call this method to add your specified layout !
@@ -129,7 +129,7 @@ public interface AdapterLoader<T> {
      * @param holder   current holder.
      * @param position current pos.
      */
-    void onViewHolderBind(RecyclerView.ViewHolder holder, int position);
+    void onViewHolderBind(PowerHolder<T> holder, int position);
 
     PowerHolder<T> onViewHolderCreate(ViewGroup parent, int viewType);
 

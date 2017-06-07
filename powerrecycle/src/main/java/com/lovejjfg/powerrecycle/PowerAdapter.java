@@ -158,12 +158,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 if (errorView == null) {
                     throw new NullPointerException("Did you forget init errorView?");
                 }
-                return new PowerHolder<T>(errorView);
+                return new PowerHolder<>(errorView);
             case TYPE_EMPT:
                 if (emptyView == null) {
                     throw new NullPointerException("Did you forget init EmptyView?");
                 }
-                return new PowerHolder<T>(emptyView);
+                return new PowerHolder<>(emptyView);
             default:
                 return onViewHolderCreate(parent, viewType);
         }
@@ -177,7 +177,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, @LoadState int loadState) {
+    public void onBottomViewHolderBind(PowerHolder<T> holder, @LoadState int loadState) {
         //todoNothing
     }
 
@@ -239,11 +239,11 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         }
     }
 
-    protected void onErrorHolderBind(RecyclerView.ViewHolder holder) {
+    protected void onErrorHolderBind(PowerHolder<T> holder) {
 
     }
 
-    protected void onEmptyHolderBind(RecyclerView.ViewHolder holder) {
+    protected void onEmptyHolderBind(PowerHolder<T> holder) {
 
     }
 
@@ -259,7 +259,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public abstract void onViewHolderBind(RecyclerView.ViewHolder holder, int position);
+    public abstract void onViewHolderBind(PowerHolder<T> holder, int position);
 
     @Override
     public final void isLoadingMore() {
@@ -414,7 +414,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         notifyItemMoved(fromPosition, toPosition);
         return true;
     }
-
+    @Deprecated
     void attachToRecyclerView(PowerRecyclerView recycleView) {
         longClickListener = recycleView.getLongClickListener();
         clickListener = recycleView.getClickListener();

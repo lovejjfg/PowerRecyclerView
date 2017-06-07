@@ -53,7 +53,7 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public void onViewHolderBind(final RecyclerView.ViewHolder holder, final int position) {
+    public void onViewHolderBind(PowerHolder<TestBean> holder, final int position) {
         final TestBean testBean = list.get(position);
         ((MyViewHolder) holder).bindDateView(isSelectMode, testBean);
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
@@ -65,7 +65,7 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, @LoadState int loadState) {
+    public void onBottomViewHolderBind(PowerHolder<TestBean> holder, @LoadState int loadState) {
         ((BottomViewHolder) holder).onBind(getLoadMoreListener(), loadState);
     }
 

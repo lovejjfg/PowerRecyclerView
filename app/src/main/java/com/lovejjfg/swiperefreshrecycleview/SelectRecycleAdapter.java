@@ -51,7 +51,7 @@ public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public void onViewHolderBind(final RecyclerView.ViewHolder holder, final int position) {
+    public void onViewHolderBind(PowerHolder<TestBean> holder, final int position) {
         final TestBean testBean = list.get(position);
         ((MyViewHolder) holder).bindDateView(testBean);
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
