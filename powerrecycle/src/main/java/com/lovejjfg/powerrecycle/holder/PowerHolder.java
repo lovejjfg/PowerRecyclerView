@@ -26,14 +26,20 @@ import android.view.View;
  * <p> Impl ViewHolder ,you can get Context and finish DataBind with onBind</p>
  */
 
-public class PowerHolder<T> extends RecyclerView.ViewHolder {
+public  class PowerHolder<T> extends RecyclerView.ViewHolder {
+    public boolean enableCLick = true;
+
     public PowerHolder(View itemView) {
         super(itemView);
     }
 
-    public void onBind(T t) {
+    public PowerHolder(View itemView, boolean enableCLick) {
+        super(itemView);
+        this.enableCLick = enableCLick;
     }
 
+    public void onBind(T t) {
+    }
 
     public Context getContext() {
         return itemView.getContext();

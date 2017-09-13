@@ -92,8 +92,14 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         enableLoadMore = totalCount > data.size();
     }
 
+    public final void insertList(List<T> data, int startPos) {
+        list.addAll(startPos, data);
+        notifyItemRangeInserted(startPos, data.size());
+    }
+
     public final void clearList() {
         list.clear();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -200,12 +206,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } else {
-                    try {
-                        ((NewBottomViewHolder) holder).bindDateView(this);
-                    } catch (Exception e) {
-//                    e.printStackTrace();
-                    }
                 }
                 break;
 
@@ -216,7 +216,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 onErrorHolderBind(holder);
                 break;
             default:
-                if (clickListener != null) {
+                if (clickListener != null && holder.enableCLick) {
                     holder.itemView.setOnClickListener(v -> {
                         int position1 = holder.getAdapterPosition();
                         if (position1 == -1 || position1 >= list.size()) {
@@ -293,6 +293,11 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     @Override
     public final void setErrorView(View errorView) {
         this.errorView = errorView;
+        errorView.setOnClickListener(v -> {
+            if (errorClickListener != null) {
+                errorClickListener.onErrorClick(v);
+            }
+        });
     }
 
     @Override
@@ -300,6 +305,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         list.clear();
         currentType = TYPE_EMPT;
         notifyDataSetChanged();
+    }
+
+    public void showError() {
+        showError(true);
     }
 
     @Override
@@ -414,17 +423,26 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         notifyItemMoved(fromPosition, toPosition);
         return true;
     }
-    @Deprecated
-    void attachToRecyclerView(PowerRecyclerView recycleView) {
-        longClickListener = recycleView.getLongClickListener();
-        clickListener = recycleView.getClickListener();
-        selectedListener = recycleView.getSelectedListener();
-        loadMoreListener = recycleView.getLoadMoreClickListener();
-    }
+
 
     @NonNull
     @Override
     public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         return new int[]{0, 0};
     }
+
+    public OnErrorClickListener getErrorClickListener() {
+        return errorClickListener;
+    }
+
+    public void setErrorClickListener(OnErrorClickListener errorClickListener) {
+        this.errorClickListener = errorClickListener;
+    }
+
+    private OnErrorClickListener errorClickListener;
+
+    public interface OnErrorClickListener {
+        void onErrorClick(View view);
+    }
+
 }
