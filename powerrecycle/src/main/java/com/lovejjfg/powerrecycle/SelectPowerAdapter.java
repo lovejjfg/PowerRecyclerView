@@ -135,4 +135,9 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     public void setOnItemSelectListener(OnItemSelectedListener listener) {
         this.selectedListener = listener;
     }
+
+    @Override
+    public int getSpanSize(int position) {
+        return super.getSpanSize(position);
+    }
 }

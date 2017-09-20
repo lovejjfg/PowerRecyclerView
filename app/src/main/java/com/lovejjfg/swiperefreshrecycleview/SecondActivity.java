@@ -18,8 +18,10 @@ package com.lovejjfg.swiperefreshrecycleview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -30,8 +32,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.lovejjfg.powerrecycle.AdapterLoader;
-import com.lovejjfg.powerrecycle.OnRefreshLoadMoreListener;
-import com.lovejjfg.powerrecycle.PowerRecyclerView;
+import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
@@ -45,10 +46,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMoreListener {
+public class SecondActivity extends AppCompatActivity implements OnLoadMoreListener {
 
     @Bind(R.id.recycle_view)
-    PowerRecyclerView mRecycleView;
+    RecyclerView mRecycleView;
+    @Bind(R.id.srl)
+    SwipeRefreshLayout mRefresh;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
     private SelectPowerAdapter<TestBean> adapter;
@@ -76,7 +79,7 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
             return true;
         });
         adapter = new SelectRecycleAdapter();
-        mRecycleView.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
+        adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
             public void onItemSelected(View view, int position, boolean isSelected) {
                 Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
@@ -91,19 +94,18 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
                 Log.e("TAG", "onNothingSelected: ");
             }
         });
-        mRecycleView.setOnItemClickListener((itemView, position, item) -> {
+        adapter.setOnItemClickListener((itemView, position, item) -> {
             toast.setText("点击了：" + position);
             toast.show();
         });
 //        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         mRecycleView.setLayoutManager(manager);
-        mRecycleView.setSpanSizeCallBack(position -> 1);
 
         decor = new SpacesItemDecoration(30, 3, true);
-        mRecycleView.getRecycle().addItemDecoration(decor);
-        mRecycleView.setAdapter(adapter);
-        mRecycleView.setOnRefreshListener(this);
+        mRecycleView.addItemDecoration(decor);
+        adapter.attachRecyclerView(mRecycleView);
+        mRefresh.setOnRefreshListener(() -> mRecycleView.postDelayed(refreshAction, DEFAULT_TIME));
         //初始化一个TouchHelperCallback
         TouchHelperCallback callback = new TouchHelperCallback();
         //添加一个回调
@@ -111,7 +113,7 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
         //初始化一个ItemTouchHelper
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         //关联相关的RecycleView
-        itemTouchHelper.attachToRecyclerView(mRecycleView.getRecycle());
+        itemTouchHelper.attachToRecyclerView(mRecycleView);
 
         adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
@@ -121,7 +123,7 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
                 list.add(new TestBean("这是" + i));
             }
             adapter.setList(list);
-            mRecycleView.setRefresh(false);
+            mRefresh.setRefreshing(false);
         };
 
         loadMoreAction = () -> {
@@ -141,16 +143,11 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
             }
             isRun = false;
         };
-        mRecycleView.setRefresh(true);
+        mRefresh.setRefreshing(true);
         mRecycleView.postDelayed(refreshAction, DEFAULT_TIME);
 
     }
 
-    @Override
-    public void onRefresh() {
-        mRecycleView.postDelayed(refreshAction, DEFAULT_TIME);
-
-    }
 
     @Override
     public void onLoadMore() {
@@ -180,7 +177,7 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
                 break;
             case R.id.pull_refresh:
                 enable = !enable;
-                mRecycleView.setPullRefreshEnable(enable);
+                mRefresh.setEnabled(enable);
                 break;
             case R.id.select_single:
                 adapter.setSelectedMode(ISelect.SINGLE_MODE);
@@ -192,7 +189,7 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
                 adapter.updateSelectMode(true);
                 break;
             case R.id.showedge:
-                mRecycleView.getRecycle().removeItemDecoration(decor);
+                mRecycleView.removeItemDecoration(decor);
                 if (flag) {
                     decor = new SpacesItemDecoration(30, 3, true);
                     flag = false;
@@ -200,7 +197,7 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
                     decor = new SpacesItemDecoration(30, 3, false);
                     flag = true;
                 }
-                mRecycleView.getRecycle().addItemDecoration(decor);
+                mRecycleView.addItemDecoration(decor);
                 break;
             case R.id.normal:
                 startActivity(new Intent(this, NormalActivity.class));
@@ -210,6 +207,9 @@ public class SecondActivity extends AppCompatActivity implements OnRefreshLoadMo
                 break;
             case R.id.error:
                 try {
+                    View inflate = LayoutInflater.from(this).inflate(R.layout.layout_error, mRecycleView, false);
+                    inflate.findViewById(R.id.iv_empty).setOnClickListener((v -> Log.e("TAG", "onOptionsItemSelected: 点击了！！")));
+                    adapter.setErrorView(inflate);
                     adapter.showError(true);
                 } catch (Exception e) {
                     e.printStackTrace();

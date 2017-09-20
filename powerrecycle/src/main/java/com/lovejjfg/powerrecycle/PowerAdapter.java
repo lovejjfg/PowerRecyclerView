@@ -206,6 +206,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else {
+                    try {
+                        ((NewBottomViewHolder) holder).bindDateView(this);
+                    } catch (Exception e) {
+//                        todoNothing
+                    }
                 }
                 break;
 
