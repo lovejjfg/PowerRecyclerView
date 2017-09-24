@@ -42,6 +42,7 @@
 
         </activity>
 
+        <activity android:name=".ProductList"/>
         <activity-alias
             android:name="launchActivity"
             android:targetActivity=".GuideActivity">

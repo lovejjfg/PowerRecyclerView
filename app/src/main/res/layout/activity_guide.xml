@@ -52,6 +52,10 @@
         android:id="@+id/bt_grid"
         android:text="配合GridLayoutManager使用"
         style="@style/button"/>
+    <Button
+        android:id="@+id/bt_product"
+        android:text="商品标签列表"
+        style="@style/button"/>
 
 
 </LinearLayout>

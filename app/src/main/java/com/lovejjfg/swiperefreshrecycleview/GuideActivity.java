@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.lovejjfg.swiperefreshrecycleview.model.Product;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -34,7 +36,7 @@ public class GuideActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.bt_choice, R.id.bt_customer, R.id.bt_drag, R.id.bt_grid, R.id.bt_normal, R.id.bt_refresh})
+    @OnClick({R.id.bt_choice, R.id.bt_customer, R.id.bt_drag, R.id.bt_grid, R.id.bt_normal, R.id.bt_refresh,R.id.bt_product})
     void click(View v) {
         Intent intent = null;
         switch (v.getId()) {
@@ -55,6 +57,9 @@ public class GuideActivity extends AppCompatActivity {
                 break;
             case R.id.bt_choice:
                 intent = new Intent(this, SecondActivity.class);
+                break;
+            case R.id.bt_product:
+                intent = new Intent(this, ProductList.class);
                 break;
             default:
                 intent = new Intent(this, NormalActivity.class);
