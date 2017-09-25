@@ -33,7 +33,7 @@ def initProperties() {
 
 String initTag() {
     try {
-        def versionName = 'git describe --tags'.execute([], project.rootDir).text.trim()
+        def versionName = 'git describe --abbrev=0 --tags'.execute([], project.rootDir).text.trim()
         def indexOf = versionName.lastIndexOf("-", 0)
         versionName = indexOf != -1 ? versionName.substring(0, indexOf) : versionName
         println versionName

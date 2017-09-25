@@ -7,10 +7,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.text.Layout;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.text.style.LeadingMarginSpan;
@@ -39,7 +36,7 @@ public class ViewUtils {
                 int lineEnd = layout.getLineEnd(0);
                 String substring = text.substring(0, lineEnd);
                 String substring1 = text.substring(lineEnd, text.length());
-                Log.i("TAG", "onGlobalLayout:"+ "+end:" + lineEnd);
+                Log.i("TAG", "onGlobalLayout:" + "+end:" + lineEnd);
                 Log.i("TAG", "onGlobalLayout: 第一行的内容：：" + substring);
                 Log.i("TAG", "onGlobalLayout: 第二行的内容：：" + substring1);
                 if (TextUtils.isEmpty(substring1)) {
@@ -115,8 +112,7 @@ public class ViewUtils {
             int drawableHeight = b.getIntrinsicHeight();
             int fontAscent = paint.getFontMetricsInt().ascent;
             int fontDescent = paint.getFontMetricsInt().descent;
-            int transY = bottom - b.getBounds().bottom +  // align bottom to bottom
-                    (drawableHeight - fontDescent + fontAscent) / 2;  // align center to center
+            int transY = bottom - b.getBounds().bottom + (drawableHeight - fontDescent + fontAscent) / 2;
 
             canvas.translate(x, transY);
             b.draw(canvas);
@@ -128,8 +124,9 @@ public class ViewUtils {
             WeakReference<Drawable> wr = mDrawableRef;
             Drawable d = null;
 
-            if (wr != null)
+            if (wr != null) {
                 d = wr.get();
+            }
 
             if (d == null) {
                 d = getDrawable();
