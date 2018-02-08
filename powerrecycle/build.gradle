@@ -45,17 +45,16 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     implementation "com.android.support:recyclerview-v7:${SUPPORT_V7_VERSION}"
     implementation "com.android.support:appcompat-v7:${SUPPORT_V7_VERSION}"
-
 }
 
 afterEvaluate {

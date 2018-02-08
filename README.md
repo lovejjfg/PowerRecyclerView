@@ -176,6 +176,18 @@
 
 PS:**直接使用RecyclerView请注意添加`mRecycleView.setItemAnimator(new DefaultAnimator());`**
 
+因为有使用 lambda ，所以你可能需要指定 Java 的版本:
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+### 混淆
+
+    -dontwarn com.lovejjfg.**
+
 
 ### 博客地址
 
@@ -186,6 +198,10 @@ PS:**直接使用RecyclerView请注意添加`mRecycleView.setItemAnimator(new De
 [Android 打造专属的下拉刷新 加载更多](http://www.jianshu.com/p/e46f72ce69c4)
 
 [编译不过？！](https://github.com/lovejjfg/PowerRecyclerView/issues/1)
+
+### 项目使用
+
+[Readhub](https://github.com/lovejjfg/Readhub)
 
 
 
