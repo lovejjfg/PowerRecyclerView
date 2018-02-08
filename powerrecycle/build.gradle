@@ -33,7 +33,7 @@ android {
         abortOnError false
     }
     defaultConfig {
-        minSdkVersion MIN_SDK_VERSION
+        minSdkVersion LIB_MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
         versionCode project.gitCommitCount
         versionName project.gitTag
