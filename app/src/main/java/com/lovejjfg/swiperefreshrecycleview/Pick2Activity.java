@@ -37,13 +37,13 @@ import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class Pick2Activity extends AppCompatActivity {
     private static final String TAG = Pick2Activity.class.getSimpleName();
-    @Bind(R.id.rv_picked)
+    @BindView(R.id.rv_picked)
     RecyclerView mPickRecyclerView;
 //    @Bind(R.id.rv_unpick)
 //    RecyclerView mUnpickRecyclerView;
@@ -129,7 +129,7 @@ public class Pick2Activity extends AppCompatActivity {
     }
 
     static class PickHolder<T> extends PowerHolder<T> {
-        @Bind(R.id.text)
+        @BindView(R.id.text)
         CheckedTextView mText;
 
         PickHolder(View itemView) {

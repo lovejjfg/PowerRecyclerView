@@ -42,17 +42,17 @@ import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class SecondActivity extends AppCompatActivity implements OnLoadMoreListener {
 
-    @Bind(R.id.recycle_view)
+    @BindView(R.id.recycle_view)
     RecyclerView mRecycleView;
-    @Bind(R.id.srl)
+    @BindView(R.id.srl)
     SwipeRefreshLayout mRefresh;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolBar;
     private SelectPowerAdapter<TestBean> adapter;
 

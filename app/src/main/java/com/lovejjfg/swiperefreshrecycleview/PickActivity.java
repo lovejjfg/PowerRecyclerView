@@ -39,15 +39,15 @@ import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class PickActivity extends AppCompatActivity {
     private static final String TAG = PickActivity.class.getSimpleName();
-    @Bind(R.id.rv_picked)
+    @BindView(R.id.rv_picked)
     RecyclerView mPickRecyclerView;
-    @Bind(R.id.rv_unpick)
+    @BindView(R.id.rv_unpick)
     RecyclerView mUnpickRecyclerView;
 
     @Override
@@ -139,7 +139,7 @@ public class PickActivity extends AppCompatActivity {
     }
 
     static class PickHolder<T> extends PowerHolder<T> {
-        @Bind(R.id.text)
+        @BindView(R.id.text)
         CheckedTextView mText;
 
         PickHolder(View itemView) {

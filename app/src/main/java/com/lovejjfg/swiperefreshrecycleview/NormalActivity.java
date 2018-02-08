@@ -30,15 +30,15 @@ import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class NormalActivity extends AppCompatActivity {
     private static final String TAG = NormalActivity.class.getSimpleName();
-    @Bind(R.id.recyclerview)
+    @BindView(R.id.recyclerview)
     RecyclerView mRecycleView;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolBar;
     NormalAdapter adapter;
 
