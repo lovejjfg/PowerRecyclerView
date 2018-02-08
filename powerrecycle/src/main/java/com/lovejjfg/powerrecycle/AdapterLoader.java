@@ -102,7 +102,8 @@ public interface AdapterLoader<T> {
     void appendList(List<T> data);
 
     /**
-     * remove the specified position in the list.
+     * remove the specified position in the list. If this method throw RecyclerView Exception when you delete the last one.
+     * consider about using the {@link com.lovejjfg.powerrecycle.manager.FixedLinearLayoutManager} or {@link com.lovejjfg.powerrecycle.manager.FixedGrideLayoutManager}
      *
      * @param position he specified position to remove
      * @return if successful return the removed object,otherwise null
@@ -148,6 +149,22 @@ public interface AdapterLoader<T> {
      * call this method after init RecyclerView(set LayoutManager)
      */
     void attachRecyclerView(@NonNull RecyclerView recyclerView);
+
+    /**
+     * call this method to get the first position of the viewType
+     *
+     * @param viewType the viewType you set ,default is 0
+     * @return the index of list
+     */
+    int findFirstPositionOfType(int viewType);
+
+    /**
+     * call this method to get the last position of the viewType
+     *
+     * @param viewType the viewType you set ,default is 0
+     * @return the index of list
+     */
+    int findLastPositionOfType(int viewType);
 
     /**
      * Interface definition for a callback to be invoked when

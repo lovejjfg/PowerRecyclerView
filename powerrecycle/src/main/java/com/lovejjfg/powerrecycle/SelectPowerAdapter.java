@@ -36,7 +36,9 @@ import java.util.HashSet;
 public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter<T> {
 
     private int currentMode = ISelect.SINGLE_MODE;
-    private int prePos;
+    private int prePos = -1;
+    private int defaultPos = -1;
+    private int currentPos = -1;
     private boolean longTouchEnable = false;
     public boolean isSelectMode;
 
@@ -49,20 +51,49 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     public void updateSelectMode(boolean isSelect) {
         if (isSelectMode != isSelect) {
             isSelectMode = isSelect;
-            resetData();
+            resetAll();
             notifyDataSetChanged();
         }
     }
 
+    public void setDefaultSelectedPos(int positon) {
+        this.defaultPos = positon;
+    }
+
+    public void setCurrentPos(int positon) {
+        if (list.isEmpty() || positon > list.size() - 1 || positon < 0) {
+            return;
+        }
+        if (currentPos != positon) {
+            currentPos = positon;
+            if (prePos == -1) {
+                prePos = currentPos;
+            }
+            T t = list.get(positon);
+            if (!t.isSelected()) {
+                resetAll();
+                t.setSelected(true);
+                notifyItemChanged(positon);
+            }
+        }
+
+    }
+
+
     public SelectPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
         this.currentMode = currentMode;
         this.longTouchEnable = longTouchEnable;
+        this.isSelectMode = true;
     }
 
-    private void resetData() {
-        for (ISelect bean : list) {
-            bean.setSelected(false);
+    public void resetAll() {
+        for (T bean : list) {
+            if (bean.isSelected()) {
+                bean.setSelected(false);
+                selectedBeans.remove(bean);
+            }
         }
+        notifyDataSetChanged();
     }
 
     public boolean isSelectMode() {
@@ -79,10 +110,13 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     @Override
-    public void performClick(final View itemView, final int position, T item) {
+    public void performClick(final View itemView, final int position, T t) {
         final T testBean = list.get(position);
 
         if (isSelectMode) {
+            if (currentMode == ISelect.SINGLE_MODE && testBean.isSelected() && defaultPos != -1) {
+                return;
+            }
             boolean selected = !testBean.isSelected();
             testBean.setSelected(selected);
             dispatchSelected(itemView, position, testBean, selected);
@@ -91,11 +125,11 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
                 dispatchSelected(itemView, prePos, testBean, false);
                 notifyItemChanged(prePos);
             }
-            notifyItemRangeChanged(position, 1);
+            notifyDataSetChanged();
             prePos = position;
         } else {
             if (clickListener != null) {
-                clickListener.onItemClick(itemView, position, getItem(position));
+                clickListener.onItemClick(itemView, position, t);
             }
         }
     }
@@ -115,7 +149,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     @Override
-    public boolean performLongClick(View itemView, int position, T item) {
+    public boolean performLongClick(View itemView, int position, T t) {
         if (longTouchEnable) {
             final T testBean = list.get(position);
             updateSelectMode(true);
@@ -125,7 +159,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
             prePos = position;
             return true;
         } else {
-            return super.performLongClick(itemView, position, item);
+            return super.performLongClick(itemView, position, t);
         }
 
     }
@@ -136,8 +170,13 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         this.selectedListener = listener;
     }
 
-    @Override
-    public int getSpanSize(int position) {
-        return super.getSpanSize(position);
+    public void selectAll() {
+        if (!list.isEmpty()) {
+            for (T bean : list) {
+                bean.setSelected(true);
+                selectedBeans.add(bean);
+            }
+        }
+        notifyDataSetChanged();
     }
 }
