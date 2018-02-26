@@ -331,6 +331,9 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     @Override
     public final int getItemViewType(int position) {
         if (list.isEmpty()) {
+            if (currentType != 0) {
+                return currentType;
+            }
             return super.getItemViewType(position);
         }
         if (!list.isEmpty() && position < list.size()) {
@@ -366,9 +369,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public int getItemViewTypes(int position) {
-        if (list.size() == 1 && currentType != 0) {
-            return currentType;
-        }
         return 0;
     }
 
