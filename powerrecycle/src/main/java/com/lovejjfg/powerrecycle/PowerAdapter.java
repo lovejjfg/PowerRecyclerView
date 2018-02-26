@@ -84,6 +84,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public final void setList(List<T> data) {
+        currentType = 0;
         if (data == null) {
             return;
         }
@@ -365,6 +366,9 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public int getItemViewTypes(int position) {
+        if (list.size() == 1 && currentType != 0) {
+            return currentType;
+        }
         return 0;
     }
 
