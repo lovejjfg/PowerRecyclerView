@@ -81,11 +81,15 @@ public interface AdapterLoader<T> {
 
     boolean isHasMore();
 
-    void isLoadingMore();
+    void updateLoadingMore();
 
     void loadMoreError();
 
     void enableLoadMore(boolean loadMore);
+
+    void onErrorHolderBind(PowerHolder<T> holder);
+
+    void onEmptyHolderBind(PowerHolder<T> holder);
 
     /**
      * You can call this method to add data to RecycleView,if you want to append data,you should call {@link #appendList(List)}

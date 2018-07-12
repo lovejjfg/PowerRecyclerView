@@ -24,5 +24,4 @@ package com.lovejjfg.powerrecycle;
 
 public interface OnLoadMoreListener {
     void onLoadMore();
-
 }

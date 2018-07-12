@@ -20,12 +20,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.PowerAdapter;
 import com.lovejjfg.powerrecycle.R;
-
 
 /**
  * Created by Joe on 2016-03-11.
@@ -39,9 +37,9 @@ public class NewBottomViewHolder<T> extends PowerHolder<T> {
     public NewBottomViewHolder(View itemView) {
 
         super(itemView);
-        container = (LinearLayout) itemView.findViewById(R.id.footer_container);
-        pb = (ProgressBar) itemView.findViewById(R.id.progressbar);
-        content = (TextView) itemView.findViewById(R.id.content);
+        container = itemView.findViewById(R.id.footer_container);
+        pb = itemView.findViewById(R.id.progressbar);
+        content = itemView.findViewById(R.id.content);
     }
 
     public void bindDateView(PowerAdapter adapter) {
@@ -79,5 +77,4 @@ public class NewBottomViewHolder<T> extends PowerHolder<T> {
                 break;
         }
     }
-
 }

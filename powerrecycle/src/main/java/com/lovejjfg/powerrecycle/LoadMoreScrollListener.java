@@ -26,38 +26,30 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
  */
 
 public class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
-    private final RecyclerView mRecyclerView;
-
-//        private int lastTitlePos = -1;
+    private final RecyclerView.LayoutManager manager;
+    private final PowerAdapter adapter;
 
     public LoadMoreScrollListener(RecyclerView recyclerView) {
-        mRecyclerView = recyclerView;
+        manager = recyclerView.getLayoutManager();
+        adapter = (PowerAdapter) recyclerView.getAdapter();
+        if (null == manager) {
+            throw new RuntimeException("You should call setLayoutManager() first!!");
+        }
+        if (null == adapter) {
+            throw new RuntimeException("You should call setAdapter() first!!");
+        }
     }
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
-        PowerAdapter adapter = (PowerAdapter) mRecyclerView.getAdapter();
-        if (null == manager) {
-            throw new RuntimeException("you should call setLayoutManager() first!!");
-        }
-        if (null == adapter) {
-            throw new RuntimeException("you should call setAdapter() first!!");
-        }
         if (manager instanceof LinearLayoutManager) {
-            int lastCompletelyVisibleItemPosition = ((LinearLayoutManager) manager).findLastCompletelyVisibleItemPosition();
+            int lastCompletelyVisibleItemPosition =
+                ((LinearLayoutManager) manager).findLastCompletelyVisibleItemPosition();
 
-            if (adapter.getItemCount() > 1 && lastCompletelyVisibleItemPosition >= adapter.getItemCount() - 1 && adapter.isHasMore()) {
-                adapter.isLoadingMore();
-//                    if (null != listener) {
-//                        listener.onLoadMore();
-//                    }
+            if (adapter.getItemCount() > 1 && lastCompletelyVisibleItemPosition >= adapter.getItemCount() - 1 && adapter
+                .isHasMore()) {
+                adapter.updateLoadingMore();
             }
-//                int position = ((LinearLayoutManager) manager).findFirstVisibleItemPosition();
-//                if (lastTitlePos == position) {
-//                    return;
-//                }
-//                lastTitlePos = position;
         }
         if (manager instanceof StaggeredGridLayoutManager) {
             int count = ((StaggeredGridLayoutManager) manager).getSpanCount();
@@ -70,12 +62,8 @@ public class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
                 }
             }
             if (lastVisibleItemPosition >= adapter.getItemCount() - 1 && adapter.isHasMore()) {
-                adapter.isLoadingMore();
-//                    if (null != listener) {
-//                        listener.onLoadMore();
-//                    }
+                adapter.updateLoadingMore();
             }
         }
     }
-
 }

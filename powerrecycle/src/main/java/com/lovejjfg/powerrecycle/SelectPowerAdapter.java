@@ -16,13 +16,11 @@
 
 package com.lovejjfg.powerrecycle;
 
+import android.support.annotation.Nullable;
 import android.view.View;
-
 import com.lovejjfg.powerrecycle.annotation.SelectMode;
 import com.lovejjfg.powerrecycle.model.ISelect;
-
 import java.util.HashSet;
-
 
 /**
  * Created by Joe on 2016-03-11
@@ -30,17 +28,23 @@ import java.util.HashSet;
  */
 
 /**
- * {@link SelectPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch {@link ISelect#SINGLE_MODE} or {@link ISelect#MULTIPLE_MODE}
- * and you can decide whether it's enable the longTouch to jump to  SelectMode, you can call {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
+ * {@link SelectPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch
+ * {@link ISelect#SINGLE_MODE} or {@link ISelect#MULTIPLE_MODE}
+ * and you can decide whether it's enable the longTouch to jump to  SelectMode, you can call
+ * {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
  */
+@SuppressWarnings("unused")
 public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter<T> {
 
-    private int currentMode = ISelect.SINGLE_MODE;
+    private int currentMode;
     private int prePos = -1;
     private int defaultPos = -1;
     private int currentPos = -1;
-    private boolean longTouchEnable = false;
-    public boolean isSelectMode;
+    private boolean longTouchEnable;
+    protected boolean isSelectMode;
+    @Nullable
+    private
+    OnItemSelectedListener selectedListener;
 
     public HashSet<T> getSelectedBeans() {
         return selectedBeans;
@@ -56,29 +60,27 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         }
     }
 
-    public void setDefaultSelectedPos(int positon) {
-        this.defaultPos = positon;
+    public void setDefaultSelectedPos(int position) {
+        this.defaultPos = position;
     }
 
-    public void setCurrentPos(int positon) {
-        if (list.isEmpty() || positon > list.size() - 1 || positon < 0) {
+    public void setCurrentPos(int position) {
+        if (list.isEmpty() || position > list.size() - 1 || position < 0) {
             return;
         }
-        if (currentPos != positon) {
-            currentPos = positon;
+        if (currentPos != position) {
+            currentPos = position;
             if (prePos == -1) {
                 prePos = currentPos;
             }
-            T t = list.get(positon);
+            T t = list.get(position);
             if (!t.isSelected()) {
                 resetAll();
                 t.setSelected(true);
-                notifyItemChanged(positon);
+                notifyItemChanged(position);
             }
         }
-
     }
-
 
     public SelectPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
         this.currentMode = currentMode;
@@ -104,25 +106,24 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         longTouchEnable = longTouchSelectModeEnable;
     }
 
-
     public void setSelectedMode(@SelectMode int mode) {
         currentMode = mode;
     }
 
     @Override
     public void performClick(final View itemView, final int position, T t) {
-        final T testBean = list.get(position);
+        final T selectBean = list.get(position);
 
         if (isSelectMode) {
-            if (currentMode == ISelect.SINGLE_MODE && testBean.isSelected() && defaultPos != -1) {
+            if (currentMode == ISelect.SINGLE_MODE && selectBean.isSelected() && defaultPos != -1) {
                 return;
             }
-            boolean selected = !testBean.isSelected();
-            testBean.setSelected(selected);
-            dispatchSelected(itemView, position, testBean, selected);
-            if (currentMode == ISelect.SINGLE_MODE && position != prePos && testBean.isSelected()) {
+            boolean selected = !selectBean.isSelected();
+            selectBean.setSelected(selected);
+            dispatchSelected(itemView, position, selectBean, selected);
+            if (currentMode == ISelect.SINGLE_MODE && prePos != -1 && position != prePos && selectBean.isSelected()) {
                 list.get(prePos).setSelected(false);
-                dispatchSelected(itemView, prePos, testBean, false);
+                dispatchSelected(itemView, prePos, selectBean, false);
                 notifyItemChanged(prePos);
             }
             notifyDataSetChanged();
@@ -161,10 +162,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         } else {
             return super.performLongClick(itemView, position, t);
         }
-
     }
-
-//    private OnItemSelectedListener selectedListener;
 
     public void setOnItemSelectListener(OnItemSelectedListener listener) {
         this.selectedListener = listener;

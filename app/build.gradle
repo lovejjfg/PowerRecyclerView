@@ -52,9 +52,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation "com.android.support:appcompat-v7:${SUPPORT_V7_VERSION}"
-
-//    implementation "com.android.support:appcompat-v4:${SUPPORT_V7_VERSION}"
     implementation "com.android.support:recyclerview-v7:${SUPPORT_V7_VERSION}"
-    implementation "com.andkulikov:transitionseverywhere:1.7.0"
+    implementation "com.andkulikov:transitionseverywhere:1.8.0"
     implementation project(':powerrecycle')
 }
