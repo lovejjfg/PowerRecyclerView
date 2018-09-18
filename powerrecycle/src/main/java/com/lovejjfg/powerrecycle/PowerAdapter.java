@@ -16,6 +16,7 @@
 
 package com.lovejjfg.powerrecycle;
 
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -40,7 +41,8 @@ import java.util.List;
 public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements AdapterLoader<T>,
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
-    private View loadMore;
+    @LayoutRes
+    private int loadMoreLayout = -1;
     private View errorView;
     private View emptyView;
     @LoadState
@@ -155,8 +157,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     public final PowerHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_BOTTOM:
-                if (loadMore != null) {
-                    PowerHolder<T> holder = onBottomViewHolderCreate(loadMore);
+                if (loadMoreLayout != -1) {
+                    View view =
+                        LayoutInflater.from(parent.getContext()).inflate(loadMoreLayout, parent, false);
+                    PowerHolder<T> holder = onBottomViewHolderCreate(view);
                     if (holder == null) {
                         throw new RuntimeException(
                             "You must impl onBottomViewHolderCreate() and return your own holder ");
@@ -206,7 +210,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 }
                 loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
                 try {
-                    if (loadMore != null) {
+                    if (loadMoreLayout != -1) {
                         onBottomViewHolderBind(holder, loadMoreListener, loadState);
                     } else {
                         ((NewBottomViewHolder) holder).onBind(loadMoreListener, loadState);
@@ -303,8 +307,8 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public final void setLoadMoreView(@NonNull View view) {
-        loadMore = view;
+    public final void setLoadMoreView(@LayoutRes int layoutRes) {
+        loadMoreLayout = layoutRes;
     }
 
     @Override

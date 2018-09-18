@@ -16,6 +16,7 @@
 
 package com.lovejjfg.powerrecycle;
 
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -53,9 +54,9 @@ public interface AdapterLoader<T> {
     /**
      * If you want to create the specified bottom layout,you must call this method to add your specified layout !
      *
-     * @param view the specified bottom layout
+     * @param viewRes the specified bottom view layout res
      */
-    void setLoadMoreView(View view);
+    void setLoadMoreView(@LayoutRes int viewRes);
 
     void setEmptyView(View emptyView);
 

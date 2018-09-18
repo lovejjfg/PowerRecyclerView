@@ -75,9 +75,9 @@ public class NewBottomViewHolder<T> extends PowerHolder<T> {
                             }
                         }
                     };
-                    container.setOnClickListener(listener);
-                    break;
                 }
+                container.setOnClickListener(listener);
+                break;
         }
     }
 }
