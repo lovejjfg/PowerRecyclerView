@@ -22,8 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.OnLoadMoreListener;
-import com.lovejjfg.powerrecycle.PowerAdapter;
 import com.lovejjfg.powerrecycle.R;
+import com.lovejjfg.powerrecycle.annotation.LoadState;
 
 /**
  * Created by Joe on 2016-03-11.
@@ -33,18 +33,17 @@ public class NewBottomViewHolder<T> extends PowerHolder<T> {
     private final LinearLayout container;
     private final ProgressBar pb;
     private final TextView content;
+    private View.OnClickListener listener;
 
     public NewBottomViewHolder(View itemView) {
-
         super(itemView);
         container = itemView.findViewById(R.id.footer_container);
         pb = itemView.findViewById(R.id.progressbar);
         content = itemView.findViewById(R.id.content);
     }
 
-    public void bindDateView(PowerAdapter adapter) {
-        final OnLoadMoreListener loadMoreListener = adapter.getLoadMoreListener();
-        switch (adapter.loadState) {
+    public void onBind(final OnLoadMoreListener loadMoreListener, @LoadState int loadState) {
+        switch (loadState) {
             case AdapterLoader.STATE_LASTED:
                 pb.setVisibility(View.GONE);
                 container.setVisibility(View.VISIBLE);
@@ -65,16 +64,20 @@ public class NewBottomViewHolder<T> extends PowerHolder<T> {
                 container.setVisibility(View.VISIBLE);
                 pb.setVisibility(View.GONE);
                 content.setText(R.string.text_load_error);
-                container.setOnClickListener(v -> {
-                    if (loadMoreListener != null) {
-                        loadMoreListener.onLoadMore();
-                    }
-                    content.setText(R.string.text_load_more);
-                    pb.setVisibility(View.VISIBLE);
-                });
-                break;
-            default:
-                break;
+                if (listener == null) {
+                    listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            content.setText(R.string.text_load_more);
+                            pb.setVisibility(View.VISIBLE);
+                            if (loadMoreListener != null) {
+                                loadMoreListener.onLoadMore();
+                            }
+                        }
+                    };
+                    container.setOnClickListener(listener);
+                    break;
+                }
         }
     }
 }

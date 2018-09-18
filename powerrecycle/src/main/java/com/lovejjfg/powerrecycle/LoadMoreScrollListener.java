@@ -25,11 +25,11 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
  * Email lovejjfg@gmail.com
  */
 
-public class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
+class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
     private final RecyclerView.LayoutManager manager;
     private final PowerAdapter adapter;
 
-    public LoadMoreScrollListener(RecyclerView recyclerView) {
+    LoadMoreScrollListener(RecyclerView recyclerView) {
         manager = recyclerView.getLayoutManager();
         adapter = (PowerAdapter) recyclerView.getAdapter();
         if (null == manager) {

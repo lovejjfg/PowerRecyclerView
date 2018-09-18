@@ -11,6 +11,7 @@ import android.util.AttributeSet;
  */
 
 // this fixed LayoutManger is used with notifyItemRemoved
+@SuppressWarnings("unused")
 public class FixedLinearLayoutManager extends LinearLayoutManager {
     public FixedLinearLayoutManager(Context context) {
         super(context);

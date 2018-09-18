@@ -20,7 +20,6 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-
 /**
  * Created by Joe on 2016/11/17.
  * Email lovejjfg@gmail.com
@@ -34,8 +33,8 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
     private final float pre;
 
     /**
-     * @param space    item之间的空间
-     * @param count    列数
+     * @param space item之间的空间
+     * @param count 列数
      * @param showEdge 是否显示左右边缘
      */
     public SpacesItemDecoration(int space, int count, boolean showEdge) {
@@ -47,7 +46,7 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, View view,
-                               RecyclerView parent, RecyclerView.State state) {
+        RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view);
         if (position == RecyclerView.NO_POSITION) {
             return;
@@ -66,5 +65,4 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
         }
         outRect.bottom = spacing;
     }
-
 }

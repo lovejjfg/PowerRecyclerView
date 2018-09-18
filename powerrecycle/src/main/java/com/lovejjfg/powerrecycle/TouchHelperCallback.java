@@ -21,15 +21,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-
 import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
-
-
 
 /**
  * Created by Joe on 2016-03-28
  * Email: lovejjfg@163.com
  */
+
 public class TouchHelperCallback extends ItemTouchHelper.Callback {
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -40,7 +38,9 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
         if (callBack != null) {
             int[] flags = callBack.getMovementFlags(recyclerView, viewHolder);
             if (flags == null || flags.length != 2) {
-                throw new IllegalStateException("method getMovementFlags() should return type int[]  witch length mush be 2 ,by default you can call super.getMovementFlags().");
+                throw new IllegalStateException(
+                    "method getMovementFlags() should return type int[]  witch length mush be 2 ,by default you can "
+                        + "call super.getMovementFlags().");
             }
             return makeMovementFlags(flags[0], flags[1]);
         }
@@ -58,7 +58,8 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+        RecyclerView.ViewHolder target) {
         return callBack != null && callBack.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
     }
 
@@ -75,12 +76,11 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView,
-                            RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-                            boolean isCurrentlyActive) {
+        RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+        boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY,
-                actionState, isCurrentlyActive);
+            actionState, isCurrentlyActive);
     }
-
 
     public void setItemDragSwipeCallBack(@Nullable ItemDragSwipeCallBack callBack) {
         this.callBack = callBack;
@@ -96,9 +96,11 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
 
         /**
          * Instead of composing this flag manually, you can use makeMovementFlags(int, int) or makeFlag(int, int).
-         * This flag is composed of 3 sets of 8 bits, where first 8 bits are for IDLE state, next 8 bits are for SWIPE state and third 8 bits are for DRAG state.
+         * This flag is composed of 3 sets of 8 bits, where first 8 bits are for IDLE state, next 8 bits are for
+         * SWIPE state and third 8 bits are for DRAG state.
          * Each 8 bit sections can be constructed by simply OR'ing direction flags defined in ItemTouchHelper.
-         * For example, if you want it to allow swiping LEFT and RIGHT but only allow starting to swipe by swiping RIGHT, you can return:
+         * For example, if you want it to allow swiping LEFT and RIGHT but only allow starting to swipe by swiping
+         * RIGHT, you can return:
          * <p>
          * <code>new  int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN |
          * ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};</code>
@@ -106,6 +108,4 @@ public class TouchHelperCallback extends ItemTouchHelper.Callback {
         @NonNull
         int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder);
     }
-
-
 }

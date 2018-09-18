@@ -20,10 +20,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.lovejjfg.powerrecycle.annotation.LoadState;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
-
+import com.lovejjfg.powerrecycle.manager.FixedGridLayoutManager;
 import java.util.List;
 
 /**
@@ -40,17 +39,16 @@ public interface AdapterLoader<T> {
     int STATE_ERROR = 3;
 
     int TYPE_BOTTOM = 0x80000000;
-    int TYPE_EMPT = 0x80000001;
+    int TYPE_EMPTY = 0x80000001;
     int TYPE_ERROR = 0x80000010;
-
 
     /**
      * This method should be called  when you load more !
      *
-     * @param holder    the current holder.
+     * @param holder the current holder.
      * @param loadState the current state.
      */
-    void onBottomViewHolderBind(PowerHolder<T> holder, @LoadState int loadState);
+    void onBottomViewHolderBind(PowerHolder<T> holder, OnLoadMoreListener listener, @LoadState int loadState);
 
     /**
      * If you want to create the specified bottom layout,you must call this method to add your specified layout !
@@ -73,7 +71,8 @@ public interface AdapterLoader<T> {
     void showError(boolean force);
 
     /**
-     * If you want to create the specified bottom layout ,you should implements this method to create your own bottomViewHolder
+     * If you want to create the specified bottom layout ,you should implements this method to create your own
+     * bottomViewHolder
      *
      * @param loadMore whether is loadingMore or not..
      */
@@ -92,7 +91,8 @@ public interface AdapterLoader<T> {
     void onEmptyHolderBind(PowerHolder<T> holder);
 
     /**
-     * You can call this method to add data to RecycleView,if you want to append data,you should call {@link #appendList(List)}
+     * You can call this method to add data to RecycleView,if you want to append data,you should call
+     * {@link #appendList(List)}
      *
      * @param data the data you want to add
      */
@@ -106,14 +106,15 @@ public interface AdapterLoader<T> {
     void appendList(List<T> data);
 
     /**
-     * remove the specified position in the list. If this method throw RecyclerView Exception when you delete the last one.
-     * consider about using the {@link com.lovejjfg.powerrecycle.manager.FixedLinearLayoutManager} or {@link com.lovejjfg.powerrecycle.manager.FixedGrideLayoutManager}
+     * remove the specified position in the list. If this method throw RecyclerView Exception when you delete the
+     * last one.
+     * consider about using the {@link com.lovejjfg.powerrecycle.manager.FixedLinearLayoutManager} or
+     * {@link FixedGridLayoutManager}
      *
      * @param position he specified position to remove
      * @return if successful return the removed object,otherwise null
      */
     T removeItem(int position);
-
 
     T getItem(int position);
 
@@ -131,7 +132,7 @@ public interface AdapterLoader<T> {
     int getItemViewTypes(int position);
 
     /**
-     * @param holder   current holder.
+     * @param holder current holder.
      * @param position current pos.
      */
     void onViewHolderBind(PowerHolder<T> holder, int position);
@@ -184,8 +185,8 @@ public interface AdapterLoader<T> {
          * Impelmenters can call getItemAtPosition(position) if they need to access the
          * data associated with the selected item.
          *
-         * @param view       The view within the AdapterView that was clicked
-         * @param position   The position of the view in the adapter
+         * @param view The view within the AdapterView that was clicked
+         * @param position The position of the view in the adapter
          * @param isSelected The state of isSelected
          */
         void onItemSelected(View view, int position, boolean isSelected);
@@ -205,6 +206,4 @@ public interface AdapterLoader<T> {
     interface OnItemLongClickListener<T> {
         boolean onItemLongClick(View itemView, int position, T item);
     }
-
-
 }

@@ -21,7 +21,6 @@ package com.lovejjfg.powerrecycle;
  * Email lovejjfg@gmail.com
  */
 
-
 public interface SpanSizeCallBack {
     int getSpanSize(int position);
 }

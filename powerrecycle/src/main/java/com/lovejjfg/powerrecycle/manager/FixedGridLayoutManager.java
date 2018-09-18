@@ -11,17 +11,18 @@ import android.util.AttributeSet;
  */
 
 // this fixed LayoutManger is used with notifyItemRemoved
-public class FixedGrideLayoutManager extends GridLayoutManager {
+@SuppressWarnings("unused")
+public class FixedGridLayoutManager extends GridLayoutManager {
 
-    public FixedGrideLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public FixedGridLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public FixedGrideLayoutManager(Context context, int spanCount) {
+    public FixedGridLayoutManager(Context context, int spanCount) {
         super(context, spanCount);
     }
 
-    public FixedGrideLayoutManager(Context context, int spanCount, int orientation, boolean reverseLayout) {
+    public FixedGridLayoutManager(Context context, int spanCount, int orientation, boolean reverseLayout) {
         super(context, spanCount, orientation, reverseLayout);
     }
 

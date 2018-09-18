@@ -33,7 +33,7 @@ import java.util.HashSet;
  * and you can decide whether it's enable the longTouch to jump to  SelectMode, you can call
  * {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter<T> {
 
     private int currentMode;

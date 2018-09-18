@@ -17,13 +17,12 @@
 package com.lovejjfg.powerrecycle.annotation;
 
 import android.support.annotation.IntDef;
-
 import com.lovejjfg.powerrecycle.AdapterLoader;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
@@ -31,11 +30,11 @@ import static java.lang.annotation.ElementType.PARAMETER;
  * Email lovejjfg@gmail.com
  */
 @IntDef(flag = true, value = {
-        AdapterLoader.STATE_LOADING,
-        AdapterLoader.STATE_LASTED,
-        AdapterLoader.STATE_ERROR
+    AdapterLoader.STATE_LOADING,
+    AdapterLoader.STATE_LASTED,
+    AdapterLoader.STATE_ERROR
 })
-@Target(PARAMETER)
+@Target({ PARAMETER, FIELD })
 @Retention(RetentionPolicy.SOURCE)
 public @interface LoadState {
 }

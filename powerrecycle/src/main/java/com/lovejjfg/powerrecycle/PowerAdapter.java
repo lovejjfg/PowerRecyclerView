@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,23 +39,26 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements AdapterLoader<T>,
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
-
+    private static final String TAG = PowerAdapter.class.getSimpleName();
     private View loadMore;
     private View errorView;
     private View emptyView;
-    public int loadState;
+    @LoadState
+    private int loadState;
     public boolean enableLoadMore;
     @Nullable
     private OnItemLongClickListener<T> longClickListener;
     @Nullable
     OnItemClickListener<T> clickListener;
     private int currentType;
+    private RecyclerView recyclerView;
+    private Runnable loadMoreAction;
 
     public OnLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
     }
 
-    public void setLoadMoreListener(OnLoadMoreListener loadMoreListener) {
+    public void setLoadMoreListener(@NonNull OnLoadMoreListener loadMoreListener) {
         this.loadMoreListener = loadMoreListener;
     }
 
@@ -167,7 +171,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                     throw new NullPointerException("Did you forget init ErrorView?");
                 }
                 return new PowerHolder<>(errorView);
-            case TYPE_EMPT:
+            case TYPE_EMPTY:
                 if (emptyView == null) {
                     throw new NullPointerException("Did you forget init EmptyView?");
                 }
@@ -183,7 +187,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public void onBottomViewHolderBind(PowerHolder<T> holder, @LoadState int loadState) {
+    public void onBottomViewHolderBind(PowerHolder<T> holder, OnLoadMoreListener listener, @LoadState int loadState) {
 
     }
 
@@ -195,6 +199,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         int viewType = getItemViewType(position);
         switch (viewType) {
             case TYPE_BOTTOM:
+                Log.i(TAG, "onBindViewHolder: bindBottom");
                 ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
                 if (params instanceof StaggeredGridLayoutManager.LayoutParams) {
                     ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
@@ -202,16 +207,16 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
                 try {
                     if (loadMore != null) {
-                        onBottomViewHolderBind(holder, loadState);
+                        onBottomViewHolderBind(holder, loadMoreListener, loadState);
                     } else {
-                        ((NewBottomViewHolder) holder).bindDateView(this);
+                        ((NewBottomViewHolder) holder).onBind(loadMoreListener, loadState);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
 
-            case TYPE_EMPT:
+            case TYPE_EMPTY:
                 onEmptyHolderBind(holder);
                 break;
             case TYPE_ERROR:
@@ -219,19 +224,25 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 break;
             default:
                 if (clickListener != null && holder.enableCLick) {
-                    holder.itemView.setOnClickListener(v -> {
-                        int position1 = holder.getAdapterPosition();
-                        if (position1 == -1 || position1 >= list.size()) {
-                            return;
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int currentPos = holder.getAdapterPosition();
+                            if (currentPos == -1 || currentPos >= list.size()) {
+                                return;
+                            }
+                            performClick(v, currentPos, getItem(currentPos));
                         }
-                        performClick(v, position1, getItem(position));
                     });
                 }
                 if (longClickListener != null) {
-                    holder.itemView.setOnLongClickListener(v -> {
-                        int position12 = holder.getAdapterPosition();
-                        return !(position12 == -1 || position12 >= list.size()) && performLongClick(v,
-                            holder.getAdapterPosition(), getItem(position12));
+                    holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            int currentPos = holder.getAdapterPosition();
+                            return !(currentPos == -1 || currentPos >= list.size()) && performLongClick(v,
+                                holder.getAdapterPosition(), getItem(currentPos));
+                        }
                     });
                 }
                 if (position == -1 || position >= list.size()) {
@@ -270,7 +281,15 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
             return;
         }
         loadState = STATE_LOADING;
-        notifyItemRangeChanged(getItemRealCount(), 1);
+        if (loadMoreAction == null) {
+            loadMoreAction = new Runnable() {
+                @Override
+                public void run() {
+                    notifyItemRangeChanged(getItemRealCount(), 1);
+                }
+            };
+        }
+        recyclerView.post(loadMoreAction);
     }
 
     @Override
@@ -296,9 +315,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     @Override
     public final void setErrorView(View errorView) {
         this.errorView = errorView;
-        errorView.setOnClickListener(v -> {
-            if (errorClickListener != null) {
-                errorClickListener.onErrorClick(v);
+        errorView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (errorClickListener != null) {
+                    errorClickListener.onErrorClick(v);
+                }
             }
         });
     }
@@ -306,7 +328,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     @Override
     public void showEmpty() {
         list.clear();
-        currentType = TYPE_EMPT;
+        currentType = TYPE_EMPTY;
         notifyDataSetChanged();
     }
 
@@ -372,7 +394,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public boolean isHasMore() {
-        return getItemCount() < totalCount;
+        return getItemRealCount() < totalCount;
     }
 
     public final void loadMoreError() {
@@ -390,8 +412,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public final void attachRecyclerView(@NonNull RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
         recyclerView.setAdapter(this);
-        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        recyclerView.addOnScrollListener(new LoadMoreScrollListener(recyclerView));
+        final RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager == null) {
             throw new NullPointerException("Did you forget call setLayoutManager() at first?");
         }
@@ -409,7 +433,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         int itemViewType = getItemViewType(position);
         switch (itemViewType) {
             case AdapterLoader.TYPE_BOTTOM:
-            case AdapterLoader.TYPE_EMPT:
+            case AdapterLoader.TYPE_EMPTY:
             case AdapterLoader.TYPE_ERROR:
                 return manager.getSpanCount();
             default:
