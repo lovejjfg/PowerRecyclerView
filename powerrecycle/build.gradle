@@ -44,17 +44,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    compileOnly "com.android.support:recyclerview-v7:${SUPPORT_V7_VERSION}"
-    compileOnly "com.android.support:appcompat-v7:${SUPPORT_V7_VERSION}"
+    implementation "com.android.support:recyclerview-v7:${SUPPORT_V7_VERSION}"
+    implementation "com.android.support:appcompat-v7:${SUPPORT_V7_VERSION}"
 }
 
 afterEvaluate {

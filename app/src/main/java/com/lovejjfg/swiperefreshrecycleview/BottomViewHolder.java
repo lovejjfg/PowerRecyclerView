@@ -17,11 +17,9 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
 import android.view.View;
-
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
-
 
 /**
  * Created by Joe on 2016/12/5.
@@ -39,11 +37,16 @@ public class BottomViewHolder<T> extends PowerHolder<T> {
 
     public void onBind(OnLoadMoreListener loadMoreListener, int loadState) {
         if (loadState == AdapterLoader.STATE_LOADING) {
-            // TODO: 2016/12/5 handle error state
-            bottomView.setVisibility(View.VISIBLE);
-            loadMoreListener.onLoadMore();
+            itemView.getLayoutParams().height = 100;
+            System.out.println("啦啦阿拉显示加载更多");
+            //bottomView.setVisibility(View.VISIBLE);
+            if (loadMoreListener != null) {
+                loadMoreListener.onLoadMore();
+            }
         } else {
-            bottomView.setVisibility(View.GONE);
+            System.out.println("啦啦阿拉隐藏加载更多");
+            //bottomView.setVisibility(View.GONE);
+            itemView.getLayoutParams().height = 0;
         }
     }
 }

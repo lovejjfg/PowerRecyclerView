@@ -22,15 +22,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-
+import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
-import com.lovejjfg.powerrecycle.annotation.LoadState;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;
-
 
 /**
  * Created by Joe on 2016-07-27
@@ -64,8 +62,8 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public void onBottomViewHolderBind(PowerHolder<TestBean> holder, @LoadState int loadState) {
-        ((BottomViewHolder) holder).onBind(getLoadMoreListener(), loadState);
+    public void onBottomViewHolderBind(PowerHolder<TestBean> holder, OnLoadMoreListener listener, int loadState) {
+        ((BottomViewHolder) holder).onBind(listener, loadState);
     }
 
     private static class MyViewHolder<T> extends PowerHolder<T> {
@@ -80,12 +78,11 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
         }
 
         void bindDateView(boolean isSelectMode, TestBean s) {
-            TransitionManager.beginDelayedTransition((ViewGroup) itemView, new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_KEEP));
+            TransitionManager.beginDelayedTransition((ViewGroup) itemView,
+                new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_KEEP));
             mCheckBox.setVisibility(isSelectMode ? View.VISIBLE : View.GONE);
             mTv.setText(s.isSelected() ? "选中：" + s.getName() : s.getName());
             mCheckBox.setChecked(s.isSelected());
         }
     }
-
-
 }

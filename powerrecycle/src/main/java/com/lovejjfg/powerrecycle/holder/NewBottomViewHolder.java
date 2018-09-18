@@ -29,6 +29,7 @@ import com.lovejjfg.powerrecycle.annotation.LoadState;
  * Created by Joe on 2016-03-11.
  * Email lovejjfg@gmail.com
  */
+@SuppressWarnings("Convert2Lambda")
 public class NewBottomViewHolder<T> extends PowerHolder<T> {
     private final LinearLayout container;
     private final ProgressBar pb;
@@ -77,6 +78,8 @@ public class NewBottomViewHolder<T> extends PowerHolder<T> {
                     };
                 }
                 container.setOnClickListener(listener);
+                break;
+            default:
                 break;
         }
     }

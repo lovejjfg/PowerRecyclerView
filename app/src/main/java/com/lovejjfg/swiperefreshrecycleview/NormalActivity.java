@@ -23,16 +23,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-
-import com.lovejjfg.powerrecycle.LoadMoreScrollListener;
-import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
+import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NormalActivity extends AppCompatActivity {
     private static final String TAG = NormalActivity.class.getSimpleName();
@@ -64,7 +59,6 @@ public class NormalActivity extends AppCompatActivity {
         adapter.attachRecyclerView(mRecycleView);
 //        mRecycleView.setItemAnimator(new DefaultAnimator());
         //3.setLoadMoreScrollListener
-        mRecycleView.addOnScrollListener(new LoadMoreScrollListener(mRecycleView));
         adapter.setOnItemClickListener((v, p, item) -> Log.e(TAG, "onItemClick: " + p));
         //4.setTotalCount
         adapter.setTotalCount(100);
@@ -101,8 +95,5 @@ public class NormalActivity extends AppCompatActivity {
             }
             isRun = false;
         };
-
     }
-
-
 }

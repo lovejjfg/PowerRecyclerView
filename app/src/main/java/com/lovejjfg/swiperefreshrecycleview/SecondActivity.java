@@ -30,7 +30,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
@@ -38,13 +39,8 @@ import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 
 public class SecondActivity extends AppCompatActivity implements OnLoadMoreListener {
 
@@ -104,6 +100,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
 
         decor = new SpacesItemDecoration(30, 3, true);
         mRecycleView.addItemDecoration(decor);
+        //mRecycleView.setItemAnimator(new DefaultAnimator());
         adapter.attachRecyclerView(mRecycleView);
         mRefresh.setOnRefreshListener(() -> mRecycleView.postDelayed(refreshAction, DEFAULT_TIME));
         //初始化一个TouchHelperCallback
@@ -145,9 +142,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         };
         mRefresh.setRefreshing(true);
         mRecycleView.postDelayed(refreshAction, DEFAULT_TIME);
-
     }
-
 
     @Override
     public void onLoadMore() {
@@ -173,7 +168,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
                 adapter.setTotalCount(500);
                 break;
             case R.id.own:
-//                adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecycleView, false));
+                adapter.setLoadMoreView(R.layout.layout_foot_self);
                 break;
             case R.id.pull_refresh:
                 enable = !enable;
@@ -208,7 +203,8 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
             case R.id.error:
                 try {
                     View inflate = LayoutInflater.from(this).inflate(R.layout.layout_error, mRecycleView, false);
-                    inflate.findViewById(R.id.iv_empty).setOnClickListener((v -> Log.e("TAG", "onOptionsItemSelected: 点击了！！")));
+                    inflate.findViewById(R.id.iv_empty)
+                        .setOnClickListener((v -> Log.e("TAG", "onOptionsItemSelected: 点击了！！")));
                     adapter.setErrorView(inflate);
                     adapter.showError(true);
                 } catch (Exception e) {
@@ -217,7 +213,8 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
                 break;
             case R.id.empty:
                 View inflate = LayoutInflater.from(this).inflate(R.layout.layout_empty, mRecycleView, false);
-                inflate.findViewById(R.id.iv_empty).setOnClickListener((v -> Log.e("TAG", "onOptionsItemSelected: 点击了！！")));
+                inflate.findViewById(R.id.iv_empty)
+                    .setOnClickListener((v -> Log.e("TAG", "onOptionsItemSelected: 点击了！！")));
                 adapter.setEmptyView(inflate);
                 adapter.showEmpty();
                 break;
@@ -229,10 +226,6 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
 
     @Override
     public void onBackPressed() {
-        if (adapter.isSelectMode()) {
-            adapter.updateSelectMode(false);
-            return;
-        }
         super.onBackPressed();
     }
 }

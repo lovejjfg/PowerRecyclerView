@@ -38,9 +38,6 @@
         <activity android:name=".GuideActivity">
 
         </activity>
-        <activity android:name=".CustomerNormalActivity">
-
-        </activity>
 
         <activity android:name=".ProductList"/>
         <activity-alias

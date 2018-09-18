@@ -24,7 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-
+import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
@@ -76,15 +76,25 @@ public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
         }
     }
 
-    //you should Override this method to control whether the viewHolder can move and swipe or not! by default was impossible!!
+    @Override
+    public PowerHolder<TestBean> onBottomViewHolderCreate(View loadMore) {
+        return new BottomViewHolder<>(loadMore);
+    }
+
+    @Override
+    public void onBottomViewHolderBind(PowerHolder<TestBean> holder, OnLoadMoreListener listener, int loadState) {
+        ((BottomViewHolder) holder).onBind(listener, loadState);
+    }
+
+    //you should Override this method to control whether the viewHolder can move and swipe or not! by default was
+    // impossible!!
     @NonNull
     @Override
     public int[] getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         if (viewHolder.getAdapterPosition() % 2 == 0) {
-            return new int[]{ItemTouchHelper.UP | ItemTouchHelper.DOWN
-                    | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE};
+            return new int[] { ItemTouchHelper.UP | ItemTouchHelper.DOWN
+                | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.ACTION_STATE_IDLE };
         }
         return super.getMovementFlags(recyclerView, viewHolder);
-
     }
 }
