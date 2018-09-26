@@ -9,6 +9,17 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PowerRecycerView-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/4745)
  [ ![Download](https://api.bintray.com/packages/lovejjfg/maven/powerRecycleView/images/download.svg) ](https://bintray.com/lovejjfg/maven/powerRecycleView/_latestVersion)
 
+### 快速使用
+
+    implementation 'com.lovejjfg.powerrecycle:powerrecycle:lastedVersion'
+
+因为 lib 已经依赖了 v7 和 `RecyclerView` ,当前版本是 27 ，可以移除。
+
+    implementation ('com.lovejjfg.powerrecycle:powerrecycle:1.2.6'){
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+
 
 
 ### V1.0.0
@@ -42,6 +53,14 @@
 * 在点击回调方法中增加Item的返回。
 * 增加了 `PowerHolder` 作为默认的 `Holder`
 * 增加设置 错误页面 和 空白页面 的两个方法
+
+### V1.2.6
+* 移除 lambda
+* `setLoadMoreView()` 方法参数改为接收 布局资源id
+* `LoadMoreScrollListener` 在 `attachRecyclerView()` 中自动设置，并不对外暴露
+* `onBottomViewHolderBind()` 修改，增加 listener
+* DefaultAnimator 废除，理论上不需要再设置这个解决相关crash。
+
 
 --------
 
@@ -174,9 +193,9 @@
         ((BottomViewHolder) holder).onBind(getLoadMoreListener(), loadState);
     }
 
-PS:**直接使用RecyclerView请注意添加`mRecycleView.setItemAnimator(new DefaultAnimator());`**
+~~PS:**直接使用RecyclerView请注意添加`mRecycleView.setItemAnimator(new DefaultAnimator());`**~~
 
-因为有使用 lambda ，所以你可能需要指定 Java 的版本:
+~~因为有使用 lambda ，所以你可能需要指定 Java 的版本:~~
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
