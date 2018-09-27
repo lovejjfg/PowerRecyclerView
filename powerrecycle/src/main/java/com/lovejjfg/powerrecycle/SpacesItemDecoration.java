@@ -25,18 +25,18 @@ import android.view.View;
  * Email lovejjfg@gmail.com
  */
 
-public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
-    private int spanCount;
-    private int spacing;
-    private boolean showEdge;
-    private float pre;
-    private boolean showTopBottom;
+    private final int spanCount;
+    private final int spacing;
+    private final boolean showEdge;
+    private final float pre;
+    private final boolean showTopBottom;
     private int topSpace;
     private int bottomSpace;
-    private ItemOffsetsCallback callback;
+    private final ItemOffsetsCallback callback;
 
-    private SpacesItemDecoration(int spacing, int spanCount, boolean showEdge, boolean showTopBottom,
+    SpacesItemDecoration(int spacing, int spanCount, boolean showEdge, boolean showTopBottom,
         int topSpace, int bottomSpace, ItemOffsetsCallback callback) {
         this.spacing = spacing;
         this.spanCount = spanCount;

@@ -71,10 +71,6 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-        mToolBar.setOnLongClickListener(v -> {
-            NotificationUtil.sendSimplestNotificationWithAction(SecondActivity.this);
-            return true;
-        });
         adapter = new SelectRecycleAdapter();
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
