@@ -19,14 +19,14 @@ package com.lovejjfg.swiperefreshrecycleview;
 import android.view.View;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.OnLoadMoreListener;
-import com.lovejjfg.powerrecycle.holder.PowerHolder;
+import com.lovejjfg.powerrecycle.holder.AbsBottomViewHolder;
 
 /**
  * Created by Joe on 2016/12/5.
  * Email lovejjfg@gmail.com
  */
 
-public class BottomViewHolder<T> extends PowerHolder<T> {
+public class BottomViewHolder extends AbsBottomViewHolder {
 
     private final View bottomView;
 
@@ -35,6 +35,7 @@ public class BottomViewHolder<T> extends PowerHolder<T> {
         bottomView = itemView.findViewById(R.id.progressbar);
     }
 
+    @Override
     public void onBind(OnLoadMoreListener loadMoreListener, int loadState) {
         if (loadState == AdapterLoader.STATE_LOADING) {
             itemView.getLayoutParams().height = 100;

@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.lovejjfg.powerrecycle.annotation.LoadState;
+import com.lovejjfg.powerrecycle.holder.AbsBottomViewHolder;
 import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import java.util.List;
  * Created by Joe on 2016-03-11
  * Email: lovejjfg@gmail.com
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "unchecked" })
 public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements AdapterLoader<T>,
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
@@ -87,7 +88,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public final void setList(List<T> data) {
+    public final void setList(@NonNull List<T> data) {
         currentType = 0;
         if (data == null) {
             return;
@@ -108,7 +109,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public final void appendList(List<T> data) {
+    public final void appendList(@NonNull List<T> data) {
         int positionStart = list.size();
         list.addAll(data);
         int itemCount = list.size() - positionStart;
@@ -160,14 +161,15 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 if (loadMoreLayout != -1) {
                     View view =
                         LayoutInflater.from(parent.getContext()).inflate(loadMoreLayout, parent, false);
-                    PowerHolder<T> holder = onBottomViewHolderCreate(view);
+                    AbsBottomViewHolder holder = onBottomViewHolderCreate(view);
                     if (holder == null) {
                         throw new RuntimeException(
                             "You must impl onBottomViewHolderCreate() and return your own holder ");
                     }
                     return holder;
                 } else {
-                    return new NewBottomViewHolder<>(
+                    //noinspection unchecked
+                    return new NewBottomViewHolder(
                         LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
                 }
             case TYPE_ERROR:
@@ -186,17 +188,18 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public PowerHolder<T> onBottomViewHolderCreate(View loadMore) {
+    public AbsBottomViewHolder onBottomViewHolderCreate(@NonNull View loadMore) {
         return null;
     }
 
     @Override
-    public void onBottomViewHolderBind(PowerHolder<T> holder, OnLoadMoreListener listener, @LoadState int loadState) {
-
+    public void onBottomViewHolderBind(AbsBottomViewHolder holder, OnLoadMoreListener listener,
+        @LoadState int loadState) {
+        holder.onBind(listener, loadState);
     }
 
     @Override
-    public abstract PowerHolder<T> onViewHolderCreate(ViewGroup parent, int viewType);
+    public abstract PowerHolder<T> onViewHolderCreate(@NonNull ViewGroup parent, int viewType);
 
     @Override
     public void onBindViewHolder(@NonNull final PowerHolder<T> holder, int position) {
@@ -211,7 +214,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
                 try {
                     if (loadMoreLayout != -1) {
-                        onBottomViewHolderBind(holder, loadMoreListener, loadState);
+                        onBottomViewHolderBind((AbsBottomViewHolder) holder, loadMoreListener, loadState);
                     } else {
                         ((NewBottomViewHolder) holder).onBind(loadMoreListener, loadState);
                     }
@@ -258,26 +261,26 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public void onErrorHolderBind(PowerHolder<T> holder) {
+    public void onErrorHolderBind(@NonNull PowerHolder<T> holder) {
     }
 
     @Override
-    public void onEmptyHolderBind(PowerHolder<T> holder) {
+    public void onEmptyHolderBind(@NonNull PowerHolder<T> holder) {
     }
 
-    public void performClick(View itemView, int position, T item) {
+    public void performClick(@NonNull View itemView, int position, T item) {
         if (clickListener != null) {
             clickListener.onItemClick(itemView, position, item);
         }
     }
 
     @Override
-    public boolean performLongClick(View itemView, int position, T item) {
+    public boolean performLongClick(@NonNull View itemView, int position, T item) {
         return longClickListener != null && longClickListener.onItemLongClick(itemView, position, item);
     }
 
     @Override
-    public abstract void onViewHolderBind(PowerHolder<T> holder, int position);
+    public abstract void onViewHolderBind(@NonNull PowerHolder<T> holder, int position);
 
     @Override
     public final void updateLoadingMore() {
@@ -312,12 +315,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public final void setEmptyView(View emptyView) {
+    public final void setEmptyView(@NonNull View emptyView) {
         this.emptyView = emptyView;
     }
 
     @Override
-    public final void setErrorView(View errorView) {
+    public final void setErrorView(@NonNull View errorView) {
         this.errorView = errorView;
         errorView.setOnClickListener(new View.OnClickListener() {
             @Override

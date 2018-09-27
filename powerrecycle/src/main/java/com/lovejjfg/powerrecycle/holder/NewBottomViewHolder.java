@@ -30,7 +30,7 @@ import com.lovejjfg.powerrecycle.annotation.LoadState;
  * Email lovejjfg@gmail.com
  */
 @SuppressWarnings("Convert2Lambda")
-public class NewBottomViewHolder<T> extends PowerHolder<T> {
+public class NewBottomViewHolder extends AbsBottomViewHolder {
     private final LinearLayout container;
     private final ProgressBar pb;
     private final TextView content;
@@ -43,6 +43,7 @@ public class NewBottomViewHolder<T> extends PowerHolder<T> {
         content = itemView.findViewById(R.id.content);
     }
 
+    @Override
     public void onBind(final OnLoadMoreListener loadMoreListener, @LoadState int loadState) {
         switch (loadState) {
             case AdapterLoader.STATE_LASTED:

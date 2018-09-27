@@ -16,14 +16,15 @@
 
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
+import com.lovejjfg.powerrecycle.holder.AbsBottomViewHolder;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
@@ -44,26 +45,21 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public PowerHolder<TestBean> onViewHolderCreate(ViewGroup parent, int viewType) {
+    public PowerHolder<TestBean> onViewHolderCreate(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
         return new MyViewHolder<>(view);
     }
 
     @Override
-    public void onViewHolderBind(PowerHolder<TestBean> holder, final int position) {
+    public void onViewHolderBind(@NonNull PowerHolder<TestBean> holder, final int position) {
         final TestBean testBean = list.get(position);
         ((MyViewHolder) holder).bindDateView(isSelectMode, testBean);
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
     }
 
     @Override
-    public PowerHolder<TestBean> onBottomViewHolderCreate(View loadMore) {
-        return new BottomViewHolder<>(loadMore);
-    }
-
-    @Override
-    public void onBottomViewHolderBind(PowerHolder<TestBean> holder, OnLoadMoreListener listener, int loadState) {
-        ((BottomViewHolder) holder).onBind(listener, loadState);
+    public AbsBottomViewHolder onBottomViewHolderCreate(@NonNull View loadMore) {
+        return new BottomViewHolder(loadMore);
     }
 
     private static class MyViewHolder<T> extends PowerHolder<T> {

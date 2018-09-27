@@ -22,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import com.lovejjfg.powerrecycle.annotation.LoadState;
+import com.lovejjfg.powerrecycle.holder.AbsBottomViewHolder;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.manager.FixedGridLayoutManager;
 import java.util.List;
@@ -49,7 +50,7 @@ public interface AdapterLoader<T> {
      * @param holder the current holder.
      * @param loadState the current state.
      */
-    void onBottomViewHolderBind(PowerHolder<T> holder, OnLoadMoreListener listener, @LoadState int loadState);
+    void onBottomViewHolderBind(AbsBottomViewHolder holder, OnLoadMoreListener listener, @LoadState int loadState);
 
     /**
      * If you want to create the specified bottom layout,you must call this method to add your specified layout !
@@ -58,9 +59,9 @@ public interface AdapterLoader<T> {
      */
     void setLoadMoreView(@LayoutRes int viewRes);
 
-    void setEmptyView(View emptyView);
+    void setEmptyView(@NonNull View emptyView);
 
-    void setErrorView(View errorView);
+    void setErrorView(@NonNull View errorView);
 
     void showEmpty();
 
@@ -77,7 +78,7 @@ public interface AdapterLoader<T> {
      *
      * @param loadMore whether is loadingMore or not..
      */
-    PowerHolder<T> onBottomViewHolderCreate(View loadMore);
+    AbsBottomViewHolder onBottomViewHolderCreate(View loadMore);
 
     boolean isHasMore();
 
@@ -87,9 +88,9 @@ public interface AdapterLoader<T> {
 
     void enableLoadMore(boolean loadMore);
 
-    void onErrorHolderBind(PowerHolder<T> holder);
+    void onErrorHolderBind(@NonNull PowerHolder<T> holder);
 
-    void onEmptyHolderBind(PowerHolder<T> holder);
+    void onEmptyHolderBind(@NonNull PowerHolder<T> holder);
 
     /**
      * You can call this method to add data to RecycleView,if you want to append data,you should call
@@ -97,14 +98,14 @@ public interface AdapterLoader<T> {
      *
      * @param data the data you want to add
      */
-    void setList(List<T> data);
+    void setList(@NonNull List<T> data);
 
     void clearList();
 
     /**
      * @param data the data you want to add
      */
-    void appendList(List<T> data);
+    void appendList(@NonNull List<T> data);
 
     /**
      * remove the specified position in the list. If this method throw RecyclerView Exception when you delete the
@@ -136,9 +137,9 @@ public interface AdapterLoader<T> {
      * @param holder current holder.
      * @param position current pos.
      */
-    void onViewHolderBind(PowerHolder<T> holder, int position);
+    void onViewHolderBind(@NonNull PowerHolder<T> holder, int position);
 
-    PowerHolder<T> onViewHolderCreate(ViewGroup parent, int viewType);
+    PowerHolder<T> onViewHolderCreate(@NonNull ViewGroup parent, int viewType);
 
     /**
      * Return the current size about {@link PowerAdapter#list}.
@@ -147,9 +148,9 @@ public interface AdapterLoader<T> {
      */
     int getItemRealCount();
 
-    void performClick(View itemView, int position, T item);
+    void performClick(@NonNull View itemView, int position, T item);
 
-    boolean performLongClick(View itemView, int position, T item);
+    boolean performLongClick(@NonNull View itemView, int position, T item);
 
     /**
      * call this method after init RecyclerView(set LayoutManager)
@@ -190,7 +191,7 @@ public interface AdapterLoader<T> {
          * @param position The position of the view in the adapter
          * @param isSelected The state of isSelected
          */
-        void onItemSelected(View view, int position, boolean isSelected);
+        void onItemSelected(@NonNull View view, int position, boolean isSelected);
 
         /**
          * Callback method to be invoked when the selection disappears from this
@@ -201,10 +202,10 @@ public interface AdapterLoader<T> {
     }
 
     interface OnItemClickListener<T> {
-        void onItemClick(View itemView, int position, T item);
+        void onItemClick(@NonNull View itemView, int position, T item);
     }
 
     interface OnItemLongClickListener<T> {
-        boolean onItemLongClick(View itemView, int position, T item);
+        boolean onItemLongClick(@NonNull View itemView, int position, T item);
     }
 }

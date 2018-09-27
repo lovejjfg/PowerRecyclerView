@@ -29,18 +29,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.TouchHelperCallback;
 import com.lovejjfg.powerrecycle.annotation.SelectMode;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.PickedBean;
-
 import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 public class PickActivity extends AppCompatActivity {
@@ -113,12 +110,12 @@ public class PickActivity extends AppCompatActivity {
         }
 
         @Override
-        public PowerHolder<PickedBean> onViewHolderCreate(ViewGroup parent, int viewType) {
+        public PowerHolder<PickedBean> onViewHolderCreate(@NonNull ViewGroup parent, int viewType) {
             return new PickHolder<>(LayoutInflater.from(parent.getContext()).inflate(R.layout.city_item_select, parent, false));
         }
 
         @Override
-        public void onViewHolderBind(PowerHolder<PickedBean> holder, int position) {
+        public void onViewHolderBind(@NonNull PowerHolder<PickedBean> holder, int position) {
             if (holder instanceof PickHolder) {
                 ((PickHolder) holder).onBind((PickHolder) holder, list.get(position));
             }

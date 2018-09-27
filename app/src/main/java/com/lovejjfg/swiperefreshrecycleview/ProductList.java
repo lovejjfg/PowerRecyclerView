@@ -1,6 +1,7 @@
 package com.lovejjfg.swiperefreshrecycleview;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,12 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.lovejjfg.powerrecycle.PowerAdapter;
 import com.lovejjfg.powerrecycle.SpacesItemDecoration;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.swiperefreshrecycleview.model.Product;
-
 import java.util.ArrayList;
 
 /**
@@ -31,7 +30,7 @@ public class ProductList extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         ProductListAdapter adapter = new ProductListAdapter();
         mRecyclerView.setAdapter(adapter);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(ViewUtils.dip2px(this, 20), 2, true));
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration.Builder(ViewUtils.dip2px(this, 20), 2, true).create());
         initData(adapter);
     }
 
@@ -47,19 +46,20 @@ public class ProductList extends AppCompatActivity {
         adapter.setList(list);
     }
 
-
     static class ProductListAdapter extends PowerAdapter<Product> {
         @Override
-        public PowerHolder<Product> onViewHolderCreate(ViewGroup parent, int viewType) {
+        public PowerHolder<Product> onViewHolderCreate(@NonNull ViewGroup parent, int viewType) {
             if (viewType == 0) {
-                return new ProductListHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_product_list1, parent, false));
+                return new ProductListHolder(
+                    LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_product_list1, parent, false));
             } else {
-                return new ProductListHolder2(LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_product_list2, parent, false));
+                return new ProductListHolder2(
+                    LayoutInflater.from(parent.getContext()).inflate(R.layout.holder_product_list2, parent, false));
             }
         }
 
         @Override
-        public void onViewHolderBind(PowerHolder<Product> holder, int position) {
+        public void onViewHolderBind(@NonNull PowerHolder<Product> holder, int position) {
             holder.onBind(list.get(position));
         }
 
@@ -67,7 +67,6 @@ public class ProductList extends AppCompatActivity {
         public int getItemViewTypes(int position) {
             return list.get(position).type;
         }
-
     }
 
     static class ProductListHolder extends PowerHolder<Product> {
@@ -89,7 +88,6 @@ public class ProductList extends AppCompatActivity {
             mTag.setText(product.tag);
             mTitle.setText(product.title);
             ViewUtils.calculateTag1(mTitle, mTitle2, product.title);
-
         }
     }
 
@@ -110,10 +108,7 @@ public class ProductList extends AppCompatActivity {
             mTag.setText(product.tag);
             mTitle2.setText(product.title);
             ViewUtils.calculateTag2(mTag, mTitle2, product.title);
-
         }
     }
-
-
 }
 

@@ -24,8 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
+import com.lovejjfg.powerrecycle.holder.AbsBottomViewHolder;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
@@ -45,13 +45,13 @@ public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public PowerHolder<TestBean> onViewHolderCreate(ViewGroup parent, int viewType) {
+    public PowerHolder<TestBean> onViewHolderCreate(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.city_item_select, parent, false);
         return new MyViewHolder<>(view);
     }
 
     @Override
-    public void onViewHolderBind(PowerHolder<TestBean> holder, final int position) {
+    public void onViewHolderBind(@NonNull PowerHolder<TestBean> holder, final int position) {
         final TestBean testBean = list.get(position);
         ((MyViewHolder) holder).bindDateView(testBean);
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
@@ -77,13 +77,8 @@ public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
     }
 
     @Override
-    public PowerHolder<TestBean> onBottomViewHolderCreate(View loadMore) {
-        return new BottomViewHolder<>(loadMore);
-    }
-
-    @Override
-    public void onBottomViewHolderBind(PowerHolder<TestBean> holder, OnLoadMoreListener listener, int loadState) {
-        ((BottomViewHolder) holder).onBind(listener, loadState);
+    public AbsBottomViewHolder onBottomViewHolderCreate(@NonNull View loadMore) {
+        return new BottomViewHolder(loadMore);
     }
 
     //you should Override this method to control whether the viewHolder can move and swipe or not! by default was

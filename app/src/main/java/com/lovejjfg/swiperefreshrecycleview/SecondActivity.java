@@ -18,6 +18,7 @@ package com.lovejjfg.swiperefreshrecycleview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -77,7 +78,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         adapter = new SelectRecycleAdapter();
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(View view, int position, boolean isSelected) {
+            public void onItemSelected(@NonNull View view, int position, boolean isSelected) {
                 Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
                 if (isSelected) {
                     toast.setText(position + "::" + true);
@@ -98,7 +99,9 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         mRecycleView.setLayoutManager(manager);
 
-        decor = new SpacesItemDecoration(30, 3, true);
+        decor = new SpacesItemDecoration.Builder(50, 3, true)
+            .setShowTopBottom(true)
+            .create();
         mRecycleView.addItemDecoration(decor);
         //mRecycleView.setItemAnimator(new DefaultAnimator());
         adapter.attachRecyclerView(mRecycleView);
@@ -186,10 +189,14 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
             case R.id.showedge:
                 mRecycleView.removeItemDecoration(decor);
                 if (flag) {
-                    decor = new SpacesItemDecoration(30, 3, true);
+                    decor = new SpacesItemDecoration.Builder(30, 3, true)
+                        .setShowTopBottom(true)
+                        .create();
                     flag = false;
                 } else {
-                    decor = new SpacesItemDecoration(30, 3, false);
+                    decor = new SpacesItemDecoration.Builder(30, 3, false)
+                        .setShowTopBottom(true)
+                        .create();
                     flag = true;
                 }
                 mRecycleView.addItemDecoration(decor);

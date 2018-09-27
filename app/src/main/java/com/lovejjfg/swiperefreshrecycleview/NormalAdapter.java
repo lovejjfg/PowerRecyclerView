@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-
 import com.lovejjfg.powerrecycle.PowerAdapter;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
@@ -41,13 +40,13 @@ public class NormalAdapter extends PowerAdapter<TestBean> {
 
 
     @Override
-    public PowerHolder<TestBean> onViewHolderCreate(ViewGroup parent, int viewType) {
+    public PowerHolder<TestBean> onViewHolderCreate(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onViewHolderBind(PowerHolder<TestBean> holder, final int position) {
+    public void onViewHolderBind(@NonNull PowerHolder<TestBean> holder, final int position) {
         final TestBean testBean = list.get(position);
         ((MyViewHolder) holder).bindDateView(testBean);
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());
