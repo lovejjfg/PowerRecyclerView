@@ -288,6 +288,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
             return;
         }
         loadState = STATE_LOADING;
+        //fix crash :https://github.com/lovejjfg/PowerRecyclerView/issues/2
         if (loadMoreAction == null) {
             loadMoreAction = new Runnable() {
                 @Override
