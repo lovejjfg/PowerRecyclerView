@@ -13,12 +13,13 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lovejjfg.swiperefreshrecycleview">
 
-<manifest package="com.lovejjfg.swiperefreshrecycleview"
-          xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 悬浮框权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,19 +28,14 @@
         <activity android:name=".NormalActivity">
         </activity>
         <activity android:name=".SecondActivity">
-
         </activity>
         <activity android:name=".PickActivity">
-
         </activity>
         <activity android:name=".Pick2Activity">
-
         </activity>
         <activity android:name=".GuideActivity">
-
         </activity>
 
-        <activity android:name=".ProductList"/>
         <activity-alias
             android:name="launchActivity"
             android:targetActivity=".GuideActivity">
@@ -48,7 +44,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity-alias>
     </application>
 

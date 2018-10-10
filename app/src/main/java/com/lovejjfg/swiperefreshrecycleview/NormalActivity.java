@@ -59,6 +59,7 @@ public class NormalActivity extends AppCompatActivity {
         adapter.attachRecyclerView(mRecycleView);
 //        mRecycleView.setItemAnimator(new DefaultAnimator());
         //3.setLoadMoreScrollListener
+        mRecycleView.addItemDecoration(new com.lovejjfg.swiperefreshrecycleview.DividerItemDecoration(this));
         adapter.setOnItemClickListener((v, p, item) -> Log.e(TAG, "onItemClick: " + p));
         //4.setTotalCount
         adapter.setTotalCount(100);
@@ -74,6 +75,9 @@ public class NormalActivity extends AppCompatActivity {
 //        mRecycleView.setOnRefreshListener(this);
         this.list = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
+            if (i % 5 == 0) {
+                this.list.add(new TestBean(i));
+            }
             this.list.add(new TestBean("这是" + i));
         }
         //3.initData

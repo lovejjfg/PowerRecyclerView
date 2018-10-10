@@ -16,6 +16,7 @@
 
 package com.lovejjfg.powerrecycle;
 
+import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -156,5 +157,10 @@ public final class SpacesItemDecoration extends RecyclerView.ItemDecoration {
          * otherwise is returned.
          */
         boolean callback(Rect outRect, View view, RecyclerView parent, RecyclerView.State state);
+    }
+
+    @Override
+    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        super.onDrawOver(c, parent, state);
     }
 }

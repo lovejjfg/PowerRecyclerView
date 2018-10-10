@@ -25,9 +25,14 @@ import com.lovejjfg.powerrecycle.model.SelectBean;
 
 public class TestBean extends SelectBean {
     private String name;
+    private int title;
 
     public TestBean(String name) {
         this.name = name;
+    }
+
+    public TestBean(int title) {
+        this.title = title;
     }
 
     public String getName() {
