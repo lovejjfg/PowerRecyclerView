@@ -31,7 +31,7 @@ import java.util.HashSet;
 /**
  * {@link SelectPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch
  * {@link ISelect#SINGLE_MODE} or {@link ISelect#MULTIPLE_MODE}
- * and you can decide whether it's enable the longTouch to jump to  SelectMode, you can call
+ * and you can decide whether it's enableSelect the longTouch to jump to  SelectMode, you can call
  * {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
  */
 @SuppressWarnings({ "unused", "WeakerAccess" })
@@ -90,10 +90,10 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     public void resetAll() {
-        for (T bean : list) {
-            if (bean.isSelected()) {
-                bean.setSelected(false);
-                selectedBeans.remove(bean);
+        for (T iSelect : list) {
+            if (iSelect.isSelected()) {
+                iSelect.setSelected(false);
+                selectedBeans.remove(iSelect);
             }
         }
         notifyDataSetChanged();
@@ -112,35 +112,34 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     @Override
-    public void performClick(@NonNull final View itemView, final int position, T t) {
-        final T selectBean = list.get(position);
+    public void performClick(@NonNull final View itemView, final int position, T iSelect) {
 
         if (isSelectMode) {
-            if (currentMode == ISelect.SINGLE_MODE && selectBean.isSelected() && defaultPos != -1) {
+            if (currentMode == ISelect.SINGLE_MODE && iSelect.isSelected() && defaultPos != -1) {
                 return;
             }
-            boolean selected = !selectBean.isSelected();
-            selectBean.setSelected(selected);
-            dispatchSelected(itemView, position, selectBean, selected);
-            if (currentMode == ISelect.SINGLE_MODE && prePos != -1 && position != prePos && selectBean.isSelected()) {
+            boolean selected = !iSelect.isSelected();
+            iSelect.setSelected(selected);
+            dispatchSelected(itemView, position, iSelect, selected);
+            if (currentMode == ISelect.SINGLE_MODE && prePos != -1 && position != prePos && iSelect.isSelected()) {
                 list.get(prePos).setSelected(false);
-                dispatchSelected(itemView, prePos, selectBean, false);
+                dispatchSelected(itemView, prePos, iSelect, false);
                 notifyItemChanged(prePos);
             }
             notifyDataSetChanged();
             prePos = position;
         } else {
             if (clickListener != null) {
-                clickListener.onItemClick(itemView, position, t);
+                clickListener.onItemClick(itemView, position, iSelect);
             }
         }
     }
 
-    private void dispatchSelected(View itemView, int position, T testBean, boolean isSelected) {
+    private void dispatchSelected(View itemView, int position, T iSelect, boolean isSelected) {
         if (isSelected) {
-            selectedBeans.add(testBean);
+            selectedBeans.add(iSelect);
         } else {
-            selectedBeans.remove(testBean);
+            selectedBeans.remove(iSelect);
             if (selectedListener != null && selectedBeans.isEmpty()) {
                 selectedListener.onNothingSelected();
             }
@@ -151,17 +150,16 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     @Override
-    public boolean performLongClick(@NonNull View itemView, int position, T t) {
+    public boolean performLongClick(@NonNull View itemView, int position, T iSelect) {
         if (longTouchEnable) {
-            final T testBean = list.get(position);
             updateSelectMode(true);
-            testBean.setSelected(!testBean.isSelected());
-            dispatchSelected(itemView, position, testBean, testBean.isSelected());
+            iSelect.setSelected(!iSelect.isSelected());
+            dispatchSelected(itemView, position, iSelect, iSelect.isSelected());
             notifyItemChanged(position);
             prePos = position;
             return true;
         } else {
-            return super.performLongClick(itemView, position, t);
+            return super.performLongClick(itemView, position, iSelect);
         }
     }
 
