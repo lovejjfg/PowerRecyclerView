@@ -18,6 +18,7 @@ package com.lovejjfg.powerrecycle;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +60,18 @@ public interface AdapterLoader<T> {
      */
     void setLoadMoreView(@LayoutRes int viewRes);
 
+    @Nullable
+    View createLoadMoreView(ViewGroup parent);
+
     void setEmptyView(@NonNull View emptyView);
 
+    @Nullable
+    View createEmptyView(ViewGroup parent);
+
     void setErrorView(@NonNull View errorView);
+
+    @Nullable
+    View createErrorView(ViewGroup parent);
 
     void showEmpty();
 

@@ -22,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -168,18 +167,34 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                     }
                     return holder;
                 } else {
-                    //noinspection unchecked
-                    return new NewBottomViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer_new, parent, false));
+                    View loadMoreView = createLoadMoreView(parent);
+                    if (loadMoreView != null) {
+                        return onBottomViewHolderCreate(loadMoreView);
+                    } else {
+                        //noinspection unchecked
+                        return new NewBottomViewHolder(
+                            LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.recycler_footer_new, parent, false));
+                    }
                 }
             case TYPE_ERROR:
                 if (errorView == null) {
-                    throw new NullPointerException("Did you forget init ErrorView?");
+                    errorView = createErrorView(parent);
+                    if (errorView != null) {
+                        setErrorView(errorView);
+                    } else {
+                        throw new NullPointerException("Did you forget init ErrorView?");
+                    }
                 }
                 return new PowerHolder<>(errorView);
             case TYPE_EMPTY:
                 if (emptyView == null) {
-                    throw new NullPointerException("Did you forget init EmptyView?");
+                    emptyView = createEmptyView(parent);
+                    if (emptyView != null) {
+                        setEmptyView(emptyView);
+                    } else {
+                        throw new NullPointerException("Did you forget init EmptyView?");
+                    }
                 }
                 return new PowerHolder<>(emptyView);
             default:
@@ -206,7 +221,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         int viewType = getItemViewType(position);
         switch (viewType) {
             case TYPE_BOTTOM:
-                Log.i(TAG, "onBindViewHolder: bindBottom");
                 ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
                 if (params instanceof StaggeredGridLayoutManager.LayoutParams) {
                     ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
@@ -258,6 +272,24 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 onViewHolderBind(holder, position);
                 break;
         }
+    }
+
+    @Nullable
+    @Override
+    public View createErrorView(ViewGroup parent) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public View createEmptyView(ViewGroup parent) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public View createLoadMoreView(ViewGroup parent) {
+        return null;
     }
 
     @Override
