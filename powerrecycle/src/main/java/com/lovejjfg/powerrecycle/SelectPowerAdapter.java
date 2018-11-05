@@ -39,13 +39,11 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
 
     private int currentMode;
     private int prePos = -1;
-    private int defaultPos = -1;
-    private int currentPos = -1;
+    private boolean hasDefaultSelect;
     private boolean longTouchEnable;
     protected boolean isSelectMode;
     @Nullable
-    private
-    OnItemSelectedListener selectedListener;
+    private OnItemSelectedListener selectedListener;
 
     public HashSet<T> getSelectedBeans() {
         return selectedBeans;
@@ -61,23 +59,21 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         }
     }
 
-    public void setDefaultSelectedPos(int position) {
-        this.defaultPos = position;
+    public void setDefaultSelect(boolean hasDefault) {
+        this.hasDefaultSelect = hasDefault;
     }
 
     public void setCurrentPos(int position) {
         if (list.isEmpty() || position > list.size() - 1 || position < 0) {
             return;
         }
-        if (currentPos != position) {
-            currentPos = position;
-            if (prePos == -1) {
-                prePos = currentPos;
-            }
+        if (prePos != position) {
+            prePos = position;
             T t = list.get(position);
             if (!t.isSelected()) {
                 resetAll();
                 t.setSelected(true);
+                selectedBeans.add(t);
                 notifyItemChanged(position);
             }
         }
@@ -87,6 +83,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         this.currentMode = currentMode;
         this.longTouchEnable = longTouchEnable;
         this.isSelectMode = true;
+        this.hasDefaultSelect = currentMode == ISelect.SINGLE_MODE;
     }
 
     public void resetAll() {
@@ -115,7 +112,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     public void performClick(@NonNull final View itemView, final int position, T iSelect) {
 
         if (isSelectMode) {
-            if (currentMode == ISelect.SINGLE_MODE && iSelect.isSelected() && defaultPos != -1) {
+            if (currentMode == ISelect.SINGLE_MODE && iSelect.isSelected() && hasDefaultSelect) {
                 return;
             }
             boolean selected = !iSelect.isSelected();
@@ -123,7 +120,9 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
             dispatchSelected(itemView, position, iSelect, selected);
             if (currentMode == ISelect.SINGLE_MODE && prePos != -1 && position != prePos && iSelect.isSelected()) {
                 list.get(prePos).setSelected(false);
-                dispatchSelected(itemView, prePos, iSelect, false);
+                T t1 = list.get(prePos);
+                t1.setSelected(false);
+                dispatchSelected(itemView, prePos, t1, false);
                 notifyItemChanged(prePos);
             }
             notifyDataSetChanged();

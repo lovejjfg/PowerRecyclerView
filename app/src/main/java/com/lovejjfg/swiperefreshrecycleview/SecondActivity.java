@@ -175,6 +175,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
                 break;
             case R.id.select_single:
                 adapter.setSelectedMode(ISelect.SINGLE_MODE);
+                adapter.setCurrentPos(3);
                 adapter.updateSelectMode(true);
 
                 break;
