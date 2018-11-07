@@ -37,7 +37,7 @@ import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 public class SelectRecycleAdapter extends SelectPowerAdapter<TestBean> {
 
     public SelectRecycleAdapter() {
-        super(ISelect.SINGLE_MODE, false);
+        super(ISelect.SINGLE_MODE, true);
     }
 
     public SelectRecycleAdapter(int currentMode, boolean longTouchEnable) {

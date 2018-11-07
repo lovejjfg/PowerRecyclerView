@@ -61,7 +61,6 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
     private static final int DEFAULT_TIME = 1000;
     private SpacesItemDecoration decor;
     private boolean flag;
-    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,6 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         setContentView(R.layout.activity_sed);
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         adapter = new SelectRecycleAdapter();
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
@@ -78,8 +76,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
                 Log.e("TAG",
                     "onItemSelected: " + position + "::" + isSelected + ";;total:" + adapter.getSelectedBeans().size());
                 if (isSelected) {
-                    toast.setText(position + "::" + true);
-                    toast.show();
+                    showToast(("current：" + position + ";;total:" + adapter.getSelectedBeans().size()));
                 }
             }
 
@@ -90,9 +87,9 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
             }
         });
         adapter.setOnItemClickListener((itemView, position, item) -> {
-            toast.setText("点击了：" + position);
-            toast.show();
+            showToast("click：" + position);
         });
+        adapter.updateSelectMode(false);
 //        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         mRecycleView.setLayoutManager(manager);
@@ -129,11 +126,11 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
             int i = ((int) (Math.random() * 10)) % 3;
             if (i == 0) {
                 ArrayList<TestBean> arrayList = new ArrayList<>();
-                arrayList.add(new TestBean("ccc1"));
-                arrayList.add(new TestBean("ccc2"));
-                arrayList.add(new TestBean("ccc3"));
-                arrayList.add(new TestBean("ccc4"));
-                arrayList.add(new TestBean("ccc5"));
+                //arrayList.add(new TestBean("ccc1"));
+                //arrayList.add(new TestBean("ccc2"));
+                //arrayList.add(new TestBean("ccc3"));
+                //arrayList.add(new TestBean("ccc4"));
+                //arrayList.add(new TestBean("ccc5"));
                 adapter.appendList(arrayList);
                 Log.e("TAG", "run: 正常加载更多！！");
             } else {
@@ -236,6 +233,11 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (adapter.isSelectMode()) {
+            adapter.updateSelectMode(false);
+            showToast("已推出选择模式");
+        } else {
+            super.onBackPressed();
+        }
     }
 }
