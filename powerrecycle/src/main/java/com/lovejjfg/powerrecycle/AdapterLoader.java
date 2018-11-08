@@ -45,6 +45,10 @@ public interface AdapterLoader<T> {
     int TYPE_EMPTY = 0x80000001;
     int TYPE_ERROR = 0x80000010;
 
+    String PAYLOAD_REFRESH_SELECT = "SelectPowerAdapter$refresh_select";
+    String PAYLOAD_REFRESH_BOTTOM = "PowerAdapter$refresh_bottom";
+
+
     /**
      * This method should be called  when you load more !
      *
@@ -148,6 +152,8 @@ public interface AdapterLoader<T> {
      * @param position current pos.
      */
     void onViewHolderBind(@NonNull PowerHolder<T> holder, int position);
+
+    void onViewHolderBind(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads);
 
     PowerHolder<T> onViewHolderCreate(@NonNull ViewGroup parent, int viewType);
 

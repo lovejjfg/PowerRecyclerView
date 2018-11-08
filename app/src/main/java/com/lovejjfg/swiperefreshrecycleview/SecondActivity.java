@@ -75,7 +75,8 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
             @Override
             public void onItemSelected(@NonNull View view, int position, boolean isSelected) {
-                Log.e("TAG", "onItemSelected: " + position + "::" + isSelected);
+                Log.e("TAG",
+                    "onItemSelected: " + position + "::" + isSelected + ";;total:" + adapter.getSelectedBeans().size());
                 if (isSelected) {
                     toast.setText(position + "::" + true);
                     toast.show();
@@ -85,6 +86,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
             @Override
             public void onNothingSelected() {
                 Log.e("TAG", "onNothingSelected: ");
+                showToast(("一个都没选中：" + adapter.getSelectedBeans().size()));
             }
         });
         adapter.setOnItemClickListener((itemView, position, item) -> {
@@ -94,6 +96,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
 //        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         mRecycleView.setLayoutManager(manager);
+        //mRecycleView.setHasFixedSize(true);
 
         decor = new SpacesItemDecoration.Builder(50, 3, true)
             .setShowTopBottom(true)
@@ -124,7 +127,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
 
         loadMoreAction = () -> {
             int i = ((int) (Math.random() * 10)) % 3;
-            if (i == 0 || i == 1) {
+            if (i == 0) {
                 ArrayList<TestBean> arrayList = new ArrayList<>();
                 arrayList.add(new TestBean("ccc1"));
                 arrayList.add(new TestBean("ccc2"));
@@ -141,6 +144,10 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         };
         mRefresh.setRefreshing(true);
         mRecycleView.postDelayed(refreshAction, DEFAULT_TIME);
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(this.getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -176,12 +183,11 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
             case R.id.select_single:
                 adapter.setSelectedMode(ISelect.SINGLE_MODE);
                 adapter.setCurrentPos(3);
-                adapter.updateSelectMode(true);
 
                 break;
             case R.id.select_mul:
                 adapter.setSelectedMode(ISelect.MULTIPLE_MODE);
-                adapter.updateSelectMode(true);
+                adapter.selectAll();
                 break;
             case R.id.showedge:
                 mRecycleView.removeItemDecoration(decor);

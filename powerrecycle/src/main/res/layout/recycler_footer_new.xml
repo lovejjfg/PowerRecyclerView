@@ -14,25 +14,40 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/footer_container"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:gravity="center"
-    android:orientation="horizontal">
+    android:gravity="center">
 
-    <ProgressBar
-        android:id="@+id/progressbar"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginRight="8dp"
-        style="@style/Widget.AppCompat.ProgressBar"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/footer_loading_container"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginRight="8dp"
+            style="@style/Widget.AppCompat.ProgressBar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/power_recycler_loading"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/loading"/>
+        android:layout_gravity="center"
+        android:text="@string/power_recycler_load_error"/>
 
-</LinearLayout>
+</FrameLayout>
+

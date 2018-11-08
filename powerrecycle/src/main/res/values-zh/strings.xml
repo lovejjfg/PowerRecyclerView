@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
 
-    <string name="loading">正在加载…</string>
-    <string name="text_no_more">---  没有更多了  ---</string>
-    <string name="text_load_more">加载更多！！</string>
-    <string name="text_load_error">--- 加载更多失败点击重试 ---</string>
+    <string name="power_recycler_loading">正在加载…</string>
+    <string name="power_recycler_load_no_more">---  没有更多了  ---</string>
+    <string name="power_recycler_load_more">加载更多！！</string>
+    <string name="power_recycler_load_error">--- 加载更多失败点击重试 ---</string>
 
 </resources>

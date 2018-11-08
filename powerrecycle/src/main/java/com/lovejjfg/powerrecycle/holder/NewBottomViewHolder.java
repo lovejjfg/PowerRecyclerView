@@ -17,8 +17,6 @@
 package com.lovejjfg.powerrecycle.holder;
 
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.OnLoadMoreListener;
@@ -31,15 +29,15 @@ import com.lovejjfg.powerrecycle.annotation.LoadState;
  */
 @SuppressWarnings("Convert2Lambda")
 public class NewBottomViewHolder extends AbsBottomViewHolder {
-    private final LinearLayout container;
-    private final ProgressBar pb;
+    private final View container;
+    private final View LoadingContainer;
     private final TextView content;
     private View.OnClickListener listener;
 
     public NewBottomViewHolder(View itemView) {
         super(itemView);
         container = itemView.findViewById(R.id.footer_container);
-        pb = itemView.findViewById(R.id.progressbar);
+        LoadingContainer = itemView.findViewById(R.id.footer_loading_container);
         content = itemView.findViewById(R.id.content);
     }
 
@@ -47,31 +45,29 @@ public class NewBottomViewHolder extends AbsBottomViewHolder {
     public void onBind(final OnLoadMoreListener loadMoreListener, @LoadState int loadState) {
         switch (loadState) {
             case AdapterLoader.STATE_LASTED:
-                pb.setVisibility(View.GONE);
-                container.setVisibility(View.VISIBLE);
+                LoadingContainer.setVisibility(View.INVISIBLE);
                 container.setOnClickListener(null);
-                content.setText(R.string.text_no_more);
-
+                content.setVisibility(View.VISIBLE);
+                content.setText(R.string.power_recycler_load_no_more);
                 break;
             case AdapterLoader.STATE_LOADING:
-                content.setVisibility(View.VISIBLE);
-                content.setText(R.string.text_load_more);
+                content.setVisibility(View.INVISIBLE);
+                LoadingContainer.setVisibility(View.VISIBLE);
                 container.setOnClickListener(null);
-                pb.setVisibility(View.VISIBLE);
                 if (loadMoreListener != null) {
                     loadMoreListener.onLoadMore();
                 }
                 break;
             case AdapterLoader.STATE_ERROR:
-                container.setVisibility(View.VISIBLE);
-                pb.setVisibility(View.GONE);
-                content.setText(R.string.text_load_error);
+                content.setVisibility(View.VISIBLE);
+                content.setText(R.string.power_recycler_load_error);
+                LoadingContainer.setVisibility(View.INVISIBLE);
                 if (listener == null) {
                     listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            content.setText(R.string.text_load_more);
-                            pb.setVisibility(View.VISIBLE);
+                            content.setVisibility(View.INVISIBLE);
+                            LoadingContainer.setVisibility(View.VISIBLE);
                             if (loadMoreListener != null) {
                                 loadMoreListener.onLoadMore();
                             }

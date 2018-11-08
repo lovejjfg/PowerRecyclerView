@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import com.lovejjfg.powerrecycle.annotation.SelectMode;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import java.util.HashSet;
 
@@ -54,6 +55,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     public void updateSelectMode(boolean isSelect) {
         if (isSelectMode != isSelect) {
             isSelectMode = isSelect;
+            prePos = -1;
             resetAll();
             notifyDataSetChanged();
         }
@@ -72,8 +74,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
             T t = list.get(position);
             if (!t.isSelected()) {
                 resetAll();
-                t.setSelected(true);
-                selectedBeans.add(t);
+                select(t);
                 notifyItemChanged(position);
             }
         }
@@ -86,16 +87,6 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         this.hasDefaultSelect = currentMode == ISelect.SINGLE_MODE;
     }
 
-    public void resetAll() {
-        for (T iSelect : list) {
-            if (iSelect.isSelected()) {
-                iSelect.setSelected(false);
-                selectedBeans.remove(iSelect);
-            }
-        }
-        notifyDataSetChanged();
-    }
-
     public boolean isSelectMode() {
         return isSelectMode;
     }
@@ -105,27 +96,58 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     public void setSelectedMode(@SelectMode int mode) {
-        currentMode = mode;
+        if (currentMode != mode) {
+            currentMode = mode;
+            isSelectMode = false;
+            updateSelectMode(true);
+        } else {
+            if (!isSelectMode) {
+                updateSelectMode(true);
+            }
+        }
+    }
+
+    void handleHolderClick(@NonNull final PowerHolder<T> holder) {
+        if (holder.enableCLick) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int currentPos = holder.getAdapterPosition();
+                    if (currentPos == -1 || currentPos >= list.size()) {
+                        return;
+                    }
+                    performClick(v, currentPos, getItem(currentPos));
+                }
+            });
+
+            if (longTouchEnable) {
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int currentPos = holder.getAdapterPosition();
+                        return !(currentPos == -1 || currentPos >= list.size()) && performLongClick(v,
+                            holder.getAdapterPosition(), getItem(currentPos));
+                    }
+                });
+            }
+        }
     }
 
     @Override
     public void performClick(@NonNull final View itemView, final int position, T iSelect) {
-
         if (isSelectMode) {
             if (currentMode == ISelect.SINGLE_MODE && iSelect.isSelected() && hasDefaultSelect) {
                 return;
             }
-            boolean selected = !iSelect.isSelected();
-            iSelect.setSelected(selected);
-            dispatchSelected(itemView, position, iSelect, selected);
+            toggleSelect(iSelect);
             if (currentMode == ISelect.SINGLE_MODE && prePos != -1 && position != prePos && iSelect.isSelected()) {
-                list.get(prePos).setSelected(false);
                 T t1 = list.get(prePos);
-                t1.setSelected(false);
-                dispatchSelected(itemView, prePos, t1, false);
-                notifyItemChanged(prePos);
+                unSelect(t1);
+                dispatchSelected(itemView, prePos, t1);
+                notifyItemChanged(prePos, PAYLOAD_REFRESH_SELECT);
             }
-            notifyDataSetChanged();
+            dispatchSelected(itemView, position, iSelect);
+            notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
             prePos = position;
         } else {
             if (clickListener != null) {
@@ -134,17 +156,12 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         }
     }
 
-    private void dispatchSelected(View itemView, int position, T iSelect, boolean isSelected) {
-        if (isSelected) {
-            selectedBeans.add(iSelect);
-        } else {
-            selectedBeans.remove(iSelect);
-            if (selectedListener != null && selectedBeans.isEmpty()) {
+    private void dispatchSelected(View itemView, int position, T iSelect) {
+        if (selectedListener != null) {
+            selectedListener.onItemSelected(itemView, position, iSelect.isSelected());
+            if (selectedBeans.isEmpty()) {
                 selectedListener.onNothingSelected();
             }
-        }
-        if (selectedListener != null) {
-            selectedListener.onItemSelected(itemView, position, isSelected);
         }
     }
 
@@ -152,9 +169,9 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     public boolean performLongClick(@NonNull View itemView, int position, T iSelect) {
         if (longTouchEnable) {
             updateSelectMode(true);
-            iSelect.setSelected(!iSelect.isSelected());
-            dispatchSelected(itemView, position, iSelect, iSelect.isSelected());
-            notifyItemChanged(position);
+            toggleSelect(iSelect);
+            dispatchSelected(itemView, position, iSelect);
+            notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
             prePos = position;
             return true;
         } else {
@@ -167,12 +184,46 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     public void selectAll() {
-        if (!list.isEmpty()) {
-            for (T bean : list) {
-                bean.setSelected(true);
-                selectedBeans.add(bean);
-            }
+        if (list.isEmpty()) {
+            return;
+        }
+        if (currentMode == ISelect.SINGLE_MODE) {
+            return;
+        }
+        for (T bean : list) {
+            select(bean);
         }
         notifyDataSetChanged();
+    }
+
+    public void resetAll() {
+        if (list.isEmpty()) {
+            return;
+        }
+        for (T iSelect : list) {
+            unSelect(iSelect);
+        }
+        notifyDataSetChanged();
+    }
+
+    private void select(T item) {
+        if (!selectedBeans.contains(item)) {
+            item.setSelected(selectedBeans.add(item));
+        }
+    }
+
+    private void unSelect(T item) {
+        if (selectedBeans.contains(item)) {
+            item.setSelected(!selectedBeans.remove(item));
+        }
+    }
+
+    private void toggleSelect(T item) {
+        boolean selected = item.isSelected();
+        if (selected) {
+            unSelect(item);
+        } else {
+            select(item);
+        }
     }
 }
