@@ -22,6 +22,7 @@ import android.view.View;
 import com.lovejjfg.powerrecycle.annotation.SelectMode;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -45,12 +46,11 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     protected boolean isSelectMode;
     @Nullable
     private OnItemSelectedListener selectedListener;
+    private final ArrayList<T> selectedList = new ArrayList<>();
 
     public HashSet<T> getSelectedBeans() {
-        return selectedBeans;
+        return new HashSet<>(selectedList);
     }
-
-    private final HashSet<T> selectedBeans = new HashSet<>();
 
     public void updateSelectMode(boolean isSelect) {
         if (isSelectMode != isSelect) {
@@ -159,7 +159,7 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     private void dispatchSelected(View itemView, int position, T iSelect) {
         if (selectedListener != null) {
             selectedListener.onItemSelected(itemView, position, iSelect.isSelected());
-            if (selectedBeans.isEmpty()) {
+            if (selectedList.isEmpty()) {
                 selectedListener.onNothingSelected();
             }
         }
@@ -207,15 +207,21 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     private void select(T item) {
-        if (!selectedBeans.contains(item)) {
-            item.setSelected(selectedBeans.add(item));
+        if (item.isSelected()) {
+            return;
+        }
+        item.setSelected(true);
+        if (!selectedList.contains(item)) {
+            selectedList.add(item);
         }
     }
 
     private void unSelect(T item) {
-        if (selectedBeans.contains(item)) {
-            item.setSelected(!selectedBeans.remove(item));
+        if (!item.isSelected()) {
+            return;
         }
+        item.setSelected(false);
+        selectedList.remove(item);
     }
 
     private void toggleSelect(T item) {

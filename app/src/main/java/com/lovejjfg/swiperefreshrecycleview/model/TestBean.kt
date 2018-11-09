@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package com.lovejjfg.swiperefreshrecycleview.model;
+package com.lovejjfg.swiperefreshrecycleview.model
 
-import com.lovejjfg.powerrecycle.model.SelectBean;
+import com.lovejjfg.powerrecycle.model.ISelect
 
 /**
  * Created by Joe on 2016/11/17.
  * Email lovejjfg@gmail.com
  */
 
-public class TestBean extends SelectBean {
-    private String name;
+class TestBean(var name: String?, var isComplete: Boolean = false) : ISelect {
 
-    public TestBean(String name) {
-        this.name = name;
+    constructor(name: String?) : this(name, false) {
     }
 
-    public String getName() {
-        return name;
+    override fun isSelected(): Boolean {
+        return isComplete
     }
 
-    public void setName(String name) {
-        this.name = name;
+    override fun setSelected(selected: Boolean) {
+        this.isComplete = selected
     }
 }
