@@ -30,14 +30,14 @@ import com.lovejjfg.powerrecycle.annotation.LoadState;
 @SuppressWarnings("Convert2Lambda")
 public class NewBottomViewHolder extends AbsBottomViewHolder {
     private final View container;
-    private final View LoadingContainer;
+    private final View loadingContainer;
     private final TextView content;
     private View.OnClickListener listener;
 
     public NewBottomViewHolder(View itemView) {
         super(itemView);
         container = itemView.findViewById(R.id.footer_container);
-        LoadingContainer = itemView.findViewById(R.id.footer_loading_container);
+        loadingContainer = itemView.findViewById(R.id.footer_loading_container);
         content = itemView.findViewById(R.id.content);
     }
 
@@ -45,14 +45,14 @@ public class NewBottomViewHolder extends AbsBottomViewHolder {
     public void onBind(final OnLoadMoreListener loadMoreListener, @LoadState int loadState) {
         switch (loadState) {
             case AdapterLoader.STATE_LASTED:
-                LoadingContainer.setVisibility(View.INVISIBLE);
+                loadingContainer.setVisibility(View.INVISIBLE);
                 container.setOnClickListener(null);
                 content.setVisibility(View.VISIBLE);
                 content.setText(R.string.power_recycler_load_no_more);
                 break;
             case AdapterLoader.STATE_LOADING:
                 content.setVisibility(View.INVISIBLE);
-                LoadingContainer.setVisibility(View.VISIBLE);
+                loadingContainer.setVisibility(View.VISIBLE);
                 container.setOnClickListener(null);
                 if (loadMoreListener != null) {
                     loadMoreListener.onLoadMore();
@@ -61,13 +61,13 @@ public class NewBottomViewHolder extends AbsBottomViewHolder {
             case AdapterLoader.STATE_ERROR:
                 content.setVisibility(View.VISIBLE);
                 content.setText(R.string.power_recycler_load_error);
-                LoadingContainer.setVisibility(View.INVISIBLE);
+                loadingContainer.setVisibility(View.INVISIBLE);
                 if (listener == null) {
                     listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             content.setVisibility(View.INVISIBLE);
-                            LoadingContainer.setVisibility(View.VISIBLE);
+                            loadingContainer.setVisibility(View.VISIBLE);
                             if (loadMoreListener != null) {
                                 loadMoreListener.onLoadMore();
                             }
