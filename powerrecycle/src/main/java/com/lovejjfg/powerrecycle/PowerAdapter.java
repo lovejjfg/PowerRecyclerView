@@ -234,12 +234,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     public abstract PowerHolder<T> onViewHolderCreate(@NonNull ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(@NonNull final PowerHolder<T> holder, int position) {
+    public final void onBindViewHolder(@NonNull final PowerHolder<T> holder, int position) {
         bindViewHolder(holder, position, null);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads) {
+    public final void onBindViewHolder(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads) {
         bindViewHolder(holder, position, payloads);
     }
 
