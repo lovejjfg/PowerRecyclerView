@@ -224,6 +224,22 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         selectedList.remove(item);
     }
 
+    public void clearSelectList(boolean notify) {
+        if (selectedList.isEmpty()) {
+            return;
+        }
+        int size = selectedList.size();
+        for (int i = 0; i < size; i++) {
+            unSelect(selectedList.get(0));
+        }
+        if (!selectedList.isEmpty()) {
+            selectedList.clear();
+        }
+        if (notify) {
+            notifyDataSetChanged();
+        }
+    }
+
     private void toggleSelect(T item) {
         boolean selected = item.isSelected();
         if (selected) {

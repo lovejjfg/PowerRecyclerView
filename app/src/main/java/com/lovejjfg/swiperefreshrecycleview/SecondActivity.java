@@ -234,7 +234,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
     @Override
     public void onBackPressed() {
         if (adapter.isSelectMode()) {
-            adapter.updateSelectMode(false);
+            adapter.clearSelectList(true);
             showToast("已推出选择模式");
         } else {
             super.onBackPressed();
