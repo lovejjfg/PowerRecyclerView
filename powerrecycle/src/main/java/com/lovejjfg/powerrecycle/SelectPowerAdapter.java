@@ -240,6 +240,27 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         }
     }
 
+    public void deleteSelectedItems() {
+        if (selectedList.isEmpty()) {
+            return;
+        }
+        int size = selectedList.size();
+        for (int i = 0; i < size; i++) {
+            T item = selectedList.get(0);
+            removeItem(list.indexOf(item));
+        }
+    }
+
+    @Override
+    public T removeItem(int position) {
+        T t = super.removeItem(position);
+        if (t == null) {
+            return null;
+        }
+        unSelect(t);
+        return t;
+    }
+
     private void toggleSelect(T item) {
         boolean selected = item.isSelected();
         if (selected) {
