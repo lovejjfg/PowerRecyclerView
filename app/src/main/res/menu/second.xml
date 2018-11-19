@@ -33,6 +33,9 @@
         android:id="@+id/select_mul"
         android:title="多选模式"/>
     <item
+        android:id="@+id/delete_select"
+        android:title="选中删除"/>
+    <item
         android:id="@+id/showedge"
         android:title="左右边距"/>
     <item

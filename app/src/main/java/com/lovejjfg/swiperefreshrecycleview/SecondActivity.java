@@ -126,11 +126,11 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
             int i = ((int) (Math.random() * 10)) % 3;
             if (i == 0) {
                 ArrayList<TestBean> arrayList = new ArrayList<>();
-                //arrayList.add(new TestBean("ccc1"));
-                //arrayList.add(new TestBean("ccc2"));
-                //arrayList.add(new TestBean("ccc3"));
-                //arrayList.add(new TestBean("ccc4"));
-                //arrayList.add(new TestBean("ccc5"));
+                arrayList.add(new TestBean("ccc1"));
+                arrayList.add(new TestBean("ccc2"));
+                arrayList.add(new TestBean("ccc3"));
+                arrayList.add(new TestBean("ccc4"));
+                arrayList.add(new TestBean("ccc5"));
                 adapter.appendList(arrayList);
                 Log.e("TAG", "run: 正常加载更多！！");
             } else {
@@ -203,6 +203,9 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
                 break;
             case R.id.normal:
                 startActivity(new Intent(this, NormalActivity.class));
+                break;
+            case R.id.delete_select:
+                adapter.deleteSelectedItems();
                 break;
             case R.id.showNoData:
                 adapter.enableLoadMore(!adapter.enableLoadMore);
