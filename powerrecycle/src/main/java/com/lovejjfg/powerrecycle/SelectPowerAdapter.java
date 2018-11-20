@@ -18,17 +18,14 @@ package com.lovejjfg.powerrecycle;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import com.lovejjfg.powerrecycle.annotation.SelectMode;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import java.util.ArrayList;
 import java.util.HashSet;
-
-/**
- * Created by Joe on 2016-03-11
- * Email: lovejjfg@gmail.com
- */
+import java.util.Set;
 
 /**
  * {@link SelectPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch
@@ -37,64 +34,78 @@ import java.util.HashSet;
  * {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
  */
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter<T> {
-
+public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAdapter<Select> implements
+    AdapterSelect<Select> {
     private int currentMode;
-    private int prePos = -1;
-    private boolean hasDefaultSelect;
+    private int prePos = RecyclerView.NO_POSITION;
+    public boolean isCancelAble;
     private boolean longTouchEnable;
     protected boolean isSelectMode;
     @Nullable
     private OnItemSelectedListener selectedListener;
-    private final ArrayList<T> selectedList = new ArrayList<>();
+    private final ArrayList<Select> selectedList = new ArrayList<>();
 
-    public HashSet<T> getSelectedBeans() {
+    public SelectPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
+        this.currentMode = currentMode;
+        this.longTouchEnable = longTouchEnable;
+        this.isSelectMode = true;
+        this.isCancelAble = currentMode != ISelect.SINGLE_MODE;
+    }
+
+    @Override
+    public Set<Select> getSelectedItems() {
         return new HashSet<>(selectedList);
     }
 
+    @Override
     public void updateSelectMode(boolean isSelect) {
         if (isSelectMode != isSelect) {
             isSelectMode = isSelect;
-            prePos = -1;
-            resetAll();
-            notifyDataSetChanged();
+            prePos = RecyclerView.NO_POSITION;
+            this.isCancelAble = currentMode != ISelect.SINGLE_MODE;
+            resetAll(true);
         }
     }
 
-    public void setDefaultSelect(boolean hasDefault) {
-        this.hasDefaultSelect = hasDefault;
+    @Override
+    public void updateCancelAble(boolean isCancelAble) {
+        this.isCancelAble = isCancelAble;
     }
 
+    @Override
+    public boolean isCancelAble() {
+        return isCancelAble;
+    }
+
+    @Override
     public void setCurrentPos(int position) {
         if (list.isEmpty() || position > list.size() - 1 || position < 0) {
             return;
         }
         if (prePos != position) {
             prePos = position;
-            T t = list.get(position);
-            if (!t.isSelected()) {
+            Select select = list.get(position);
+            if (!select.isSelected()) {
                 resetAll();
-                select(t);
-                notifyItemChanged(position);
+                if (select(select)) {
+                    checkAndDispatchHolder(position, select);
+                    notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
+                }
             }
         }
     }
 
-    public SelectPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
-        this.currentMode = currentMode;
-        this.longTouchEnable = longTouchEnable;
-        this.isSelectMode = true;
-        this.hasDefaultSelect = currentMode == ISelect.SINGLE_MODE;
-    }
-
+    @Override
     public boolean isSelectMode() {
         return isSelectMode;
     }
 
+    @Override
     public void longTouchSelectModeEnable(boolean longTouchSelectModeEnable) {
         longTouchEnable = longTouchSelectModeEnable;
     }
 
+    @Override
     public void setSelectedMode(@SelectMode int mode) {
         if (currentMode != mode) {
             currentMode = mode;
@@ -107,16 +118,16 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
         }
     }
 
-    void handleHolderClick(@NonNull final PowerHolder<T> holder) {
+    void handleHolderClick(@NonNull final PowerHolder<Select> holder) {
         if (holder.enableCLick) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int currentPos = holder.getAdapterPosition();
-                    if (currentPos == -1 || currentPos >= list.size()) {
+                    if (currentPos == RecyclerView.NO_POSITION || currentPos >= list.size()) {
                         return;
                     }
-                    performClick(v, currentPos, getItem(currentPos));
+                    performClick(holder, currentPos, getItem(currentPos));
                 }
             });
 
@@ -125,8 +136,8 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
                     @Override
                     public boolean onLongClick(View v) {
                         int currentPos = holder.getAdapterPosition();
-                        return !(currentPos == -1 || currentPos >= list.size()) && performLongClick(v,
-                            holder.getAdapterPosition(), getItem(currentPos));
+                        return !(currentPos == RecyclerView.NO_POSITION || currentPos >= list.size())
+                            && performLongClick(holder, holder.getAdapterPosition(), getItem(currentPos));
                     }
                 });
             }
@@ -134,139 +145,241 @@ public abstract class SelectPowerAdapter<T extends ISelect> extends PowerAdapter
     }
 
     @Override
-    public void performClick(@NonNull final View itemView, final int position, T iSelect) {
+    public void performClick(@NonNull final PowerHolder powerHolder, final int position, Select select) {
         if (isSelectMode) {
-            if (currentMode == ISelect.SINGLE_MODE && iSelect.isSelected() && hasDefaultSelect) {
-                return;
-            }
-            toggleSelect(iSelect);
-            if (currentMode == ISelect.SINGLE_MODE && prePos != -1 && position != prePos && iSelect.isSelected()) {
-                T t1 = list.get(prePos);
-                unSelect(t1);
-                dispatchSelected(itemView, prePos, t1);
-                notifyItemChanged(prePos, PAYLOAD_REFRESH_SELECT);
-            }
-            dispatchSelected(itemView, position, iSelect);
-            notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
-            prePos = position;
+            handleClick(powerHolder, position, select);
         } else {
             if (clickListener != null) {
-                clickListener.onItemClick(itemView, position, iSelect);
-            }
-        }
-    }
-
-    private void dispatchSelected(View itemView, int position, T iSelect) {
-        if (selectedListener != null) {
-            selectedListener.onItemSelected(itemView, position, iSelect.isSelected());
-            if (selectedList.isEmpty()) {
-                selectedListener.onNothingSelected();
+                clickListener.onItemClick(powerHolder, position, select);
             }
         }
     }
 
     @Override
-    public boolean performLongClick(@NonNull View itemView, int position, T iSelect) {
+    public boolean performLongClick(@NonNull PowerHolder holder, int position, Select select) {
         if (longTouchEnable) {
             updateSelectMode(true);
-            toggleSelect(iSelect);
-            dispatchSelected(itemView, position, iSelect);
-            notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
-            prePos = position;
+            handleClick(holder, position, select);
             return true;
         } else {
-            return super.performLongClick(itemView, position, iSelect);
+            return super.performLongClick(holder, position, select);
         }
     }
 
+    @Override
     public void setOnItemSelectListener(OnItemSelectedListener listener) {
         this.selectedListener = listener;
     }
 
+    @Override
     public void selectAll() {
-        if (list.isEmpty()) {
-            return;
-        }
         if (currentMode == ISelect.SINGLE_MODE) {
             return;
         }
-        for (T bean : list) {
-            select(bean);
-        }
-        notifyDataSetChanged();
-    }
-
-    public void resetAll() {
         if (list.isEmpty()) {
             return;
         }
-        for (T iSelect : list) {
-            unSelect(iSelect);
-        }
-        notifyDataSetChanged();
-    }
+        int size = list.size();
 
-    private void select(T item) {
-        if (item.isSelected()) {
-            return;
-        }
-        item.setSelected(true);
-        if (!selectedList.contains(item)) {
-            selectedList.add(item);
-        }
-    }
-
-    private void unSelect(T item) {
-        if (!item.isSelected()) {
-            return;
-        }
-        item.setSelected(false);
-        selectedList.remove(item);
-    }
-
-    public void clearSelectList(boolean notify) {
-        if (selectedList.isEmpty()) {
-            return;
-        }
-        int size = selectedList.size();
         for (int i = 0; i < size; i++) {
-            unSelect(selectedList.get(0));
-        }
-        if (!selectedList.isEmpty()) {
-            selectedList.clear();
-        }
-        if (notify) {
-            notifyDataSetChanged();
-        }
-    }
-
-    public void deleteSelectedItems() {
-        if (selectedList.isEmpty()) {
-            return;
-        }
-        int size = selectedList.size();
-        for (int i = 0; i < size; i++) {
-            T item = selectedList.get(0);
-            removeItem(list.indexOf(item));
+            Select select = list.get(i);
+            if (select(select)) {
+                checkAndDispatchHolder(i, select);
+                notifyItemChanged(i, PAYLOAD_REFRESH_SELECT);
+            }
         }
     }
 
     @Override
-    public T removeItem(int position) {
-        T t = super.removeItem(position);
-        if (t == null) {
-            return null;
+    public void resetAll(boolean force) {
+        if (!isCancelAble && !force) {
+            return;
         }
-        unSelect(t);
-        return t;
+        if (list.isEmpty()) {
+            return;
+        }
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            Select select = list.get(i);
+            if (unSelect(select)) {
+                checkAndDispatchHolder(i, select);
+                notifyItemChanged(i, PAYLOAD_REFRESH_SELECT);
+            }
+        }
+        dispatchNothingSelect();
     }
 
-    private void toggleSelect(T item) {
+    @Override
+    public void resetAll() {
+        resetAll(false);
+    }
+
+    @Override
+    public void clearSelectList(boolean notify) {
+        if (!isCancelAble) {
+            return;
+        }
+        if (selectedList.isEmpty()) {
+            return;
+        }
+        int size = selectedList.size();
+        for (int i = 0; i < size; i++) {
+            Select item = selectedList.get(0);
+            if (unSelect(item) && notify) {
+                int index = list.indexOf(item);
+                if (index < 0 || index > list.size() - 1) {
+                    return;
+                }
+                checkAndDispatchHolder(index, item);
+                notifyItemChanged(index, PAYLOAD_REFRESH_SELECT);
+            }
+        }
+        if (!selectedList.isEmpty()) {
+            selectedList.clear();
+        }
+    }
+
+    @Override
+    public void deleteSelectedItems() {
+        if (!isCancelAble) {
+            return;
+        }
+        if (selectedList.isEmpty()) {
+            return;
+        }
+        int size = selectedList.size();
+        for (int i = 0; i < size; i++) {
+            Select item = selectedList.get(0);
+            int position = list.indexOf(item);
+            removeItem(position);
+        }
+        if (!selectedList.isEmpty()) {
+            selectedList.clear();
+        }
+    }
+
+    @Override
+    public void revertAllSelected() {
+        if (!isCancelAble) {
+            return;
+        }
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            Select select = list.get(i);
+            if (toggleSelect(select)) {
+                checkAndDispatchHolder(i, select);
+                notifyItemChanged(i, PAYLOAD_REFRESH_SELECT);
+            }
+        }
+    }
+
+    @Override
+    public int getMaxSelectCount() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public void onReceivedMaxSelectCount(int count) {
+    }
+
+    @Override
+    public Select removeItem(int position) {
+        if (position < 0 || position > list.size()) {
+            return null;
+        }
+        Select select = list.remove(position);
+        if (unSelect(select)) {
+            checkAndDispatchHolder(position, select);
+            notifyItemRemoved(position);
+        }
+        return select;
+    }
+
+    private void checkAndDispatchHolder(int position, Select select) {
+        RecyclerView.ViewHolder h = getViewHolder(position);
+        if (h != null && h instanceof PowerHolder) {
+            dispatchSelected((PowerHolder) h, position, select);
+        }
+    }
+
+    private RecyclerView.ViewHolder getViewHolder(int index) {
+        return recyclerView.findViewHolderForAdapterPosition(index);
+    }
+
+    private boolean select(Select item) {
+        if (item == null) {
+            return false;
+        }
+        if (item.isSelected()) {
+            return false;
+        }
+        item.setSelected(true);
+        return !selectedList.contains(item) && selectedList.add(item);
+    }
+
+    private boolean unSelect(Select item) {
+        if (item == null) {
+            return false;
+        }
+        if (!item.isSelected()) {
+            return false;
+        }
+        item.setSelected(false);
+        return selectedList.remove(item);
+    }
+
+    private boolean toggleSelect(Select item) {
+        if (item == null) {
+            return false;
+        }
         boolean selected = item.isSelected();
         if (selected) {
-            unSelect(item);
+            return unSelect(item);
         } else {
-            select(item);
+            return select(item);
+        }
+    }
+
+    private void dispatchSelected(PowerHolder holder, int position, Select select) {
+        if (selectedListener != null) {
+            selectedListener.onItemSelectChange(holder, position, select.isSelected());
+            dispatchNothingSelect();
+        }
+    }
+
+    private void dispatchNothingSelect() {
+        if (selectedList.isEmpty() && selectedListener != null) {
+            selectedListener.onNothingSelected();
+        }
+    }
+
+    private void handleClick(@NonNull PowerHolder powerHolder, int position, Select select) {
+        if (select.isSelected() && !isCancelAble) {
+            return;
+        }
+        if (currentMode == ISelect.MULTIPLE_MODE
+            && !select.isSelected()
+            && selectedList.size() >= getMaxSelectCount()) {
+            onReceivedMaxSelectCount(selectedList.size());
+            return;
+        }
+        if (toggleSelect(select)) {
+            handlePrePos(position);
+            dispatchSelected(powerHolder, position, select);
+            notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
+        }
+    }
+
+    private void handlePrePos(int position) {
+        if (currentMode == ISelect.SINGLE_MODE && position != prePos) {
+            if (prePos >= 0 && prePos <= list.size() - 1) {
+                Select select = list.get(prePos);
+                if (unSelect(select)) {
+                    checkAndDispatchHolder(prePos, select);
+                    notifyItemChanged(prePos, PAYLOAD_REFRESH_SELECT);
+                }
+            }
+            prePos = position;
         }
     }
 }

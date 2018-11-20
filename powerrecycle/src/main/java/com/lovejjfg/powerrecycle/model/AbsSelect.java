@@ -24,7 +24,7 @@ import android.os.Parcelable;
  * Email lovejjfg@gmail.com
  */
 
-public class SelectBean implements ISelect, Parcelable {
+public class AbsSelect implements ISelect, Parcelable {
     private boolean isSelected;
 
     public boolean isSelected() {
@@ -45,23 +45,23 @@ public class SelectBean implements ISelect, Parcelable {
         dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
     }
 
-    protected SelectBean() {
+    protected AbsSelect() {
     }
 
     @SuppressWarnings("WeakerAccess")
-    protected SelectBean(Parcel in) {
+    protected AbsSelect(Parcel in) {
         this.isSelected = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<SelectBean> CREATOR = new Parcelable.Creator<SelectBean>() {
+    public static final Parcelable.Creator<AbsSelect> CREATOR = new Parcelable.Creator<AbsSelect>() {
         @Override
-        public SelectBean createFromParcel(Parcel source) {
-            return new SelectBean(source);
+        public AbsSelect createFromParcel(Parcel source) {
+            return new AbsSelect(source);
         }
 
         @Override
-        public SelectBean[] newArray(int size) {
-            return new SelectBean[size];
+        public AbsSelect[] newArray(int size) {
+            return new AbsSelect[size];
         }
     };
 }
