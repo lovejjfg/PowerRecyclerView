@@ -16,14 +16,14 @@
 
 package com.lovejjfg.swiperefreshrecycleview.model;
 
-import com.lovejjfg.powerrecycle.model.SelectBean;
+import com.lovejjfg.powerrecycle.model.AbsSelect;
 
 /**
  * Created by Joe on 2016/11/17.
  * Email lovejjfg@gmail.com
  */
 
-public class TestBean extends SelectBean {
+public class TestBean extends AbsSelect {
     private String name;
 
     public TestBean(String name) {

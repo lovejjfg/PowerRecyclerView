@@ -57,7 +57,6 @@ public class NormalActivity extends AppCompatActivity {
         mRecycleView.setLayoutManager(manager);
         //2.setAdapter after setLayoutManager
         adapter.attachRecyclerView(mRecycleView);
-//        mRecycleView.setItemAnimator(new DefaultAnimator());
         //3.setLoadMoreScrollListener
         adapter.setOnItemClickListener((v, p, item) -> Log.e(TAG, "onItemClick: " + p));
         //4.setTotalCount
@@ -95,5 +94,10 @@ public class NormalActivity extends AppCompatActivity {
             }
             isRun = false;
         };
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

@@ -24,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,11 +32,11 @@ import android.view.View;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.lovejjfg.powerrecycle.AdapterLoader;
+import com.lovejjfg.powerrecycle.AdapterSelect;
 import com.lovejjfg.powerrecycle.OnLoadMoreListener;
 import com.lovejjfg.powerrecycle.SelectPowerAdapter;
 import com.lovejjfg.powerrecycle.SpacesItemDecoration;
-import com.lovejjfg.powerrecycle.TouchHelperCallback;
+import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import java.util.ArrayList;
@@ -70,20 +69,21 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         adapter = new SelectRecycleAdapter();
-        adapter.setOnItemSelectListener(new AdapterLoader.OnItemSelectedListener() {
+        adapter.setOnItemSelectListener(new AdapterSelect.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(@NonNull View view, int position, boolean isSelected) {
+            public void onItemSelectChange(@NonNull PowerHolder holder, int position, boolean isSelected) {
                 Log.e("TAG",
-                    "onItemSelected: " + position + "::" + isSelected + ";;total:" + adapter.getSelectedBeans().size());
+                    "onItemSelected: " + position + "::" + isSelected + ";;total:" + adapter.getSelectedItems()
+                        .size());
                 if (isSelected) {
-                    showToast(("current：" + position + ";;total:" + adapter.getSelectedBeans().size()));
+                    showToast(("current：" + position + ";;total:" + adapter.getSelectedItems().size()));
                 }
             }
 
             @Override
             public void onNothingSelected() {
                 Log.e("TAG", "onNothingSelected: ");
-                showToast(("一个都没选中：" + adapter.getSelectedBeans().size()));
+                showToast(("一个都没选中：" + adapter.getSelectedItems().size()));
             }
         });
         adapter.setOnItemClickListener((itemView, position, item) -> {
@@ -91,31 +91,31 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
         });
         adapter.updateSelectMode(false);
 //        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
-        GridLayoutManager manager = new GridLayoutManager(this, 3);
+        GridLayoutManager manager = new GridLayoutManager(this, 1);
         mRecycleView.setLayoutManager(manager);
         //mRecycleView.setHasFixedSize(true);
 
-        decor = new SpacesItemDecoration.Builder(50, 3, true)
+        decor = new SpacesItemDecoration.Builder(50, 1, true)
             .setShowTopBottom(true)
             .create();
         mRecycleView.addItemDecoration(decor);
-        //mRecycleView.setItemAnimator(new DefaultAnimator());
+        mRecycleView.setItemAnimator(new DefaultItemAnimator());
         adapter.attachRecyclerView(mRecycleView);
         mRefresh.setOnRefreshListener(() -> mRecycleView.postDelayed(refreshAction, DEFAULT_TIME));
-        //初始化一个TouchHelperCallback
-        TouchHelperCallback callback = new TouchHelperCallback();
-        //添加一个回调
-        callback.setItemDragSwipeCallBack(adapter);
-        //初始化一个ItemTouchHelper
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        //关联相关的RecycleView
-        itemTouchHelper.attachToRecyclerView(mRecycleView);
+        ////初始化一个TouchHelperCallback
+        //TouchHelperCallback callback = new TouchHelperCallback();
+        ////添加一个回调
+        //callback.setItemDragSwipeCallBack(adapter);
+        ////初始化一个ItemTouchHelper
+        //ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        ////关联相关的RecycleView
+        //itemTouchHelper.attachToRecyclerView(mRecycleView);
 
         adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
         refreshAction = () -> {
             list = new ArrayList<>();
-            for (int i = 0; i < 40; i++) {
+            for (int i = 0; i < 15; i++) {
                 list.add(new TestBean("这是" + i));
             }
             adapter.setList(list);
@@ -184,7 +184,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
                 break;
             case R.id.select_mul:
                 adapter.setSelectedMode(ISelect.MULTIPLE_MODE);
-                adapter.selectAll();
+                adapter.setCurrentPos(0);
                 break;
             case R.id.showedge:
                 mRecycleView.removeItemDecoration(decor);
@@ -207,6 +207,19 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
             case R.id.delete_select:
                 adapter.deleteSelectedItems();
                 break;
+            case R.id.revert_select:
+                adapter.revertAllSelected();
+                break;
+            case R.id.selet_all:
+                adapter.selectAll();
+                break;
+            case R.id.unselect_all:
+                adapter.resetAll();
+                break;
+            case R.id.default_select:
+                adapter.isCancelAble = !adapter.isCancelAble;
+                break;
+
             case R.id.showNoData:
                 adapter.enableLoadMore(!adapter.enableLoadMore);
                 break;
@@ -238,6 +251,7 @@ public class SecondActivity extends AppCompatActivity implements OnLoadMoreListe
     public void onBackPressed() {
         if (adapter.isSelectMode()) {
             adapter.clearSelectList(true);
+            adapter.updateSelectMode(false);
             showToast("已推出选择模式");
         } else {
             super.onBackPressed();

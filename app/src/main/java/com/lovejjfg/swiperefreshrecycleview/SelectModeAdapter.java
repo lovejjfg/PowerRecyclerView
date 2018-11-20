@@ -62,6 +62,16 @@ public class SelectModeAdapter extends SelectPowerAdapter<TestBean> {
         return new BottomViewHolder(loadMore);
     }
 
+    @Override
+    public int getMaxSelectCount() {
+        return 6;
+    }
+
+    @Override
+    public void onReceivedMaxSelectCount(int count) {
+        Log.e("TAG", "onReceivedMaxSelectCount: " + count);
+    }
+
     private static class MyViewHolder<T> extends PowerHolder<T> {
 
         private final TextView mTv;

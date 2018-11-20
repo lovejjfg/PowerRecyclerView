@@ -33,8 +33,20 @@
         android:id="@+id/select_mul"
         android:title="多选模式"/>
     <item
+        android:id="@+id/selet_all"
+        android:title="全部选中"/>
+    <item
+        android:id="@+id/unselect_all"
+        android:title="全部不选中"/>
+    <item
+        android:id="@+id/revert_select"
+        android:title="全部反选"/>
+    <item
         android:id="@+id/delete_select"
         android:title="选中删除"/>
+    <item
+        android:id="@+id/default_select"
+        android:title="选中可取消(单选情况)"/>
     <item
         android:id="@+id/showedge"
         android:title="左右边距"/>
