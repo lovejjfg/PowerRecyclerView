@@ -206,7 +206,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
                 notifyItemChanged(i, PAYLOAD_REFRESH_SELECT);
             }
         }
-        dispatchNothingSelect();
     }
 
     @Override
@@ -296,6 +295,9 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     }
 
     private void checkAndDispatchHolder(int position, Select select) {
+        if (!isSelectMode) {
+            return;
+        }
         RecyclerView.ViewHolder h = getViewHolder(position);
         if (h != null && h instanceof PowerHolder) {
             dispatchSelected((PowerHolder) h, position, select);
@@ -341,16 +343,16 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     }
 
     private void dispatchSelected(PowerHolder holder, int position, Select select) {
-        if (selectedListener != null) {
+        if (isSelectMode && selectedListener != null) {
             selectedListener.onItemSelectChange(holder, position, select.isSelected());
-            dispatchNothingSelect();
+            if (selectedList.isEmpty()) {
+                selectedListener.onNothingSelected();
+            }
         }
     }
 
     private void dispatchNothingSelect() {
-        if (selectedList.isEmpty() && selectedListener != null) {
-            selectedListener.onNothingSelected();
-        }
+
     }
 
     private void handleClick(@NonNull PowerHolder powerHolder, int position, Select select) {

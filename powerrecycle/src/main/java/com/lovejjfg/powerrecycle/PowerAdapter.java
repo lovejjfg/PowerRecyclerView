@@ -42,7 +42,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
     @LayoutRes
-    private int loadMoreLayout = -1;
+    private int loadMoreLayout = RecyclerView.INVALID_TYPE;
     private View errorView;
     private View emptyView;
     @LoadState
@@ -53,7 +53,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     @Nullable
     OnItemClickListener<T> clickListener;
     private int currentType;
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
     private Runnable loadMoreAction;
 
     public OnLoadMoreListener getLoadMoreListener() {
@@ -280,10 +280,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 @Override
                 public void onClick(View v) {
                     int currentPos = holder.getAdapterPosition();
-                    if (currentPos == -1 || currentPos >= list.size()) {
+                    if (currentPos == RecyclerView.NO_POSITION || currentPos >= list.size()) {
                         return;
                     }
-                    performClick(v, currentPos, getItem(currentPos));
+                    performClick(holder, currentPos, getItem(currentPos));
                 }
             });
         }
@@ -292,8 +292,8 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 @Override
                 public boolean onLongClick(View v) {
                     int currentPos = holder.getAdapterPosition();
-                    return !(currentPos == -1 || currentPos >= list.size()) && performLongClick(v,
-                        holder.getAdapterPosition(), getItem(currentPos));
+                    return !(currentPos == RecyclerView.NO_POSITION || currentPos >= list.size()) && performLongClick
+                        (holder, holder.getAdapterPosition(), getItem(currentPos));
                 }
             });
         }
@@ -342,15 +342,16 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     public void onEmptyHolderBind(@NonNull PowerHolder<T> holder) {
     }
 
-    public void performClick(@NonNull View itemView, int position, T item) {
+    @Override
+    public void performClick(@NonNull PowerHolder holder, int position, T item) {
         if (clickListener != null) {
-            clickListener.onItemClick(itemView, position, item);
+            clickListener.onItemClick(holder, position, item);
         }
     }
 
     @Override
-    public boolean performLongClick(@NonNull View itemView, int position, T item) {
-        return longClickListener != null && longClickListener.onItemLongClick(itemView, position, item);
+    public boolean performLongClick(@NonNull PowerHolder holder, int position, T item) {
+        return longClickListener != null && longClickListener.onItemLongClick(holder, position, item);
     }
 
     @Override
@@ -450,28 +451,44 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public int findFirstPositionOfType(int viewType) {
+        return findFirstPositionOfType(viewType, 0);
+    }
+
+    @Override
+    public int findFirstPositionOfType(int viewType, int offsetPosition) {
         if (list.isEmpty()) {
-            return -1;
+            return RecyclerView.NO_POSITION;
         }
-        for (int i = 0; i < list.size(); i++) {
+        if (offsetPosition < 0 || offsetPosition > list.size() - 1) {
+            return RecyclerView.NO_POSITION;
+        }
+        for (int i = offsetPosition; i < list.size(); i++) {
             if (getItemViewType(i) == viewType) {
                 return i;
             }
         }
-        return -1;
+        return RecyclerView.NO_POSITION;
     }
 
     @Override
     public int findLastPositionOfType(int viewType) {
+        return findLastPositionOfType(viewType, list.size() - 1);
+    }
+
+    @Override
+    public int findLastPositionOfType(int viewType, int offsetPosition) {
         if (list.isEmpty()) {
-            return -1;
+            return RecyclerView.NO_POSITION;
         }
-        for (int i = list.size() - 1; i >= 0; i--) {
+        if (offsetPosition < 0 || offsetPosition > list.size() - 1) {
+            return RecyclerView.NO_POSITION;
+        }
+        for (int i = offsetPosition; i >= 0; i--) {
             if (getItemViewType(i) == viewType) {
                 return i;
             }
         }
-        return -1;
+        return RecyclerView.NO_POSITION;
     }
 
     @Override
@@ -533,10 +550,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         return 1;
     }
 
+    @Override
     public void setOnItemClickListener(OnItemClickListener<T> listener) {
         this.clickListener = listener;
     }
 
+    @Override
     public void setOnItemLongClickListener(OnItemLongClickListener<T> listener) {
         this.longClickListener = listener;
     }
@@ -571,17 +590,16 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         return new int[] { 0, 0 };
     }
 
+    @Nullable
     public OnErrorClickListener getErrorClickListener() {
         return errorClickListener;
     }
 
-    public void setErrorClickListener(OnErrorClickListener errorClickListener) {
+    @Override
+    public void setErrorClickListener(@Nullable OnErrorClickListener errorClickListener) {
         this.errorClickListener = errorClickListener;
     }
 
+    @Nullable
     private OnErrorClickListener errorClickListener;
-
-    public interface OnErrorClickListener {
-        void onErrorClick(View view);
-    }
 }

@@ -48,7 +48,6 @@ public interface AdapterLoader<T> {
     String PAYLOAD_REFRESH_SELECT = "SelectPowerAdapter$refresh_select";
     String PAYLOAD_REFRESH_BOTTOM = "PowerAdapter$refresh_bottom";
 
-
     /**
      * This method should be called  when you load more !
      *
@@ -164,9 +163,9 @@ public interface AdapterLoader<T> {
      */
     int getItemRealCount();
 
-    void performClick(@NonNull View itemView, int position, T item);
+    void performClick(@NonNull PowerHolder holder, int position, T item);
 
-    boolean performLongClick(@NonNull View itemView, int position, T item);
+    boolean performLongClick(@NonNull PowerHolder holder, int position, T item);
 
     /**
      * call this method after init RecyclerView(set LayoutManager)
@@ -182,6 +181,15 @@ public interface AdapterLoader<T> {
     int findFirstPositionOfType(int viewType);
 
     /**
+     * call this method to get the first position of the viewType start with the offsetPosition end to list end.
+     *
+     * @param viewType the viewType you set ,default is 0
+     * @param offsetPosition the position to offset.
+     * @return the index of list
+     */
+    int findFirstPositionOfType(int viewType, int offsetPosition);
+
+    /**
      * call this method to get the last position of the viewType
      *
      * @param viewType the viewType you set ,default is 0
@@ -190,38 +198,29 @@ public interface AdapterLoader<T> {
     int findLastPositionOfType(int viewType);
 
     /**
-     * Interface definition for a callback to be invoked when
-     * an item in this view has been selected.
+     * call this method to get the last position of the viewType start with the offsetPosition end to 0.
+     *
+     * @param viewType the viewType you set ,default is 0
+     * @param offsetPosition the position to offset.
+     * @return the index of list
      */
-    interface OnItemSelectedListener {
-        /**
-         * <p>Callback method to be invoked when an item in this view has been
-         * selected. This callback is invoked only when the newly selected
-         * position is different from the previously selected position or if
-         * there was no selected item.</p>
-         * <p>
-         * Impelmenters can call getItemAtPosition(position) if they need to access the
-         * data associated with the selected item.
-         *
-         * @param view The view within the AdapterView that was clicked
-         * @param position The position of the view in the adapter
-         * @param isSelected The state of isSelected
-         */
-        void onItemSelected(@NonNull View view, int position, boolean isSelected);
+    int findLastPositionOfType(int viewType, int offsetPosition);
 
-        /**
-         * Callback method to be invoked when the selection disappears from this
-         * view. The selection can disappear for instance when touch is activated
-         * or when the adapter becomes empty.
-         */
-        void onNothingSelected();
-    }
+    void setOnItemClickListener(@Nullable OnItemClickListener<T> listener);
 
     interface OnItemClickListener<T> {
-        void onItemClick(@NonNull View itemView, int position, T item);
+        void onItemClick(@NonNull PowerHolder holder, int position, T item);
     }
 
+    void setOnItemLongClickListener(@Nullable OnItemLongClickListener<T> listener);
+
     interface OnItemLongClickListener<T> {
-        boolean onItemLongClick(@NonNull View itemView, int position, T item);
+        boolean onItemLongClick(@NonNull PowerHolder holder, int position, T item);
+    }
+
+    void setErrorClickListener(@Nullable OnErrorClickListener errorClickListener);
+
+    interface OnErrorClickListener {
+        void onErrorClick(@NonNull View view);
     }
 }
