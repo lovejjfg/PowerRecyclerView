@@ -16,6 +16,7 @@
 
 package com.lovejjfg.swiperefreshrecycleview;
 
+import android.support.annotation.Nullable;
 import android.view.View;
 import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.powerrecycle.OnLoadMoreListener;
@@ -36,7 +37,7 @@ public class BottomViewHolder extends AbsBottomViewHolder {
     }
 
     @Override
-    public void onBind(OnLoadMoreListener loadMoreListener, int loadState) {
+    public void onBind(@Nullable OnLoadMoreListener loadMoreListener, int loadState) {
         if (loadState == AdapterLoader.STATE_LOADING) {
             itemView.getLayoutParams().height = 100;
             System.out.println("啦啦阿拉显示加载更多");

@@ -20,7 +20,7 @@ import java.util.List;
 public class DefaultItemAnimator extends SimpleItemAnimator {
     private static final boolean DEBUG = false;
 
-    private static TimeInterpolator sDefaultInterpolator;
+    private static TimeInterpolator DEFAULT_INTERPOLATOR;
 
     private ArrayList<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<>();
     private ArrayList<RecyclerView.ViewHolder> mPendingAdditions = new ArrayList<>();
@@ -511,10 +511,10 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
     }
 
     private void resetAnimation(RecyclerView.ViewHolder holder) {
-        if (sDefaultInterpolator == null) {
-            sDefaultInterpolator = new ValueAnimator().getInterpolator();
+        if (DEFAULT_INTERPOLATOR == null) {
+            DEFAULT_INTERPOLATOR = new ValueAnimator().getInterpolator();
         }
-        holder.itemView.animate().setInterpolator(sDefaultInterpolator);
+        holder.itemView.animate().setInterpolator(DEFAULT_INTERPOLATOR);
         endAnimation(holder);
     }
 

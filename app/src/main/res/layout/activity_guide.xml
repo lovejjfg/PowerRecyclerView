@@ -16,12 +16,12 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:clipToPadding="false"
-              tools:context="com.lovejjfg.swiperefreshrecycleview.NormalActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    tools:context="com.lovejjfg.swiperefreshrecycleview.NormalActivity">
 
     <Button
         android:id="@+id/bt_normal"
@@ -29,32 +29,14 @@
         style="@style/button"/>
 
     <Button
-        android:id="@+id/bt_refresh"
-        android:text="下拉刷新 加载更多"
-        style="@style/button"/>
-
-    <Button
         android:id="@+id/bt_choice"
         android:text="单选 多选"
         style="@style/button"/>
 
-    <Button
-        android:id="@+id/bt_customer"
-        android:text="自定义加载更多"
-        style="@style/button"/>
 
     <Button
-        android:id="@+id/bt_drag"
-        android:text="拖拽排序"
-        style="@style/button"/>
-
-    <Button
-        android:id="@+id/bt_grid"
-        android:text="配合GridLayoutManager使用"
-        style="@style/button"/>
-    <Button
-        android:id="@+id/bt_product"
-        android:text="商品标签列表"
+        android:id="@+id/btCats"
+        android:text="猫图"
         style="@style/button"/>
 
 

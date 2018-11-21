@@ -15,8 +15,8 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.lovejjfg.swiperefreshrecycleview"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lovejjfg.swiperefreshrecycleview">
     <!-- 悬浮框权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <application
@@ -29,17 +29,11 @@
         <activity android:name=".SecondActivity">
 
         </activity>
-        <activity android:name=".PickActivity">
-
-        </activity>
-        <activity android:name=".Pick2Activity">
-
-        </activity>
         <activity android:name=".GuideActivity">
 
         </activity>
+        <activity android:name=".activity.CatsActivity"/>
 
-        <activity android:name=".ProductList"/>
         <activity-alias
             android:name="launchActivity"
             android:targetActivity=".GuideActivity">
