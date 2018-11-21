@@ -42,7 +42,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     private boolean longTouchEnable;
     protected boolean isSelectMode;
     @Nullable
-    private OnItemSelectedListener selectedListener;
+    private OnItemSelectedListener<Select> selectedListener;
     private final ArrayList<Select> selectedList = new ArrayList<>();
 
     public SelectPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
@@ -52,6 +52,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         this.isCancelAble = currentMode != ISelect.SINGLE_MODE;
     }
 
+    @NonNull
     @Override
     public Set<Select> getSelectedItems() {
         return new HashSet<>(selectedList);
@@ -124,9 +125,10 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
                 @Override
                 public void onClick(View v) {
                     int currentPos = holder.getAdapterPosition();
-                    if (currentPos == RecyclerView.NO_POSITION || currentPos >= list.size()) {
+                    if (currentPos < 0 || currentPos >= list.size()) {
                         return;
                     }
+                    //noinspection ConstantConditions
                     performClick(holder, currentPos, getItem(currentPos));
                 }
             });
@@ -136,7 +138,8 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
                     @Override
                     public boolean onLongClick(View v) {
                         int currentPos = holder.getAdapterPosition();
-                        return !(currentPos == RecyclerView.NO_POSITION || currentPos >= list.size())
+                        //noinspection ConstantConditions
+                        return !(currentPos < 0 || currentPos >= list.size())
                             && performLongClick(holder, holder.getAdapterPosition(), getItem(currentPos));
                     }
                 });
@@ -145,7 +148,8 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     }
 
     @Override
-    public void performClick(@NonNull final PowerHolder powerHolder, final int position, Select select) {
+    public void performClick(@NonNull final PowerHolder<Select> powerHolder, final int position,
+        @NonNull Select select) {
         if (isSelectMode) {
             handleClick(powerHolder, position, select);
         } else {
@@ -156,7 +160,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     }
 
     @Override
-    public boolean performLongClick(@NonNull PowerHolder holder, int position, Select select) {
+    public boolean performLongClick(@NonNull PowerHolder<Select> holder, int position, @NonNull Select select) {
         if (longTouchEnable) {
             updateSelectMode(true);
             handleClick(holder, position, select);
@@ -167,7 +171,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     }
 
     @Override
-    public void setOnItemSelectListener(OnItemSelectedListener listener) {
+    public void setOnItemSelectListener(OnItemSelectedListener<Select> listener) {
         this.selectedListener = listener;
     }
 
@@ -203,8 +207,13 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
             Select select = list.get(i);
             if (unSelect(select)) {
                 checkAndDispatchHolder(i, select);
-                notifyItemChanged(i, PAYLOAD_REFRESH_SELECT);
+                if (!force) {
+                    notifyItemChanged(i, PAYLOAD_REFRESH_SELECT);
+                }
             }
+        }
+        if (force) {
+            notifyItemRangeChanged(0, list.size(), PAYLOAD_REFRESH_SELECT);
         }
     }
 
@@ -298,14 +307,23 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (!isSelectMode) {
             return;
         }
-        RecyclerView.ViewHolder h = getViewHolder(position);
-        if (h != null && h instanceof PowerHolder) {
-            dispatchSelected((PowerHolder) h, position, select);
+        @SuppressWarnings("unchecked")
+        PowerHolder<Select> h = getViewHolder(position);
+        if (h != null) {
+            dispatchSelected(h, position, select);
         }
     }
 
-    private RecyclerView.ViewHolder getViewHolder(int index) {
-        return recyclerView.findViewHolderForAdapterPosition(index);
+    @Nullable
+    private PowerHolder getViewHolder(int index) {
+        if (recyclerView == null) {
+            throw new NullPointerException("Did you forget call attachRecyclerView() at first?");
+        }
+        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(index);
+        if (holder != null && holder instanceof PowerHolder) {
+            return (PowerHolder) holder;
+        }
+        return null;
     }
 
     private boolean select(Select item) {
@@ -342,7 +360,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         }
     }
 
-    private void dispatchSelected(PowerHolder holder, int position, Select select) {
+    private void dispatchSelected(PowerHolder<Select> holder, int position, Select select) {
         if (isSelectMode && selectedListener != null) {
             selectedListener.onItemSelectChange(holder, position, select.isSelected());
             if (selectedList.isEmpty()) {
@@ -355,7 +373,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     }
 
-    private void handleClick(@NonNull PowerHolder powerHolder, int position, Select select) {
+    private void handleClick(@NonNull PowerHolder<Select> powerHolder, int position, Select select) {
         if (select.isSelected() && !isCancelAble) {
             return;
         }

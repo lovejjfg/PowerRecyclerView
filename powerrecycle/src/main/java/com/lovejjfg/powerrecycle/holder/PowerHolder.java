@@ -17,8 +17,11 @@
 package com.lovejjfg.powerrecycle.holder;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import java.util.List;
 
 /**
  * Created by Joe on 2017/5/31.
@@ -29,19 +32,31 @@ import android.view.View;
 public class PowerHolder<T> extends RecyclerView.ViewHolder {
     public boolean enableCLick = true;
 
-    public PowerHolder(View itemView) {
+    public PowerHolder(@NonNull View itemView) {
         super(itemView);
     }
 
-    public PowerHolder(View itemView, boolean enableCLick) {
+    public PowerHolder(@NonNull View itemView, boolean enableCLick) {
         super(itemView);
         this.enableCLick = enableCLick;
     }
 
-    public void onBind(T t) {
+    public void onBind(@NonNull T t) {
     }
 
-    public Context getContext() {
+    public void onBind(@NonNull T t, boolean isSelectMode) {
+
+    }
+
+    public void onPartBind(@NonNull T t, @NonNull List<Object> payloads) {
+
+    }
+
+    public void onPartBind(@NonNull T t, boolean isSelectMode, @NonNull List<Object> payloads) {
+
+    }
+
+    public @Nullable Context getContext() {
         return itemView.getContext();
     }
 }

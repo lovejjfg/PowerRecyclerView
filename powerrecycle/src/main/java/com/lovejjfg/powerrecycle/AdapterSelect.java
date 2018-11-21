@@ -17,6 +17,7 @@
 package com.lovejjfg.powerrecycle;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.lovejjfg.powerrecycle.annotation.SelectMode;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
@@ -26,13 +27,15 @@ import java.util.Set;
  * Created by Joe on 2018-11-11
  * Email: lovejjfg@gmail.com
  */
-public interface AdapterSelect<T extends ISelect> extends AdapterLoader<T> {
+@SuppressWarnings("unused")
+public interface AdapterSelect<S extends ISelect> {
     /**
      * return the select items in Set.
      *
      * @return the selected items.
      */
-    Set<T> getSelectedItems();
+    @NonNull
+    Set<S> getSelectedItems();
 
     /**
      * reset selected list and remove them form the list.
@@ -125,17 +128,16 @@ public interface AdapterSelect<T extends ISelect> extends AdapterLoader<T> {
 
     /**
      * you can reset all
-     * @param force
      */
     void resetAll(boolean force);
 
-    void setOnItemSelectListener(OnItemSelectedListener listener);
+    void setOnItemSelectListener(@Nullable OnItemSelectedListener<S> listener);
 
     /**
      * Interface definition for a callback to be invoked when
      * an item in this view has been selected.
      */
-    interface OnItemSelectedListener {
+    interface OnItemSelectedListener<S> {
         /**
          * <p>Callback method to be invoked when an item in this view has been
          * selected. This callback is invoked only when the newly selected
@@ -147,7 +149,7 @@ public interface AdapterSelect<T extends ISelect> extends AdapterLoader<T> {
          * @param position The position of the view in the adapter
          * @param isSelected The state of isSelected
          */
-        void onItemSelectChange(@NonNull PowerHolder holder, int position, boolean isSelected);
+        void onItemSelectChange(@NonNull PowerHolder<S> holder, int position, boolean isSelected);
 
         /**
          * Callback method to be invoked when the selection disappears from this

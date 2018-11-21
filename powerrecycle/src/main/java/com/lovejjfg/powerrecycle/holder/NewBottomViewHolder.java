@@ -16,6 +16,7 @@
 
 package com.lovejjfg.powerrecycle.holder;
 
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 import com.lovejjfg.powerrecycle.AdapterLoader;
@@ -42,7 +43,7 @@ public class NewBottomViewHolder extends AbsBottomViewHolder {
     }
 
     @Override
-    public void onBind(final OnLoadMoreListener loadMoreListener, @LoadState int loadState) {
+    public void onBind(@Nullable final OnLoadMoreListener loadMoreListener, @LoadState int loadState) {
         switch (loadState) {
             case AdapterLoader.STATE_LASTED:
                 loadingContainer.setVisibility(View.INVISIBLE);

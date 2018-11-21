@@ -54,7 +54,9 @@ public interface AdapterLoader<T> {
      * @param holder the current holder.
      * @param loadState the current state.
      */
-    void onBottomViewHolderBind(AbsBottomViewHolder holder, OnLoadMoreListener listener, @LoadState int loadState);
+    void onBottomViewHolderBind(@NonNull AbsBottomViewHolder holder,
+        @Nullable OnLoadMoreListener listener,
+        @LoadState int loadState);
 
     /**
      * If you want to create the specified bottom layout,you must call this method to add your specified layout !
@@ -64,17 +66,17 @@ public interface AdapterLoader<T> {
     void setLoadMoreView(@LayoutRes int viewRes);
 
     @Nullable
-    View createLoadMoreView(ViewGroup parent);
+    View createLoadMoreView(@NonNull ViewGroup parent);
 
     void setEmptyView(@NonNull View emptyView);
 
     @Nullable
-    View createEmptyView(ViewGroup parent);
+    View createEmptyView(@NonNull ViewGroup parent);
 
     void setErrorView(@NonNull View errorView);
 
     @Nullable
-    View createErrorView(ViewGroup parent);
+    View createErrorView(@NonNull ViewGroup parent);
 
     void showEmpty();
 
@@ -91,7 +93,8 @@ public interface AdapterLoader<T> {
      *
      * @param loadMore whether is loadingMore or not..
      */
-    AbsBottomViewHolder onBottomViewHolderCreate(View loadMore);
+    @Nullable
+    AbsBottomViewHolder onBottomViewHolderCreate(@NonNull View loadMore);
 
     boolean isHasMore();
 
@@ -120,6 +123,8 @@ public interface AdapterLoader<T> {
      */
     void appendList(@NonNull List<T> data);
 
+    void insertList(@NonNull List<T> data, int startPos);
+
     /**
      * remove the specified position in the list. If this method throw RecyclerView Exception when you delete the
      * last one.
@@ -129,8 +134,10 @@ public interface AdapterLoader<T> {
      * @param position he specified position to remove
      * @return if successful return the removed object,otherwise null
      */
+    @Nullable
     T removeItem(int position);
 
+    @Nullable
     T getItem(int position);
 
     /**
@@ -138,7 +145,7 @@ public interface AdapterLoader<T> {
      *
      * @param position he specified position to remove
      */
-    void insertItem(int position, T bean);
+    void insertItem(int position, @NonNull T item);
 
     /**
      * @param position the current pos .
@@ -163,9 +170,9 @@ public interface AdapterLoader<T> {
      */
     int getItemRealCount();
 
-    void performClick(@NonNull PowerHolder holder, int position, T item);
+    void performClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
 
-    boolean performLongClick(@NonNull PowerHolder holder, int position, T item);
+    boolean performLongClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
 
     /**
      * call this method after init RecyclerView(set LayoutManager)
@@ -209,13 +216,13 @@ public interface AdapterLoader<T> {
     void setOnItemClickListener(@Nullable OnItemClickListener<T> listener);
 
     interface OnItemClickListener<T> {
-        void onItemClick(@NonNull PowerHolder holder, int position, T item);
+        void onItemClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
     }
 
     void setOnItemLongClickListener(@Nullable OnItemLongClickListener<T> listener);
 
     interface OnItemLongClickListener<T> {
-        boolean onItemLongClick(@NonNull PowerHolder holder, int position, T item);
+        boolean onItemLongClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
     }
 
     void setErrorClickListener(@Nullable OnErrorClickListener errorClickListener);
