@@ -86,12 +86,13 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (prePos != position) {
             prePos = position;
             Select select = list.get(position);
-            if (!select.isSelected()) {
-                resetAll();
-                if (select(select)) {
-                    checkAndDispatchHolder(position, select);
-                    notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
-                }
+            if (select.isSelected()) {
+                return;
+            }
+            resetAll();
+            if (select(select)) {
+                checkAndDispatchHolder(position, select);
+                notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
             }
         }
     }
@@ -320,7 +321,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
             throw new NullPointerException("Did you forget call attachRecyclerView() at first?");
         }
         RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(index);
-        if (holder != null && holder instanceof PowerHolder) {
+        if (holder instanceof PowerHolder) {
             return (PowerHolder) holder;
         }
         return null;
