@@ -304,8 +304,8 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 public boolean onLongClick(View v) {
                     int currentPos = holder.getAdapterPosition();
                     //noinspection ConstantConditions
-                    return !(currentPos < 0 || currentPos >= list.size()) && performLongClick
-                        (holder, holder.getAdapterPosition(), getItem(currentPos));
+                    return !(currentPos < 0 || currentPos >= list.size()) && performLongClick(
+                        holder, holder.getAdapterPosition(), getItem(currentPos));
                 }
             });
         }
