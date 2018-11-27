@@ -18,7 +18,6 @@ package com.lovejjfg.powerrecycle.holder;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import java.util.List;
@@ -29,6 +28,7 @@ import java.util.List;
  * <p> Impl ViewHolder ,you can get Context and finish DataBind with onBind</p>
  */
 
+@SuppressWarnings("unused")
 public class PowerHolder<T> extends RecyclerView.ViewHolder {
     public boolean enableCLick = true;
 
@@ -56,7 +56,7 @@ public class PowerHolder<T> extends RecyclerView.ViewHolder {
 
     }
 
-    public @Nullable Context getContext() {
+    public @NonNull Context getContext() {
         return itemView.getContext();
     }
 }

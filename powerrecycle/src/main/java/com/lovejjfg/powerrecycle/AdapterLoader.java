@@ -60,24 +60,45 @@ public interface AdapterLoader<T> {
 
     /**
      * If you want to create the specified bottom layout,you must call this method to add your specified layout !
+     * consider to use {@link AdapterLoader#createLoadMoreView(ViewGroup)}
      *
      * @param viewRes the specified bottom view layout res
      */
+    @Deprecated
     void setLoadMoreView(@LayoutRes int viewRes);
 
     @Nullable
     View createLoadMoreView(@NonNull ViewGroup parent);
 
+    /**
+     * consider to use {@link AdapterLoader#createEmptyView(ViewGroup)}
+     *
+     * @param emptyView the emptyView to show
+     */
+    @Deprecated
     void setEmptyView(@NonNull View emptyView);
 
+    /**
+     * create the Empty
+     * <code> LayoutInflater.from(parent.getContext()).inflate(R.layout.xxx, parent, false); </code>
+     */
     @Nullable
     View createEmptyView(@NonNull ViewGroup parent);
 
+    /**
+     * consider to use {@link AdapterLoader#createErrorView(ViewGroup)}
+     *
+     * @param errorView the errorView to show
+     */
+    @Deprecated
     void setErrorView(@NonNull View errorView);
 
     @Nullable
     View createErrorView(@NonNull ViewGroup parent);
 
+    /**
+     * show the empty view when data is empty.
+     */
     void showEmpty();
 
     /**
@@ -96,16 +117,35 @@ public interface AdapterLoader<T> {
     @Nullable
     AbsBottomViewHolder onBottomViewHolderCreate(@NonNull View loadMore);
 
+    /**
+     * {@link PowerAdapter} through this method to known whether there is more data or nor.
+     *
+     * @return true if there is more data,  otherwise false.
+     */
     boolean isHasMore();
 
+    /**
+     * refresh the bottom holder state ,this method is always called from the {@link LoadMoreScrollListener}
+     */
     void updateLoadingMore();
 
     void loadMoreError();
 
+    /**
+     * call this method to set whether there is support loadmore or not.
+     *
+     * @param loadMore true: support load more false: not show load more anymore
+     */
     void enableLoadMore(boolean loadMore);
 
+    /**
+     * Called by RecyclerView to display the error view.
+     */
     void onErrorHolderBind(@NonNull PowerHolder<T> holder);
 
+    /**
+     * Called by RecyclerView to display the empty view.
+     */
     void onEmptyHolderBind(@NonNull PowerHolder<T> holder);
 
     /**
@@ -116,13 +156,22 @@ public interface AdapterLoader<T> {
      */
     void setList(@NonNull List<T> data);
 
+    /**
+     * clear current data.
+     */
     void clearList();
 
     /**
-     * @param data the data you want to add
+     * @param data the data you want to add.
      */
     void appendList(@NonNull List<T> data);
 
+    /**
+     * insert the new list data within the start Position.
+     *
+     * @param data new list to insert
+     * @param startPos the start position
+     */
     void insertList(@NonNull List<T> data, int startPos);
 
     /**
@@ -137,6 +186,12 @@ public interface AdapterLoader<T> {
     @Nullable
     T removeItem(int position);
 
+    /**
+     * get the data of list in this RecyclerView.
+     * return the data in specified position, or null.
+     *
+     * @param position the specified position
+     */
     @Nullable
     T getItem(int position);
 
@@ -154,13 +209,46 @@ public interface AdapterLoader<T> {
     int getItemViewTypes(int position);
 
     /**
+     * Called by RecyclerView to display the data at the specified position. This method
+     * should update the contents of the {@link PowerHolder#itemView} to reflect the item at
+     * the given position.
+     *
      * @param holder current holder.
      * @param position current pos.
      */
     void onViewHolderBind(@NonNull PowerHolder<T> holder, int position);
 
+    /**
+     * Called by RecyclerView to display the data at the specified position. This method
+     * should update the contents of the {@link PowerHolder#itemView} to reflect the item at
+     * the given position.
+     *
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     * item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     * @param payloads A non-null list of merged payloads. Can be empty list if requires full
+     * update.
+     */
     void onViewHolderBind(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads);
 
+    /**
+     * Called when RecyclerView needs a new {@link PowerHolder} of the given type to represent
+     * an item.
+     * <p>
+     * This new ViewHolder should be constructed with a new View that can represent the items
+     * of the given type. You can either create a new View manually or inflate it from an XML
+     * layout file.
+     * <p>
+     * The new ViewHolder will be used to display items of the adapter using
+     * {@link #onViewHolderBind(PowerHolder, int, List)} (ViewHolder, int, List)}. Since it will be re-used to display
+     * different items in the data set, it is a good idea to cache references to sub views of
+     * the View to avoid unnecessary {@link View#findViewById(int)} calls.
+     *
+     * @param parent The ViewGroup into which the new View will be added after it is bound to
+     * an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     PowerHolder<T> onViewHolderCreate(@NonNull ViewGroup parent, int viewType);
 
     /**
@@ -170,8 +258,22 @@ public interface AdapterLoader<T> {
      */
     int getItemRealCount();
 
+    /**
+     * handle the holder itemview click.
+     *
+     * @param holder the holder that click
+     * @param position the position of holder in RecyclerView
+     * @param item the data of holder.
+     */
     void performClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
 
+    /**
+     * handle the holder itemview long click.
+     *
+     * @param holder the holder that click
+     * @param position the position of holder in RecyclerView
+     * @param item the data of holder.
+     */
     boolean performLongClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
 
     /**
@@ -213,20 +315,70 @@ public interface AdapterLoader<T> {
      */
     int findLastPositionOfType(int viewType, int offsetPosition);
 
+    /**
+     * Register a callback to be invoked when an item in this RecyclerView has
+     * been clicked.
+     *
+     * @param listener The callback that will be invoked.
+     */
     void setOnItemClickListener(@Nullable OnItemClickListener<T> listener);
 
+    /**
+     * Interface definition for a callback to be invoked when an item in this
+     * Adapter has been clicked.
+     */
     interface OnItemClickListener<T> {
+        /**
+         * Callback method to be invoked when an item in this RecyclerView has
+         * been clicked.
+         * <p>
+         * Implementers can call getItemAtPosition(position) if they need
+         * to access the data associated with the selected item.
+         *
+         * @param holder The holder within the RecyclerView that was clicked
+         * @param position The position of the view in the adapter.
+         * @param item The data of holder that bind.
+         */
         void onItemClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
     }
 
+    /**
+     * Register a callback to be invoked when an item in this RecyclerView has
+     * been long clicked.
+     *
+     * @param listener The callback that will be invoked.
+     */
     void setOnItemLongClickListener(@Nullable OnItemLongClickListener<T> listener);
 
+    /**
+     * Interface definition for a callback to be invoked when an item in this
+     * Adapter has been long clicked.
+     */
     interface OnItemLongClickListener<T> {
+        /**
+         * Callback method to be invoked when an item in this RecyclerView has
+         * been long clicked.
+         * <p>
+         * Implementers can call getItemAtPosition(position) if they need
+         * to access the data associated with the selected item.
+         *
+         * @param holder The holder within the RecyclerView that was clicked
+         * @param position The position of the view in the adapter.
+         * @param item The data of holder that bind.
+         */
         boolean onItemLongClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
     }
 
+    /**
+     * Register a callback to be invoked when RecyclerView error layout has been clicked.
+     *
+     * @param errorClickListener The callback that will be invoked.
+     */
     void setErrorClickListener(@Nullable OnErrorClickListener errorClickListener);
 
+    /**
+     * Interface definition for a callback to be invoked when error layout click
+     */
     interface OnErrorClickListener {
         void onErrorClick(@NonNull View view);
     }

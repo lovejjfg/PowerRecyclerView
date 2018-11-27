@@ -82,6 +82,11 @@ public interface AdapterSelect<S extends ISelect> {
      */
     void updateSelectMode(boolean isSelect);
 
+    /**
+     * set select mode in {@link ISelect#SINGLE_MODE} or {@link ISelect#MULTIPLE_MODE}
+     *
+     * @param mode {@link ISelect#SINGLE_MODE} or {@link ISelect#MULTIPLE_MODE}
+     */
     void setSelectedMode(@SelectMode int mode);
 
     /**
@@ -110,7 +115,8 @@ public interface AdapterSelect<S extends ISelect> {
     boolean isCancelAble();
 
     /**
-     * set the default selected position.
+     * set the default selected position.this method maybe callback the method
+     * {@link OnItemSelectedListener#onItemSelectChange(PowerHolder, int, boolean)} if the adapter has filled before.
      *
      * @param position selected position
      */
