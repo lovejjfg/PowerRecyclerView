@@ -210,7 +210,7 @@ public interface AdapterLoader<T> {
 
     /**
      * Called by RecyclerView to display the data at the specified position. This method
-     * should update the contents of the {@link PowerHolder#itemView} to reflect the item at
+     * should update the contents of the PowerHolder#itemView to reflect the item at
      * the given position.
      *
      * @param holder current holder.
@@ -220,7 +220,7 @@ public interface AdapterLoader<T> {
 
     /**
      * Called by RecyclerView to display the data at the specified position. This method
-     * should update the contents of the {@link PowerHolder#itemView} to reflect the item at
+     * should update the contents of the PowerHolder#itemView to reflect the item at
      * the given position.
      *
      * @param holder The ViewHolder which should be updated to represent the contents of the

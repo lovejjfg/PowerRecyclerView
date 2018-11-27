@@ -23,6 +23,8 @@ import android.support.v7.recyclerview.extensions.AsyncListDiffer;
 import android.support.v7.util.AdapterListUpdateCallback;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import java.util.List;
 
@@ -30,6 +32,10 @@ import java.util.List;
 public abstract class ListPowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> {
 
     private final AsyncListDiffer<T> mHelper;
+    @Nullable
+    private AdapterLoader.OnItemLongClickListener<T> longClickListener;
+    @Nullable
+    AdapterLoader.OnItemClickListener<T> clickListener;
 
     protected ListPowerAdapter() {
         DiffUtil.ItemCallback<T> itemCallback = new DiffUtil.ItemCallback<T>() {
@@ -52,14 +58,6 @@ public abstract class ListPowerAdapter<T> extends RecyclerView.Adapter<PowerHold
             new AsyncDifferConfig.Builder<>(itemCallback).build());
     }
 
-    /**
-     * Submits a new list to be diffed, and displayed.
-     * <p>
-     * If a list is already being displayed, a diff will be computed on a background thread, which
-     * will dispatch Adapter.notifyItem events on the main thread.
-     *
-     * @param list The new list to be displayed.
-     */
     @SuppressWarnings("WeakerAccess")
     public void setList(List<T> list) {
         mHelper.submitList(list);
@@ -76,50 +74,91 @@ public abstract class ListPowerAdapter<T> extends RecyclerView.Adapter<PowerHold
         return mHelper.getCurrentList().size();
     }
 
-    /**
-     * Called to check whether two objects represent the same item.
-     * <p>
-     * For example, if your items have unique ids, this method should check their id equality.
-     *
-     * @param oldItem The item in the old list.
-     * @param newItem The item in the new list.
-     * @return True if the two items represent the same object or false if they are different.
-     * @see DiffUtil.Callback#areItemsTheSame(int, int)
-     */
     public abstract boolean areItemsTheSame(@NonNull T oldItem, @NonNull T newItem);
 
-    /**
-     * When {@link #areItemsTheSame(T, T)} returns {@code true} for two items and
-     * {@link #areContentsTheSame(T, T)} returns false for them, this method is called to
-     * get a payload about the change.
-     * <p>
-     * For example, if you are using DiffUtil with {@link RecyclerView}, you can return the
-     * particular field that changed in the item and your
-     * {@link android.support.v7.widget.RecyclerView.ItemAnimator ItemAnimator} can use that
-     * information to run the correct animation.
-     * <p>
-     * Default implementation returns {@code null}.
-     *
-     * @see DiffUtil.Callback#getChangePayload(int, int)
-     */
     public abstract boolean areContentsTheSame(@NonNull T oldItem, @NonNull T newItem);
 
-    /**
-     * When {@link #areItemsTheSame(T, T)} returns {@code true} for two items and
-     * {@link #areContentsTheSame(T, T)} returns false for them, this method is called to
-     * get a payload about the change.
-     * <p>
-     * For example, if you are using DiffUtil with {@link RecyclerView}, you can return the
-     * particular field that changed in the item and your
-     * {@link android.support.v7.widget.RecyclerView.ItemAnimator ItemAnimator} can use that
-     * information to run the correct animation.
-     * <p>
-     * Default implementation returns {@code null}.
-     *
-     * @see DiffUtil.Callback#getChangePayload(int, int)
-     */
     @Nullable
     public Object getChangePayload(@NonNull T oldItem, @NonNull T newItem) {
         return null;
+    }
+
+    @NonNull
+    @Override
+    public final PowerHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return onViewHolderCreate(parent, viewType);
+    }
+
+    @Override
+    public final void onBindViewHolder(@NonNull PowerHolder<T> holder, int position) {
+        bindDefaultHolder(holder, position, null);
+    }
+
+    @Override
+    public final void onBindViewHolder(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads) {
+        bindDefaultHolder(holder, position, payloads);
+    }
+
+    public abstract PowerHolder<T> onViewHolderCreate(@NonNull ViewGroup parent, int viewType);
+
+    public abstract void onViewHolderBind(@NonNull PowerHolder<T> holder, int position);
+
+    private void bindDefaultHolder(@NonNull final PowerHolder<T> holder, int position,
+        @Nullable List<Object> payloads) {
+        handleHolderClick(holder);
+        if (payloads == null || payloads.isEmpty()) {
+            onViewHolderBind(holder, position);
+        } else {
+            onViewHolderBind(holder, position, payloads);
+        }
+    }
+
+    public void onViewHolderBind(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads) {
+        onViewHolderBind(holder, position);
+    }
+
+    public void setOnItemClickListener(@NonNull AdapterLoader.OnItemClickListener<T> listener) {
+        this.clickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(@Nullable AdapterLoader.OnItemLongClickListener<T> listener) {
+        this.longClickListener = listener;
+    }
+
+    public void performClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item) {
+        if (clickListener != null) {
+            clickListener.onItemClick(holder, position, item);
+        }
+    }
+
+    public boolean performLongClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item) {
+        return longClickListener != null && longClickListener.onItemLongClick(holder, position, item);
+    }
+
+    void handleHolderClick(@NonNull final PowerHolder<T> holder) {
+        if (clickListener != null && holder.enableCLick) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int currentPos = holder.getAdapterPosition();
+                    if (currentPos < 0 || currentPos >= mHelper.getCurrentList().size()) {
+                        return;
+                    }
+                    //noinspection ConstantConditions
+                    performClick(holder, currentPos, getItem(currentPos));
+                }
+            });
+        }
+        if (longClickListener != null) {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int currentPos = holder.getAdapterPosition();
+                    //noinspection ConstantConditions
+                    return !(currentPos < 0 || currentPos >= mHelper.getCurrentList().size()) && performLongClick(
+                        holder, holder.getAdapterPosition(), getItem(currentPos));
+                }
+            });
+        }
     }
 }
