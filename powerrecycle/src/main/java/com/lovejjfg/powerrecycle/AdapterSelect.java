@@ -122,6 +122,8 @@ public interface AdapterSelect<S extends ISelect> {
      */
     void setCurrentPos(int position);
 
+    void setCurrentPositions(@NonNull int... position);
+
     /**
      * select all the item, <b> NOTE: This is not work for model:{@link ISelect#SINGLE_MODE} </b>
      */

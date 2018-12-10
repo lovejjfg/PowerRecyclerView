@@ -83,17 +83,22 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (list.isEmpty() || position > list.size() - 1 || position < 0) {
             return;
         }
-        if (prePos != position) {
-            prePos = position;
-            Select select = list.get(position);
-            if (select.isSelected()) {
-                return;
-            }
-            resetAll();
-            if (select(select)) {
-                checkAndDispatchHolder(position, select);
-                notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
-            }
+        Select select = list.get(position);
+        handlePrePos(position);
+        if (select(select)) {
+            checkAndDispatchHolder(position, select);
+            notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
+        }
+    }
+
+    @Override
+    public void setCurrentPositions(@NonNull int... positions) {
+        int length = positions.length;
+        if (length == 0) {
+            return;
+        }
+        for (int position : positions) {
+            setCurrentPos(position);
         }
     }
 
