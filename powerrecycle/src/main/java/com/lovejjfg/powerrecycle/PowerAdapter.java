@@ -114,9 +114,19 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public final void clearList() {
+    public void clearList() {
+        clearList(true);
+    }
+
+    @Override
+    public void clearList(boolean notify) {
         list.clear();
-        notifyDataSetChanged();
+        loadState = 0;
+        currentType = 0;
+        totalCount = 0;
+        if (notify) {
+            notifyDataSetChanged();
+        }
     }
 
     @Override

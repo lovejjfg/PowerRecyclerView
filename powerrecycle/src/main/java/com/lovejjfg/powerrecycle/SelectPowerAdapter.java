@@ -224,6 +224,12 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     }
 
     @Override
+    public void clearList(boolean notify) {
+        prePos = RecyclerView.NO_POSITION;
+        super.clearList(notify);
+    }
+
+    @Override
     public void clearSelectList(boolean notify) {
         if (!isCancelAble) {
             return;

@@ -105,7 +105,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
 
         loadMoreAction = Runnable {
             val i = (Math.random() * 10).toInt() % 3
-            if (i == 0) {
+            if (i != 0) {
                 val arrayList = arrayListOf(
                     (TestBean("ccc1")),
                     (TestBean("ccc2")),

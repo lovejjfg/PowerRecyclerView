@@ -162,6 +162,11 @@ public interface AdapterLoader<T> {
     void clearList();
 
     /**
+     * clear current data.
+     */
+    void clearList(boolean notify);
+
+    /**
      * @param data the data you want to add.
      */
     void appendList(@NonNull List<T> data);
