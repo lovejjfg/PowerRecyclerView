@@ -19,6 +19,8 @@ package com.lovejjfg.powerrecycle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.util.AdapterListUpdateCallback;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -41,7 +43,7 @@ import java.util.List;
 public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements AdapterLoader<T>,
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
-    public final List<T> list;
+    private final List<T> list;
     public boolean enableLoadMore;
     private int totalCount;
     private int currentType;
@@ -66,8 +68,48 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     private Runnable loadMoreAction;
 
+    @Nullable
+    ModifyAsyncListDiffer<T> mHelper;
+
     public PowerAdapter() {
+        this(false);
+    }
+
+    public PowerAdapter(boolean diffEnable) {
         list = new ArrayList<>();
+        if (diffEnable) {
+            DiffUtil.ItemCallback<T> itemCallback = new DiffUtil.ItemCallback<T>() {
+                @Override
+                public boolean areItemsTheSame(T oldItem, T newItem) {
+                    return PowerAdapter.this.areItemsTheSame(oldItem, newItem);
+                }
+
+                @Override
+                public boolean areContentsTheSame(T oldItem, T newItem) {
+                    return PowerAdapter.this.areContentsTheSame(oldItem, newItem);
+                }
+
+                @Override
+                public Object getChangePayload(T oldItem, T newItem) {
+                    return PowerAdapter.this.getChangePayload(oldItem, newItem);
+                }
+            };
+            mHelper = new ModifyAsyncListDiffer<>(new AdapterListUpdateCallback(this),
+                new ModifyAsyncDifferConfig.Builder<>(itemCallback).build());
+        }
+    }
+
+    public boolean areItemsTheSame(@NonNull T oldItem, @NonNull T newItem) {
+        return oldItem.equals(newItem);
+    }
+
+    public boolean areContentsTheSame(@NonNull T oldItem, @NonNull T newItem) {
+        return oldItem.equals(newItem);
+    }
+
+    @Nullable
+    public Object getChangePayload(@NonNull T oldItem, @NonNull T newItem) {
+        return null;
     }
 
     @Nullable
@@ -84,12 +126,16 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     public void setTotalCount(int totalCount) {
+        List<T> list = getList();
         this.totalCount = totalCount;
         enableLoadMore = totalCount > list.size();
         notifyDataSetChanged();
     }
 
     public List<T> getList() {
+        if (mHelper != null) {
+            return mHelper.getCurrentList();
+        }
         return list;
     }
 
@@ -98,13 +144,18 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (data.isEmpty()) {
             return;
         }
-        clearList(false);
+        if (mHelper != null) {
+            resetState();
+        } else {
+            clearList(false);
+        }
         appendList(data);
         enableLoadMore = totalCount > data.size();
     }
 
     @Override
     public final void insertList(@NonNull List<T> data, int startPos) {
+        List<T> list = getList();
         if (startPos < 0 || startPos > list.size()) {
             return;
         }
@@ -119,12 +170,17 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public void clearList(boolean notify) {
+        List<T> list = getList();
         list.clear();
-        loadState = 0;
-        currentType = 0;
+        resetState();
         if (notify) {
             notifyDataSetChanged();
         }
+    }
+
+    public void resetState() {
+        loadState = 0;
+        currentType = 0;
     }
 
     @Override
@@ -132,19 +188,25 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (data.isEmpty()) {
             return;
         }
+        List<T> list = getList();
         int positionStart = list.size();
-        list.addAll(data);
-        int itemCount = list.size() - positionStart;
-
         if (positionStart == 0) {
-            notifyDataSetChanged();
+            if (mHelper == null) {
+                list.addAll(data);
+                notifyItemRangeInserted(0, data.size());
+            } else {
+                mHelper.submitList(data);
+            }
         } else {
+            list.addAll(data);
+            int itemCount = list.size() - positionStart;
             notifyItemRangeInserted(positionStart + 1, itemCount);
         }
     }
 
     @Override
     public T removeItem(int position) {
+        List<T> list = getList();
         if (checkIllegalPosition(position)) {
             return null;
         }
@@ -155,11 +217,13 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public T getItem(int position) {
+        List<T> list = getList();
         return checkIllegalPosition(position) ? null : list.get(position);
     }
 
     @Override
     public void insertItem(int position, @NonNull T item) {
+        List<T> list = getList();
         if (position < 0) {
             position = 0;
         }
@@ -402,11 +466,13 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public int getItemCount() {
+        List<T> list = getList();
         return list.isEmpty() ? (currentType == 0) ? 0 : 1 : enableLoadMore ? list.size() + 1 : list.size();
     }
 
     @Override
     public int getItemRealCount() {
+        List<T> list = getList();
         return list.size();
     }
 
@@ -446,6 +512,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public void showError(boolean force) {
+        List<T> list = getList();
         if (!force && !list.isEmpty()) {
             return;
         }
@@ -456,6 +523,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public final int getItemViewType(int position) {
+        List<T> list = getList();
         if (list.isEmpty()) {
             if (currentType != 0) {
                 return currentType;
@@ -479,6 +547,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (checkIllegalPosition(offsetPosition)) {
             return RecyclerView.NO_POSITION;
         }
+        List<T> list = getList();
         for (int i = offsetPosition; i < list.size(); i++) {
             if (getItemViewType(i) == viewType) {
                 return i;
@@ -489,6 +558,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public int findLastPositionOfType(int viewType) {
+        List<T> list = getList();
         return findLastPositionOfType(viewType, list.size() - 1);
     }
 
@@ -576,22 +646,24 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public void onItemDismiss(int position) {
+        List<T> list = getList();
         list.remove(position);
         notifyItemRemoved(position);
     }
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        if (fromPosition == list.size() || toPosition == list.size()) {
+        List<T> list = getList();
+        if (fromPosition == this.list.size() || toPosition == this.list.size()) {
             return false;
         }
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(list, i, i + 1);
+                Collections.swap(this.list, i, i + 1);
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(list, i, i - 1);
+                Collections.swap(this.list, i, i - 1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);
@@ -616,6 +688,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public boolean checkIllegalPosition(int position) {
+        List<T> list = mHelper != null ? mHelper.getCurrentList() : this.list;
         return list.isEmpty() || position < 0 || position >= list.size();
     }
 }

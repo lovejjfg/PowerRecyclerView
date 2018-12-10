@@ -52,7 +52,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
         setSupportActionBar(toolbar)
-        adapter = SelectRecycleAdapter()
+        adapter = SelectRecycleAdapter(true)
         adapter.setOnItemSelectListener(object : AdapterSelect.OnItemSelectedListener<TestBean> {
             override fun onItemSelectChange(holder: PowerHolder<TestBean>, position: Int, isSelected: Boolean) {
                 Log.e(
@@ -81,7 +81,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
             .setShowTopBottom(true)
             .create()
         recycleView.addItemDecoration(decor)
-        recycleView.itemAnimator = DefaultItemAnimator()
+//        recycleView.itemAnimator = DefaultItemAnimator()
         adapter.attachRecyclerView(recycleView)
         refresh.setOnRefreshListener { recycleView.postDelayed(refreshAction, DEFAULT_TIME.toLong()) }
         ////初始化一个TouchHelperCallback

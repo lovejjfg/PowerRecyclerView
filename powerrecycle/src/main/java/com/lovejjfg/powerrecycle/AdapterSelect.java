@@ -29,6 +29,9 @@ import java.util.Set;
  */
 @SuppressWarnings("unused")
 public interface AdapterSelect<S extends ISelect> {
+
+    String PAYLOAD_REFRESH_SELECT = "SelectPowerAdapter$refresh_select";
+
     /**
      * return the select items in Set.
      *

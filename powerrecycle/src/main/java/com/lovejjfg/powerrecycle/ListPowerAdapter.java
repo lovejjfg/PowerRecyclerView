@@ -22,6 +22,7 @@ import android.support.v7.recyclerview.extensions.AsyncDifferConfig;
 import android.support.v7.recyclerview.extensions.AsyncListDiffer;
 import android.support.v7.util.AdapterListUpdateCallback;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,13 +30,15 @@ import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import java.util.List;
 
 @SuppressWarnings({ "unused", "unchecked", "WeakerAccess" })
-public abstract class ListPowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> {
-
+public abstract class ListPowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements IAdapter<T> {
+    public List<T> list;
     private final AsyncListDiffer<T> mHelper;
     @Nullable
-    private AdapterLoader.OnItemLongClickListener<T> longClickListener;
+    private OnItemLongClickListener<T> longClickListener;
     @Nullable
-    AdapterLoader.OnItemClickListener<T> clickListener;
+    OnItemClickListener<T> clickListener;
+
+    protected RecyclerView recyclerView;
 
     protected ListPowerAdapter() {
         DiffUtil.ItemCallback<T> itemCallback = new DiffUtil.ItemCallback<T>() {
@@ -58,15 +61,58 @@ public abstract class ListPowerAdapter<T> extends RecyclerView.Adapter<PowerHold
             new AsyncDifferConfig.Builder<>(itemCallback).build());
     }
 
+    @Nullable
+    @Override
+    public View createEmptyView(@NonNull ViewGroup parent) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public View createErrorView(@NonNull ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    public void showEmpty() {
+
+    }
+
+    @Override
+    public void showError(boolean force) {
+
+    }
+
+    @Override
+    public void onErrorHolderBind(@NonNull PowerHolder<T> holder) {
+
+    }
+
+    @Override
+    public void onEmptyHolderBind(@NonNull PowerHolder<T> holder) {
+
+    }
+
     @SuppressWarnings("WeakerAccess")
-    public void setList(List<T> list) {
+    public void setList(@NonNull List<T> list) {
         mHelper.submitList(list);
+        this.list = list;
+    }
+
+    @Override
+    public void clearList() {
+
     }
 
     @SuppressWarnings("unused")
     @NonNull
-    protected T getItem(int position) {
+    public T getItem(int position) {
         return mHelper.getCurrentList().get(position);
+    }
+
+    @Override
+    public int getItemViewTypes(int position) {
+        return 0;
     }
 
     @Override
@@ -99,9 +145,10 @@ public abstract class ListPowerAdapter<T> extends RecyclerView.Adapter<PowerHold
         bindDefaultHolder(holder, position, payloads);
     }
 
-    public abstract PowerHolder<T> onViewHolderCreate(@NonNull ViewGroup parent, int viewType);
-
-    public abstract void onViewHolderBind(@NonNull PowerHolder<T> holder, int position);
+    @Override
+    public int getItemRealCount() {
+        return 0;
+    }
 
     private void bindDefaultHolder(@NonNull final PowerHolder<T> holder, int position,
         @Nullable List<Object> payloads) {
@@ -113,26 +160,115 @@ public abstract class ListPowerAdapter<T> extends RecyclerView.Adapter<PowerHold
         }
     }
 
+    @Override
     public void onViewHolderBind(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads) {
         onViewHolderBind(holder, position);
     }
 
-    public void setOnItemClickListener(@NonNull AdapterLoader.OnItemClickListener<T> listener) {
-        this.clickListener = listener;
-    }
-
-    public void setOnItemLongClickListener(@Nullable AdapterLoader.OnItemLongClickListener<T> listener) {
-        this.longClickListener = listener;
-    }
-
+    @Override
     public void performClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item) {
         if (clickListener != null) {
             clickListener.onItemClick(holder, position, item);
         }
     }
 
+    @Override
     public boolean performLongClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item) {
         return longClickListener != null && longClickListener.onItemLongClick(holder, position, item);
+    }
+
+    @Override
+    public void attachRecyclerView(@NonNull RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+        this.recyclerView = recyclerView;
+        recyclerView.setAdapter(this);
+        //recyclerView.addOnScrollListener(new LoadMoreScrollListener(recyclerView));
+        final RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager == null) {
+            throw new NullPointerException("Did you forget call setLayoutManager() at first?");
+        }
+        if (manager instanceof GridLayoutManager) {
+            ((GridLayoutManager) manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return initSpanSize(position, (GridLayoutManager) manager);
+                }
+            });
+        }
+    }
+
+    private int initSpanSize(int position, GridLayoutManager manager) {
+        int itemViewType = getItemViewType(position);
+        switch (itemViewType) {
+            case AdapterLoader.TYPE_BOTTOM:
+            case AdapterLoader.TYPE_EMPTY:
+            case AdapterLoader.TYPE_ERROR:
+                return manager.getSpanCount();
+            default:
+                return getSpanSize(position);
+        }
+    }
+
+    @Override
+    public int getSpanSize(int position) {
+        return 1;
+    }
+
+    @Override
+    public int findFirstPositionOfType(int viewType) {
+        return findFirstPositionOfType(viewType, 0);
+    }
+
+    @Override
+    public int findFirstPositionOfType(int viewType, int offsetPosition) {
+        if (list.isEmpty()) {
+            return RecyclerView.NO_POSITION;
+        }
+        if (offsetPosition < 0 || offsetPosition > list.size() - 1) {
+            return RecyclerView.NO_POSITION;
+        }
+        for (int i = offsetPosition; i < list.size(); i++) {
+            if (getItemViewType(i) == viewType) {
+                return i;
+            }
+        }
+        return RecyclerView.NO_POSITION;
+    }
+
+    @Override
+    public int findLastPositionOfType(int viewType) {
+        return findLastPositionOfType(viewType, list.size() - 1);
+    }
+
+    @Override
+    public int findLastPositionOfType(int viewType, int offsetPosition) {
+        if (list.isEmpty()) {
+            return RecyclerView.NO_POSITION;
+        }
+        if (offsetPosition < 0 || offsetPosition > list.size() - 1) {
+            return RecyclerView.NO_POSITION;
+        }
+        for (int i = offsetPosition; i >= 0; i--) {
+            if (getItemViewType(i) == viewType) {
+                return i;
+            }
+        }
+        return RecyclerView.NO_POSITION;
+    }
+
+    @Override
+    public void setOnItemClickListener(@Nullable OnItemClickListener<T> listener) {
+        this.clickListener = listener;
+    }
+
+    @Override
+    public void setOnItemLongClickListener(@Nullable OnItemLongClickListener<T> listener) {
+        this.longClickListener = listener;
+    }
+
+    @Override
+    public void setErrorClickListener(@Nullable OnErrorClickListener errorClickListener) {
+
     }
 
     void handleHolderClick(@NonNull final PowerHolder<T> holder) {

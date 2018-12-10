@@ -30,7 +30,7 @@ import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;
-
+import java.util.List;
 
 /**
  * Created by Joe on 2016-07-27
@@ -47,6 +47,7 @@ public class NormalAdapter extends PowerAdapter<TestBean> {
 
     @Override
     public void onViewHolderBind(@NonNull PowerHolder<TestBean> holder, final int position) {
+        List<TestBean> list = getList();
         final TestBean testBean = list.get(position);
         ((MyViewHolder) holder).bindDateView(testBean);
         Log.e("TAG", "onViewHolderBind: " + position + "是否选中" + testBean.isSelected());

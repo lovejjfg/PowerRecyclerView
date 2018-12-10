@@ -16,66 +16,22 @@
 
 package com.lovejjfg.powerrecycle;
 
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import com.lovejjfg.powerrecycle.annotation.LoadState;
-import com.lovejjfg.powerrecycle.holder.AbsBottomViewHolder;
 import com.lovejjfg.powerrecycle.holder.PowerHolder;
-import com.lovejjfg.powerrecycle.manager.FixedGridLayoutManager;
 import java.util.List;
 
 /**
  * Created by Joe on 2016-07-26
  * Email: lovejjfg@gmail.com
  */
-public interface AdapterLoader<T> {
+public interface IAdapter<T> {
 
-    /**
-     * state about load more..
-     */
-    int STATE_LOADING = 1;
-    int STATE_LASTED = 2;
-    int STATE_ERROR = 3;
-
-    int TYPE_BOTTOM = 0x80000000;
     int TYPE_EMPTY = 0x80000001;
     int TYPE_ERROR = 0x80000010;
-
-    String PAYLOAD_REFRESH_BOTTOM = "PowerAdapter$refresh_bottom";
-
-    /**
-     * This method should be called  when you load more !
-     *
-     * @param holder the current holder.
-     * @param loadState the current state.
-     */
-    void onBottomViewHolderBind(@NonNull AbsBottomViewHolder holder,
-        @Nullable OnLoadMoreListener listener,
-        @LoadState int loadState);
-
-    /**
-     * If you want to create the specified bottom layout,you must call this method to add your specified layout !
-     * consider to use {@link AdapterLoader#createLoadMoreView(ViewGroup)}
-     *
-     * @param viewRes the specified bottom view layout res
-     */
-    @Deprecated
-    void setLoadMoreView(@LayoutRes int viewRes);
-
-    @Nullable
-    View createLoadMoreView(@NonNull ViewGroup parent);
-
-    /**
-     * consider to use {@link AdapterLoader#createEmptyView(ViewGroup)}
-     *
-     * @param emptyView the emptyView to show
-     */
-    @Deprecated
-    void setEmptyView(@NonNull View emptyView);
 
     /**
      * create the Empty
@@ -83,14 +39,6 @@ public interface AdapterLoader<T> {
      */
     @Nullable
     View createEmptyView(@NonNull ViewGroup parent);
-
-    /**
-     * consider to use {@link AdapterLoader#createErrorView(ViewGroup)}
-     *
-     * @param errorView the errorView to show
-     */
-    @Deprecated
-    void setErrorView(@NonNull View errorView);
 
     @Nullable
     View createErrorView(@NonNull ViewGroup parent);
@@ -108,36 +56,6 @@ public interface AdapterLoader<T> {
     void showError(boolean force);
 
     /**
-     * If you want to create the specified bottom layout ,you should implements this method to create your own
-     * bottomViewHolder
-     *
-     * @param loadMore whether is loadingMore or not..
-     */
-    @Nullable
-    AbsBottomViewHolder onBottomViewHolderCreate(@NonNull View loadMore);
-
-    /**
-     * {@link PowerAdapter} through this method to known whether there is more data or nor.
-     *
-     * @return true if there is more data,  otherwise false.
-     */
-    boolean isHasMore();
-
-    /**
-     * refresh the bottom holder state ,this method is always called from the {@link LoadMoreScrollListener}
-     */
-    void updateLoadingMore();
-
-    void loadMoreError();
-
-    /**
-     * call this method to set whether there is support loadmore or not.
-     *
-     * @param loadMore true: support load more false: not show load more anymore
-     */
-    void enableLoadMore(boolean loadMore);
-
-    /**
      * Called by RecyclerView to display the error view.
      */
     void onErrorHolderBind(@NonNull PowerHolder<T> holder);
@@ -148,8 +66,7 @@ public interface AdapterLoader<T> {
     void onEmptyHolderBind(@NonNull PowerHolder<T> holder);
 
     /**
-     * You can call this method to add data to RecycleView,if you want to append data,you should call
-     * {@link #appendList(List)}, Maybe You should call setTotalCount() before setList() .
+     * You can call this method to add data to RecycleView,if you want to append data.
      *
      * @param data the data you want to add
      */
@@ -161,43 +78,6 @@ public interface AdapterLoader<T> {
     void clearList();
 
     /**
-     * clear current data.
-     */
-    void clearList(boolean notify);
-
-    /**
-     * @param data the data you want to add.
-     */
-    void appendList(@NonNull List<T> data);
-
-    /**
-     * insert the new list data within the start Position.
-     *
-     * @param data new list to insert
-     * @param startPos the start position
-     */
-    void insertList(@NonNull List<T> data, int startPos);
-
-    /**
-     * check the position is illegal.
-     *
-     * @return true the position is out of [0,list.size()-1] ,else legal.
-     */
-    boolean checkIllegalPosition(int position);
-
-    /**
-     * remove the specified position in the list. If this method throw RecyclerView Exception when you delete the
-     * last one.
-     * consider about using the {@link com.lovejjfg.powerrecycle.manager.FixedLinearLayoutManager} or
-     * {@link FixedGridLayoutManager}
-     *
-     * @param position he specified position to remove
-     * @return if successful return the removed object,otherwise null
-     */
-    @Nullable
-    T removeItem(int position);
-
-    /**
      * get the data of list in this RecyclerView.
      * return the data in specified position, or null.
      *
@@ -205,13 +85,6 @@ public interface AdapterLoader<T> {
      */
     @Nullable
     T getItem(int position);
-
-    /**
-     * remove the specified position in the list.
-     *
-     * @param position he specified position to remove
-     */
-    void insertItem(int position, @NonNull T item);
 
     /**
      * @param position the current pos .
@@ -291,6 +164,8 @@ public interface AdapterLoader<T> {
      * call this method after init RecyclerView(set LayoutManager)
      */
     void attachRecyclerView(@NonNull RecyclerView recyclerView);
+
+    int getSpanSize(int position);
 
     /**
      * call this method to get the first position of the viewType

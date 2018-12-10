@@ -25,17 +25,16 @@ import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
- * {@link SelectPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch
+ * {@link SelectListPowerAdapter} impl SelectMode,you can call  {@link #setSelectedMode(int)} to switch
  * {@link ISelect#SINGLE_MODE} or {@link ISelect#MULTIPLE_MODE}
  * and you can decide whether it's enableSelect the longTouch to jump to  SelectMode, you can call
  * {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
  */
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAdapter<Select> implements
+public abstract class SelectListPowerAdapter<Select extends ISelect> extends ListPowerAdapter<Select> implements
     AdapterSelect<Select> {
     private int currentMode;
     private int prePos = RecyclerView.NO_POSITION;
@@ -46,12 +45,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     private OnItemSelectedListener<Select> selectedListener;
     private final ArrayList<Select> selectedList = new ArrayList<>();
 
-    public SelectPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
-        this(currentMode, longTouchEnable, false);
-    }
-
-    public SelectPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable, boolean diffEnable) {
-        super(diffEnable);
+    public SelectListPowerAdapter(@SelectMode int currentMode, boolean longTouchEnable) {
         this.currentMode = currentMode;
         this.longTouchEnable = longTouchEnable;
         this.isSelectMode = true;
@@ -86,33 +80,20 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     @Override
     public void setCurrentPos(int position) {
-        if (checkIllegalPosition(position)) {
+        if (list.isEmpty() || position > list.size() - 1 || position < 0) {
             return;
         }
-        List<Select> list = getList();
-        Select select = list.get(position);
-        handlePrePos(position);
-        if (select(select)) {
-            checkAndDispatchHolder(position, select);
-            notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
-        }
-    }
-
-    @Override
-    public void setCurrentPositions(@NonNull int... positions) {
-        int length = positions.length;
-        if (length == 0) {
-            return;
-        }
-        List<Select> list = getList();
-        for (int position : positions) {
-            if (checkIllegalPosition(position)) {
-                continue;
-            }
-            if (checkMaxCount(list.get(position))) {
+        if (prePos != position) {
+            prePos = position;
+            Select select = list.get(position);
+            if (select.isSelected()) {
                 return;
             }
-            setCurrentPos(position);
+            resetAll();
+            if (select(select)) {
+                checkAndDispatchHolder(position, select);
+                notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
+            }
         }
     }
 
@@ -141,12 +122,11 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     void handleHolderClick(@NonNull final PowerHolder<Select> holder) {
         if (holder.enableCLick) {
-            final List<Select> list = getList();
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int currentPos = holder.getAdapterPosition();
-                    if (checkIllegalPosition(currentPos)) {
+                    if (currentPos < 0 || currentPos >= list.size()) {
                         return;
                     }
                     //noinspection ConstantConditions
@@ -160,7 +140,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
                     public boolean onLongClick(View v) {
                         int currentPos = holder.getAdapterPosition();
                         //noinspection ConstantConditions
-                        return !checkIllegalPosition(currentPos)
+                        return !(currentPos < 0 || currentPos >= list.size())
                             && performLongClick(holder, holder.getAdapterPosition(), getItem(currentPos));
                     }
                 });
@@ -201,7 +181,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (currentMode == ISelect.SINGLE_MODE) {
             return;
         }
-        List<Select> list = getList();
         if (list.isEmpty()) {
             return;
         }
@@ -221,7 +200,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (!isCancelAble && !force) {
             return;
         }
-        List<Select> list = getList();
         if (list.isEmpty()) {
             return;
         }
@@ -246,13 +224,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     }
 
     @Override
-    public void clearList(boolean notify) {
-        prePos = RecyclerView.NO_POSITION;
-        selectedList.clear();
-        super.clearList(notify);
-    }
-
-    @Override
     public void clearSelectList(boolean notify) {
         if (!isCancelAble) {
             return;
@@ -261,7 +232,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
             return;
         }
         int size = selectedList.size();
-        List<Select> list = getList();
         for (int i = 0; i < size; i++) {
             Select item = selectedList.get(0);
             if (unSelect(item) && notify) {
@@ -286,7 +256,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (selectedList.isEmpty()) {
             return;
         }
-        List<Select> list = getList();
         int size = selectedList.size();
         for (int i = 0; i < size; i++) {
             Select item = selectedList.get(0);
@@ -303,7 +272,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (!isCancelAble) {
             return;
         }
-        List<Select> list = getList();
         int size = list.size();
         for (int i = 0; i < size; i++) {
             Select select = list.get(i);
@@ -323,16 +291,11 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     public void onReceivedMaxSelectCount(int count) {
     }
 
-    @Override
     public Select removeItem(int position) {
-        if (checkIllegalPosition(position)) {
+        if (position < 0 || position > list.size()) {
             return null;
         }
-        List<Select> list = getList();
         Select select = list.remove(position);
-        if (mHelper != null && mHelper.getCurrentList().contains(select)) {
-            mHelper.getCurrentList().remove(select);
-        }
         if (unSelect(select)) {
             checkAndDispatchHolder(position, select);
             notifyItemRemoved(position);
@@ -406,11 +369,18 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         }
     }
 
+    private void dispatchNothingSelect() {
+
+    }
+
     private void handleClick(@NonNull PowerHolder<Select> powerHolder, int position, Select select) {
         if (select.isSelected() && !isCancelAble) {
             return;
         }
-        if (checkMaxCount(select)) {
+        if (currentMode == ISelect.MULTIPLE_MODE
+            && !select.isSelected()
+            && selectedList.size() >= getMaxSelectCount()) {
+            onReceivedMaxSelectCount(selectedList.size());
             return;
         }
         if (toggleSelect(select)) {
@@ -420,19 +390,8 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         }
     }
 
-    private boolean checkMaxCount(Select select) {
-        if (currentMode == ISelect.MULTIPLE_MODE
-            && !select.isSelected()
-            && selectedList.size() >= getMaxSelectCount()) {
-            onReceivedMaxSelectCount(selectedList.size());
-            return true;
-        }
-        return false;
-    }
-
     private void handlePrePos(int position) {
         if (currentMode == ISelect.SINGLE_MODE && position != prePos) {
-            List<Select> list = getList();
             if (prePos >= 0 && prePos <= list.size() - 1) {
                 Select select = list.get(prePos);
                 if (unSelect(select)) {

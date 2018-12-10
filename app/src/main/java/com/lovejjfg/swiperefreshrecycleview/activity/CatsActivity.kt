@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_list.recycleView
 import kotlinx.android.synthetic.main.activity_list.refresh
 import kotlinx.android.synthetic.main.holder_cat.view.catCheckState
 import kotlinx.android.synthetic.main.holder_cat.view.catImage
+import kotlinx.android.synthetic.main.holder_cat.view.catName
 
 /**
  * Created by joe on 2018/11/20.
@@ -72,10 +73,10 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         for (i in 0..29) {
             list.add(Cat(cats[i % cats.size], "黑猫$i"))
         }
-        selectAdapter.setList(list)
+        selectAdapter.list = list
     }
 
-    class CatsAdapter : SelectPowerAdapter<Cat>(ISelect.MULTIPLE_MODE, true) {
+    class CatsAdapter : SelectPowerAdapter<Cat>(ISelect.MULTIPLE_MODE, true, true) {
         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): PowerHolder<Cat> {
             return CatHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_cat, parent, false))
         }
@@ -96,16 +97,26 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         override fun onReceivedMaxSelectCount(count: Int) {
             Log.e("CatsAdapter", "onReceivedMaxSelectCount:$count")
         }
+
+        override fun areContentsTheSame(oldItem: Cat, newItem: Cat): Boolean {
+            return oldItem.src == newItem.src
+        }
+
+        override fun areItemsTheSame(oldItem: Cat, newItem: Cat): Boolean {
+            return oldItem.name == newItem.name
+        }
     }
 
     class CatHolder(view: View) : PowerHolder<Cat>(view) {
         private val catSrc = view.catImage
         private val catState = view.catCheckState
+        private val catName = view.catName
         override fun onBind(t: Cat, isSelectMode: Boolean) {
             println("onBind:${t.name}")
             catSrc.setImageResource(t.src)
             catState.isChecked = t.isSelected
             catState.isVisible = isSelectMode
+            catName.text = t.name
         }
 
         override fun onPartBind(t: Cat, isSelectMode: Boolean, payloads: MutableList<Any>) {
