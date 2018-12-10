@@ -376,9 +376,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         }
     }
 
-    private void dispatchNothingSelect() {
-
-    }
 
     private void handleClick(@NonNull PowerHolder<Select> powerHolder, int position, Select select) {
         if (select.isSelected() && !isCancelAble) {
