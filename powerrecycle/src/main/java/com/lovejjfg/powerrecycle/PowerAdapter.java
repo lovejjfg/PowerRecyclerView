@@ -98,8 +98,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (data.isEmpty()) {
             return;
         }
-        currentType = 0;
-        list.clear();
+        clearList(false);
         appendList(data);
         enableLoadMore = totalCount > data.size();
     }
@@ -440,7 +439,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public void showEmpty() {
-        list.clear();
+        clearList(false);
         currentType = TYPE_EMPTY;
         notifyDataSetChanged();
     }
@@ -454,7 +453,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (!force && !list.isEmpty()) {
             return;
         }
-        list.clear();
+        clearList(false);
         currentType = TYPE_ERROR;
         notifyDataSetChanged();
     }
