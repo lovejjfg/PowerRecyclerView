@@ -28,7 +28,6 @@ class CatsActivity : BaseSelectActivity<Cat>() {
     override fun startRefresh() {
         recycleView.postDelayed(
             {
-                adapter.clearList()
                 initData()
                 refresh.isRefreshing = false
             }, 1000
@@ -45,6 +44,16 @@ class CatsActivity : BaseSelectActivity<Cat>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        selectAdapter.totalCount = 100
+        selectAdapter.setLoadMoreListener {
+            recycleView.postDelayed(
+                {
+                    appendData()
+                    refresh.isRefreshing = false
+                }, 1000
+            )
+        }
         initToolbar("猫猫图", R.menu.menu_select) {
             when (it.itemId) {
                 R.id.select_single -> {
@@ -75,6 +84,16 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         }
         selectAdapter.list = list
     }
+
+    private fun appendData() {
+        val cats = arrayOf(R.mipmap.cat1, R.mipmap.cat2, R.mipmap.cat3, R.mipmap.cat4, R.mipmap.cat5, R.mipmap.cat6)
+        val list = ArrayList<Cat>(30)
+        for (i in 0..9) {
+            list.add(Cat(cats[i % cats.size], "黑猫$i"))
+        }
+        selectAdapter.appendList(list)
+    }
+
 
     class CatsAdapter : SelectPowerAdapter<Cat>(ISelect.MULTIPLE_MODE, true, true) {
         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): PowerHolder<Cat> {

@@ -43,10 +43,11 @@ import java.util.List;
 public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements AdapterLoader<T>,
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
-    private final List<T> list;
+    private List<T> list;
     public boolean enableLoadMore;
     private int totalCount;
     private int currentType;
+    private boolean firstLoad;
     @LayoutRes
     private int loadMoreLayout = RecyclerView.INVALID_TYPE;
     @LoadState
@@ -75,8 +76,8 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         this(false);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public PowerAdapter(boolean diffEnable) {
-        list = new ArrayList<>();
         if (diffEnable) {
             DiffUtil.ItemCallback<T> itemCallback = new DiffUtil.ItemCallback<T>() {
                 @Override
@@ -96,6 +97,8 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
             };
             mHelper = new ModifyAsyncListDiffer<>(new AdapterListUpdateCallback(this),
                 new ModifyAsyncDifferConfig.Builder<>(itemCallback).build());
+        } else {
+            list = new ArrayList<>();
         }
     }
 
@@ -107,6 +110,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         return oldItem.equals(newItem);
     }
 
+    @SuppressWarnings("WeakerAccess")
     @Nullable
     public Object getChangePayload(@NonNull T oldItem, @NonNull T newItem) {
         return null;
@@ -178,9 +182,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         }
     }
 
-    public void resetState() {
+    private void resetState() {
         loadState = 0;
         currentType = 0;
+        firstLoad = true;
     }
 
     @Override
@@ -188,12 +193,13 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (data.isEmpty()) {
             return;
         }
-        List<T> list = getList();
+        final List<T> list = getList();
         int positionStart = list.size();
-        if (positionStart == 0) {
+        if (positionStart == 0 || firstLoad) {
+            firstLoad = false;
             if (mHelper == null) {
                 list.addAll(data);
-                notifyItemRangeInserted(0, data.size());
+                notifyDataSetChanged();
             } else {
                 mHelper.submitList(data);
             }
@@ -472,8 +478,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public int getItemRealCount() {
-        List<T> list = getList();
-        return list.size();
+        return getList().size();
     }
 
     @Override

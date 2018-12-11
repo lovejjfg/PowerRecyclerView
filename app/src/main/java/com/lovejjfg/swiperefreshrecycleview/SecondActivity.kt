@@ -99,6 +99,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
             for (i in 0..14) {
                 list.add(TestBean("这是$i"))
             }
+            recycleView.scrollToPosition(0)
             adapter.setList(list)
             refresh.isRefreshing = false
         }
