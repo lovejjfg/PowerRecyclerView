@@ -342,6 +342,19 @@ public interface AdapterLoader<T> {
     void setOnItemClickListener(@Nullable OnItemClickListener<T> listener);
 
     /**
+     * This method default implements is to solve RecyclerView scroll to top with DiffUtil.
+     *
+     * @param positionStart the start position of insert.
+     * @param itemCount the total count that inserted.
+     */
+    void onItemRangeInserted(int positionStart, int itemCount);
+
+    /**
+     * Whether add Observer in this Adapter or not. If you use DiffUtil, this method default is true.
+     */
+    boolean isEnableObserver();
+
+    /**
      * Interface definition for a callback to be invoked when an item in this
      * Adapter has been clicked.
      */

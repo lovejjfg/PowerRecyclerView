@@ -66,8 +66,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     private OnItemLongClickListener<T> longClickListener;
     @Nullable
     OnItemClickListener<T> clickListener;
-
+    @Nullable
     private Runnable loadMoreAction;
+    @Nullable
+    private RecyclerView.AdapterDataObserver innerObserver;
 
     @Nullable
     ModifyAsyncListDiffer<T> mHelper;
@@ -156,6 +158,17 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        try {
+            if (innerObserver != null) {
+                unregisterAdapterDataObserver(innerObserver);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public final void insertList(@NonNull List<T> data, int startPos) {
         List<T> list = getList();
         if (startPos < 0 || startPos > list.size()) {
@@ -235,6 +248,18 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         }
         list.add(position, item);
         notifyItemInserted(position);
+    }
+
+    @Override
+    public boolean isEnableObserver() {
+        return mHelper != null;
+    }
+
+    @Override
+    public void onItemRangeInserted(int positionStart, int itemCount) {
+        if (positionStart == 0 && recyclerView != null) {
+            recyclerView.scrollToPosition(positionStart);
+        }
     }
 
     @NonNull
@@ -616,6 +641,15 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                     return initSpanSize(position, (GridLayoutManager) manager);
                 }
             });
+        }
+        if (isEnableObserver()) {
+            innerObserver = new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    PowerAdapter.this.onItemRangeInserted(positionStart, itemCount);
+                }
+            };
+            registerAdapterDataObserver(innerObserver);
         }
     }
 
