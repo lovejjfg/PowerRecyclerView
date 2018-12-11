@@ -28,7 +28,7 @@ class CatsActivity : BaseSelectActivity<Cat>() {
     override fun startRefresh() {
         recycleView.postDelayed(
             {
-                initData()
+                initData(false)
                 refresh.isRefreshing = false
             }, 1000
         )
@@ -76,12 +76,19 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         initData()
     }
 
-    private fun initData() {
+    private fun initData(full: Boolean = true) {
         val cats = arrayOf(R.mipmap.cat1, R.mipmap.cat2, R.mipmap.cat3, R.mipmap.cat4, R.mipmap.cat5, R.mipmap.cat6)
         val list = ArrayList<Cat>(30)
-        for (i in 0..29) {
-            list.add(Cat(cats[i % cats.size], "黑猫$i"))
+        if (full) {
+            for (i in 0..29) {
+                list.add(Cat(cats[i % cats.size], "黑猫$i"))
+            }
+        } else {
+            for (i in 4..29) {
+                list.add(Cat(cats[i % cats.size], "黑猫$i"))
+            }
         }
+
         selectAdapter.list = list
     }
 
@@ -93,7 +100,6 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         }
         selectAdapter.appendList(list)
     }
-
 
     class CatsAdapter : SelectPowerAdapter<Cat>(ISelect.MULTIPLE_MODE, true, true) {
         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): PowerHolder<Cat> {

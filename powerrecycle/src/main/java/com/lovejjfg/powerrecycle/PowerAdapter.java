@@ -192,7 +192,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         }
     }
 
-    private void resetState() {
+    public void resetState() {
         loadState = 0;
         currentType = 0;
         firstLoad = true;

@@ -168,6 +168,11 @@ public interface AdapterLoader<T> {
     void clearList();
 
     /**
+     * reset the states of Adapter.
+     */
+    void resetState();
+
+    /**
      * clear current data.
      */
     void clearList(boolean notify);
