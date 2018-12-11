@@ -133,14 +133,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         List<T> list = getList();
         this.totalCount = totalCount;
         enableLoadMore = totalCount > list.size();
-        notifyDataSetChanged();
+        notifyItemChanged(getList().size());
     }
 
-    public List<T> getList() {
-        if (mHelper != null) {
-            return mHelper.getCurrentList();
-        }
-        return list;
+    @Override
+    public final List<T> getList() {
+        return mHelper != null ? mHelper.getCurrentList() : list;
     }
 
     @Override
@@ -174,8 +172,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public void clearList(boolean notify) {
-        List<T> list = getList();
-        list.clear();
+        getList().clear();
         resetState();
         if (notify) {
             notifyDataSetChanged();
@@ -599,7 +596,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     public void enableLoadMore(boolean loadMore) {
         if (enableLoadMore != loadMore) {
             enableLoadMore = loadMore;
-            notifyDataSetChanged();
+            notifyItemChanged(getList().size());
         }
     }
 
@@ -659,16 +656,16 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
         List<T> list = getList();
-        if (fromPosition == this.list.size() || toPosition == this.list.size()) {
+        if (fromPosition == list.size() || toPosition == list.size()) {
             return false;
         }
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(this.list, i, i + 1);
+                Collections.swap(list, i, i + 1);
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(this.list, i, i - 1);
+                Collections.swap(list, i, i - 1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);

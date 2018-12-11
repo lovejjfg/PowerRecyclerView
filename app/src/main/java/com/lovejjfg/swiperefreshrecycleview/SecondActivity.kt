@@ -147,7 +147,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.load_more -> adapter.setTotalCount(500)
+            R.id.load_more -> adapter.setTotalCount(30)
             R.id.own -> adapter.setLoadMoreView(R.layout.layout_foot_self)
             R.id.pull_refresh -> {
                 enable = !enable

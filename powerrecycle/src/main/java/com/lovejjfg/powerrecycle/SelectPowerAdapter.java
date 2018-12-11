@@ -141,7 +141,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     void handleHolderClick(@NonNull final PowerHolder<Select> holder) {
         if (holder.enableCLick) {
-            final List<Select> list = getList();
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -156,6 +156,13 @@ public interface AdapterLoader<T> {
     void setList(@NonNull List<T> data);
 
     /**
+     * get current list in the adapter
+     *
+     * @return current list.
+     */
+    List<T> getList();
+
+    /**
      * clear current data.
      */
     void clearList();

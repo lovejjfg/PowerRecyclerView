@@ -18,10 +18,8 @@ package com.lovejjfg.powerrecycle;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.util.AdapterListUpdateCallback;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.util.ListUpdateCallback;
-import android.support.v7.widget.RecyclerView;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,13 +27,6 @@ public class ModifyAsyncListDiffer<T> {
     private final ListUpdateCallback mUpdateCallback;
     private final ModifyAsyncDifferConfig<T> mConfig;
 
-    public ModifyAsyncListDiffer(@NonNull RecyclerView.Adapter adapter,
-        @NonNull DiffUtil.ItemCallback<T> diffCallback) {
-        mUpdateCallback = new AdapterListUpdateCallback(adapter);
-        mConfig = new ModifyAsyncDifferConfig.Builder<>(diffCallback).build();
-    }
-
-    @SuppressWarnings("WeakerAccess")
     public ModifyAsyncListDiffer(@NonNull ListUpdateCallback listUpdateCallback,
         @NonNull ModifyAsyncDifferConfig<T> config) {
         mUpdateCallback = listUpdateCallback;
@@ -53,13 +44,10 @@ public class ModifyAsyncListDiffer<T> {
         return mList == null ? Collections.<T>emptyList() : mList;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void submitList(final List<T> newList) {
-        if (newList == mList) {
-            // nothing to do
+        if (newList != null && newList.equals(mList)) {
             return;
         }
-
         // incrementing generation means any currently-running diffs are discarded when they finish
         final int runGeneration = ++mMaxScheduledGeneration;
 
