@@ -96,7 +96,7 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         val cats = arrayOf(R.mipmap.cat1, R.mipmap.cat2, R.mipmap.cat3, R.mipmap.cat4, R.mipmap.cat5, R.mipmap.cat6)
         val list = ArrayList<Cat>(30)
         for (i in 0..9) {
-            list.add(Cat(cats[i % cats.size], "黑猫$i"))
+            list.add(Cat(cats[i % cats.size], "白猫$i"))
         }
         selectAdapter.appendList(list)
     }
@@ -124,7 +124,7 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         }
 
         override fun areContentsTheSame(oldItem: Cat, newItem: Cat): Boolean {
-            return oldItem.src == newItem.src
+            return oldItem == newItem
         }
 
         override fun areItemsTheSame(oldItem: Cat, newItem: Cat): Boolean {

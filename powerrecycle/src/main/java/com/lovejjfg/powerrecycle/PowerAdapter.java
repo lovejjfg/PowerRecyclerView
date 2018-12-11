@@ -148,10 +148,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (data.isEmpty()) {
             return;
         }
-        if (mHelper != null) {
-            resetState();
-        } else {
+        if (mHelper == null) {
             clearList(false);
+        } else {
+            firstLoad = true;
         }
         appendList(data);
         enableLoadMore = totalCount > data.size();
@@ -195,7 +195,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     public void resetState() {
         loadState = 0;
         currentType = 0;
-        firstLoad = true;
     }
 
     @Override
