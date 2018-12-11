@@ -150,7 +150,7 @@ public interface AdapterLoader<T> {
 
     /**
      * You can call this method to add data to RecycleView,if you want to append data,you should call
-     * {@link #appendList(List)}
+     * {@link #appendList(List)}, Maybe You should call setTotalCount() before setList() .
      *
      * @param data the data you want to add
      */
@@ -178,6 +178,13 @@ public interface AdapterLoader<T> {
      * @param startPos the start position
      */
     void insertList(@NonNull List<T> data, int startPos);
+
+    /**
+     * check the position is illegal.
+     *
+     * @return true the position is out of [0,list.size()-1] ,else legal.
+     */
+    boolean checkIllegalPosition(int position);
 
     /**
      * remove the specified position in the list. If this method throw RecyclerView Exception when you delete the

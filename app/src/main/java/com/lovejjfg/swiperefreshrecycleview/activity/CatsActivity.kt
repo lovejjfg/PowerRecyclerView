@@ -48,11 +48,11 @@ class CatsActivity : BaseSelectActivity<Cat>() {
             when (it.itemId) {
                 R.id.select_single -> {
                     selectAdapter.setSelectedMode(ISelect.SINGLE_MODE)
-                    selectAdapter.setCurrentPos(3)
+                    selectAdapter.setCurrentPositions(0, 1, 2, 3)
                 }
                 R.id.select_mul -> {
                     selectAdapter.setSelectedMode(ISelect.MULTIPLE_MODE)
-                    selectAdapter.setCurrentPos(0)
+                    selectAdapter.setCurrentPositions(0, 1, 2, 3)
                 }
                 R.id.delete_select -> selectAdapter.deleteSelectedItems()
                 R.id.revert_select -> selectAdapter.revertAllSelected()
@@ -90,7 +90,7 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         }
 
         override fun getMaxSelectCount(): Int {
-            return 6
+            return 3
         }
 
         override fun onReceivedMaxSelectCount(count: Int) {

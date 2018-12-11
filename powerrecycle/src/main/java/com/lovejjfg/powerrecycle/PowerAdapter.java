@@ -122,7 +122,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         list.clear();
         loadState = 0;
         currentType = 0;
-        totalCount = 0;
         if (notify) {
             notifyDataSetChanged();
         }
@@ -146,7 +145,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public T removeItem(int position) {
-        if (position < 0 || position > list.size()) {
+        if (checkIllegalPosition(position)) {
             return null;
         }
         T bean = list.remove(position);
@@ -156,10 +155,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public T getItem(int position) {
-        if (position < 0 || position > list.size()) {
-            return null;
-        }
-        return list.get(position);
+        return checkIllegalPosition(position) ? null : list.get(position);
     }
 
     @Override
@@ -282,7 +278,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     private void bindDefaultHolder(@NonNull final PowerHolder<T> holder, int position,
         @Nullable List<Object> payloads) {
-        if (position == -1 || position >= list.size()) {
+        if (checkIllegalPosition(position)) {
             return;
         }
         handleHolderClick(holder);
@@ -299,7 +295,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 @Override
                 public void onClick(View v) {
                     int currentPos = holder.getAdapterPosition();
-                    if (currentPos < 0 || currentPos >= list.size()) {
+                    if (checkIllegalPosition(currentPos)) {
                         return;
                     }
                     //noinspection ConstantConditions
@@ -313,7 +309,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 public boolean onLongClick(View v) {
                     int currentPos = holder.getAdapterPosition();
                     //noinspection ConstantConditions
-                    return !(currentPos < 0 || currentPos >= list.size()) && performLongClick(
+                    return !checkIllegalPosition(currentPos) && performLongClick(
                         holder, holder.getAdapterPosition(), getItem(currentPos));
                 }
             });
@@ -480,10 +476,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public int findFirstPositionOfType(int viewType, int offsetPosition) {
-        if (list.isEmpty()) {
-            return RecyclerView.NO_POSITION;
-        }
-        if (offsetPosition < 0 || offsetPosition > list.size() - 1) {
+        if (checkIllegalPosition(offsetPosition)) {
             return RecyclerView.NO_POSITION;
         }
         for (int i = offsetPosition; i < list.size(); i++) {
@@ -501,10 +494,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     @Override
     public int findLastPositionOfType(int viewType, int offsetPosition) {
-        if (list.isEmpty()) {
-            return RecyclerView.NO_POSITION;
-        }
-        if (offsetPosition < 0 || offsetPosition > list.size() - 1) {
+        if (checkIllegalPosition(offsetPosition)) {
             return RecyclerView.NO_POSITION;
         }
         for (int i = offsetPosition; i >= 0; i--) {
@@ -622,5 +612,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     @Override
     public void setErrorClickListener(@Nullable OnErrorClickListener errorClickListener) {
         this.errorClickListener = errorClickListener;
+    }
+
+    @Override
+    public boolean checkIllegalPosition(int position) {
+        return list.isEmpty() || position < 0 || position >= list.size();
     }
 }

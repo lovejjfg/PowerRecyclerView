@@ -80,7 +80,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     @Override
     public void setCurrentPos(int position) {
-        if (list.isEmpty() || position > list.size() - 1 || position < 0) {
+        if (checkIllegalPosition(position)) {
             return;
         }
         Select select = list.get(position);
@@ -98,6 +98,12 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
             return;
         }
         for (int position : positions) {
+            if (checkIllegalPosition(position)) {
+                continue;
+            }
+            if (checkMaxCount(list.get(position))) {
+                return;
+            }
             setCurrentPos(position);
         }
     }
@@ -131,7 +137,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
                 @Override
                 public void onClick(View v) {
                     int currentPos = holder.getAdapterPosition();
-                    if (currentPos < 0 || currentPos >= list.size()) {
+                    if (checkIllegalPosition(currentPos)) {
                         return;
                     }
                     //noinspection ConstantConditions
@@ -145,7 +151,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
                     public boolean onLongClick(View v) {
                         int currentPos = holder.getAdapterPosition();
                         //noinspection ConstantConditions
-                        return !(currentPos < 0 || currentPos >= list.size())
+                        return !checkIllegalPosition(currentPos)
                             && performLongClick(holder, holder.getAdapterPosition(), getItem(currentPos));
                     }
                 });
@@ -305,7 +311,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     @Override
     public Select removeItem(int position) {
-        if (position < 0 || position > list.size()) {
+        if (checkIllegalPosition(position)) {
             return null;
         }
         Select select = list.remove(position);
@@ -386,10 +392,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (select.isSelected() && !isCancelAble) {
             return;
         }
-        if (currentMode == ISelect.MULTIPLE_MODE
-            && !select.isSelected()
-            && selectedList.size() >= getMaxSelectCount()) {
-            onReceivedMaxSelectCount(selectedList.size());
+        if (checkMaxCount(select)) {
             return;
         }
         if (toggleSelect(select)) {
@@ -397,6 +400,16 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
             dispatchSelected(powerHolder, position, select);
             notifyItemChanged(position, PAYLOAD_REFRESH_SELECT);
         }
+    }
+
+    private boolean checkMaxCount(Select select) {
+        if (currentMode == ISelect.MULTIPLE_MODE
+            && !select.isSelected()
+            && selectedList.size() >= getMaxSelectCount()) {
+            onReceivedMaxSelectCount(selectedList.size());
+            return true;
+        }
+        return false;
     }
 
     private void handlePrePos(int position) {
