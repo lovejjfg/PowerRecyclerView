@@ -55,16 +55,13 @@ class CatsActivity : BaseSelectActivity<Cat>() {
                     val list = selectAdapter.list
                     val cat0 = list[0]
                     cat0.isSelected = true
-                    cat0.name = "修改后的${cat0.name}"
                     val cat2 = list[2]
                     cat2.isSelected = true
-                    cat2.name = "修改后的${cat2.name}"
                     val cat5 = list[5]
                     cat5.isSelected = true
-                    cat5.name = "修改后的${cat5.name}"
                     adapter.updateItem(cat0)
-                    adapter.updateItem(cat2)
-                    adapter.updateItem(cat5, "textxxx5")
+                    adapter.updateItem(cat2, "textxxx2")
+                    adapter.updateItem(cat5)
                 }
                 R.id.delete_select -> selectAdapter.deleteSelectedItems()
                 R.id.revert_select -> selectAdapter.revertAllSelected()
@@ -123,7 +120,7 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         }
 
         override fun onPartBind(t: Cat, isSelectMode: Boolean, payloads: MutableList<Any>) {
-            println("onBindPart:::${t.name}")
+            println("onBindPart:::${t.name},,$payloads")
             catState.isVisible = isSelectMode
             catState.isChecked = t.isSelected
             catState.text = t.name

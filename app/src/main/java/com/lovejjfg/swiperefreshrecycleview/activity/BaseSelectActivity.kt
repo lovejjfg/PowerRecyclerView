@@ -35,9 +35,9 @@ abstract class BaseSelectActivity<T : ISelect> : BaseActivity<T>() {
 
     override fun onBackPressed() {
         if (selectAdapter.isSelectMode) {
-            selectAdapter.notifyItemChanged(0, "xxxx0")
-            selectAdapter.notifyItemChanged(1, "xxxx1")
-            selectAdapter.clearSelectList(true)
+//            selectAdapter.notifyItemChanged(0, "xxxx0")
+//            selectAdapter.notifyItemChanged(1, "xxxx1")
+//            selectAdapter.clearSelectList(true)
             selectAdapter.updateSelectMode(false)
             toast("已推出选择模式")
         } else {
