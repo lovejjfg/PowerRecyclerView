@@ -322,6 +322,20 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     public void onReceivedMaxSelectCount(int count) {
     }
 
+    @Nullable
+    @Override
+    public Object getChangePayload(@NonNull Select oldItem, @NonNull Select newItem) {
+        try {
+            if (oldItem.isSelected() != newItem.isSelected()) {
+                return AdapterSelect.PAYLOAD_REFRESH_SELECT;
+            } else {
+                return super.getChangePayload(oldItem, newItem);
+            }
+        } catch (Exception e) {
+            return super.getChangePayload(oldItem, newItem);
+        }
+    }
+
     @Override
     public Select removeItem(int position) {
         if (checkIllegalPosition(position)) {

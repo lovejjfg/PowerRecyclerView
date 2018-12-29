@@ -39,7 +39,18 @@
         android:id="@+id/default_select"
         android:title="选中可取消(单选情况)"/>
     <item
-        android:id="@+id/showNoData"
-        android:title="是否显示没有更过了"/>
+        android:id="@+id/enableLoadMore"
+        android:title="是否加载更多"/>
+
+    <item
+        android:id="@+id/empty"
+        android:title="显示空的"/>
+    <item
+        android:id="@+id/error"
+        android:title="显示error"/>
+    <item
+        android:id="@+id/enableDiffUtil"
+        android:title="DiffUtil可用"/>
+
 
 </menu>

@@ -98,7 +98,13 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 }
             };
             mHelper = new ModifyAsyncListDiffer<>(new AdapterListUpdateCallback(this),
-                new ModifyAsyncDifferConfig.Builder<>(itemCallback).build());
+                new ModifyAsyncDifferConfig.Builder<>(itemCallback).build(),
+                new ModifyAsyncListDiffer.DataPreparedCallback() {
+                    @Override
+                    public void onDataPrepared() {
+
+                    }
+                });
         } else {
             list = new ArrayList<>();
         }
@@ -152,6 +158,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
             clearList(false);
         } else {
             firstLoad = true;
+            resetState();
         }
         appendList(data);
         enableLoadMore = totalCount > data.size();
@@ -186,6 +193,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     @Override
     public void clearList(boolean notify) {
         getList().clear();
+        firstLoad = true;
         resetState();
         if (notify) {
             notifyDataSetChanged();

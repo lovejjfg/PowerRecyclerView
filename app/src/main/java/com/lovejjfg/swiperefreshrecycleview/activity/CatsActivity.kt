@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.lovejjfg.powerrecycle.AdapterSelect.OnItemSelectedListener
 import com.lovejjfg.powerrecycle.PowerAdapter
 import com.lovejjfg.powerrecycle.SelectPowerAdapter
 import com.lovejjfg.powerrecycle.holder.PowerHolder
@@ -54,11 +55,20 @@ class CatsActivity : BaseSelectActivity<Cat>() {
                 }, 1000
             )
         }
+        selectAdapter.setOnItemSelectListener(object : OnItemSelectedListener<Cat?> {
+            override fun onNothingSelected() {
+                println("onNothingSelected...")
+            }
+
+            override fun onItemSelectChange(holder: PowerHolder<Cat?>, position: Int, isSelected: Boolean) {
+                println("onItemSelectChange...position:$position;;isSelected:$isSelected")
+            }
+        })
         initToolbar("猫猫图", R.menu.menu_select) {
             when (it.itemId) {
                 R.id.select_single -> {
                     selectAdapter.setSelectedMode(ISelect.SINGLE_MODE)
-                    selectAdapter.setCurrentPositions(0, 1, 2, 3)
+                    selectAdapter.setCurrentPositions(0)
                 }
                 R.id.select_mul -> {
                     selectAdapter.setSelectedMode(ISelect.MULTIPLE_MODE)
@@ -69,6 +79,10 @@ class CatsActivity : BaseSelectActivity<Cat>() {
                 R.id.selet_all -> selectAdapter.selectAll()
                 R.id.unselect_all -> selectAdapter.resetAll()
                 R.id.default_select -> selectAdapter.isCancelAble = !selectAdapter.isCancelAble
+                R.id.empty -> selectAdapter.showEmpty()
+                R.id.error -> selectAdapter.showError()
+                R.id.enableLoadMore -> selectAdapter.enableLoadMore(!selectAdapter.enableLoadMore)
+
             }
             return@initToolbar true
         }
@@ -90,6 +104,7 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         }
 
         selectAdapter.list = list
+        selectAdapter.setCurrentPos(2)
     }
 
     private fun appendData() {
@@ -130,6 +145,14 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         override fun areItemsTheSame(oldItem: Cat, newItem: Cat): Boolean {
             return oldItem.name == newItem.name
         }
+
+        override fun createErrorView(parent: ViewGroup): View? {
+            return LayoutInflater.from(parent.context).inflate(R.layout.layout_error, parent, false)
+        }
+
+        override fun createEmptyView(parent: ViewGroup): View? {
+            return LayoutInflater.from(parent.context).inflate(R.layout.layout_empty, parent, false)
+        }
     }
 
     class CatHolder(view: View) : PowerHolder<Cat>(view) {
@@ -145,7 +168,7 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         }
 
         override fun onPartBind(t: Cat, isSelectMode: Boolean, payloads: MutableList<Any>) {
-            println("onPartBind:${t.name}")
+            println("onPartBind:${t.name},isSelect:${t.isSelected}")
             catState.isVisible = isSelectMode
             catState.isChecked = t.isSelected
         }

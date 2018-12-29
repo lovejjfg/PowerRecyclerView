@@ -26,11 +26,13 @@ import java.util.List;
 public class ModifyAsyncListDiffer<T> {
     private final ListUpdateCallback mUpdateCallback;
     private final ModifyAsyncDifferConfig<T> mConfig;
+    private DataPreparedCallback dataPreparedCallback;
 
     public ModifyAsyncListDiffer(@NonNull ListUpdateCallback listUpdateCallback,
-        @NonNull ModifyAsyncDifferConfig<T> config) {
+        @NonNull ModifyAsyncDifferConfig<T> config, DataPreparedCallback dataPreparedCallback) {
         mUpdateCallback = listUpdateCallback;
         mConfig = config;
+        this.dataPreparedCallback = dataPreparedCallback;
     }
 
     @Nullable
@@ -118,7 +120,12 @@ public class ModifyAsyncListDiffer<T> {
 
     private void latchList(@NonNull List<T> newList, @NonNull DiffUtil.DiffResult diffResult) {
         mList = newList;
+        dataPreparedCallback.onDataPrepared();
         // notify last, after list is updated
         diffResult.dispatchUpdatesTo(mUpdateCallback);
+    }
+
+    interface DataPreparedCallback {
+        void onDataPrepared();
     }
 }
