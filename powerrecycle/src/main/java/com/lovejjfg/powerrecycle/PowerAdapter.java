@@ -154,6 +154,21 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
+    public final boolean updateItem(@NonNull T item) {
+        return updateItem(item, null);
+    }
+
+    @Override
+    public boolean updateItem(@NonNull T item, @Nullable Object payload) {
+        int index = list.indexOf(item);
+        if (checkIllegalPosition(index)) {
+            return false;
+        }
+        notifyItemChanged(index, payload);
+        return true;
+    }
+
+    @Override
     public T getItem(int position) {
         return checkIllegalPosition(position) ? null : list.get(position);
     }

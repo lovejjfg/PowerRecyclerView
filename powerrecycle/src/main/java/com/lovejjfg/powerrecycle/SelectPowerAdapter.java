@@ -310,6 +310,42 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
     }
 
     @Override
+    public boolean updateItem(@NonNull Select item, @Nullable Object payload) {
+        int index = list.indexOf(item);
+        if (checkIllegalPosition(index)) {
+            return false;
+        }
+        if (!item.isSelected() && selectedList.contains(item)) {
+            selectedList.remove(item);
+            checkAndDispatchHolder(index, item);
+            if (payload != null) {
+                notifyItemChanged(index, payload);
+                notifyItemChanged(index, PAYLOAD_REFRESH_SELECT);
+            } else {
+                notifyItemChanged(index, PAYLOAD_REFRESH_SELECT);
+            }
+        } else if (item.isSelected() && !selectedList.contains(item)) {
+            item.setSelected(false);
+            if (checkMaxCount(item)) {
+                notifyItemChanged(index, payload);
+                return false;
+            }
+            item.setSelected(true);
+            selectedList.add(item);
+            checkAndDispatchHolder(index, item);
+            if (payload != null) {
+                notifyItemChanged(index, payload);
+                notifyItemChanged(index, PAYLOAD_REFRESH_SELECT);
+            } else {
+                notifyItemChanged(index, PAYLOAD_REFRESH_SELECT);
+            }
+        } else {
+            notifyItemChanged(index, payload);
+        }
+        return true;
+    }
+
+    @Override
     public Select removeItem(int position) {
         if (checkIllegalPosition(position)) {
             return null;

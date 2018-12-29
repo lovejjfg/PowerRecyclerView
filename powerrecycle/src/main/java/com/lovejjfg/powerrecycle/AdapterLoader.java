@@ -190,13 +190,27 @@ public interface AdapterLoader<T> {
      * remove the specified position in the list. If this method throw RecyclerView Exception when you delete the
      * last one.
      * consider about using the {@link com.lovejjfg.powerrecycle.manager.FixedLinearLayoutManager} or
-     * {@link FixedGridLayoutManager}
+     * {@link FixedGridLayoutManager} to avoid crash when you want to delete the lasted item.
      *
      * @param position he specified position to remove
      * @return if successful return the removed object,otherwise null
      */
     @Nullable
     T removeItem(int position);
+
+    /**
+     * call this method to update the item Holder's itemView.
+     *
+     * @return true find the item in current list, false otherwise.
+     */
+    boolean updateItem(@NonNull T item);
+
+    /**
+     * call this method to update the item Holder's itemView.
+     *
+     * @return true find the item in current list, false otherwise.
+     */
+    boolean updateItem(@NonNull T item, @Nullable Object payload);
 
     /**
      * get the data of list in this RecyclerView.

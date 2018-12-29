@@ -19,13 +19,16 @@ abstract class BaseSelectActivity<T : ISelect> : BaseActivity<T>() {
         selectAdapter = adapter as SelectPowerAdapter<T>
         selectAdapter.setOnItemSelectListener(object : OnItemSelectedListener<T> {
             override fun onNothingSelected() {
-                Log.e(this::class.java.simpleName, "onNothingSelected:...")
-                toast("一个都没有")
+                Log.e(this@BaseSelectActivity::class.java.simpleName, "onNothingSelected:...")
+//                toast("一个都没有")
             }
 
             override fun onItemSelectChange(holder: PowerHolder<T>, position: Int, isSelected: Boolean) {
-                Log.e(this::class.java.simpleName, "onItemSelectChange:$position;isSelected:$isSelected")
-                toast("选中：$position,total：${selectAdapter.selectedItems.size}")
+                Log.e(
+                    this@BaseSelectActivity::class.java.simpleName,
+                    "onItemSelectChange:$position;isSelected:$isSelected"
+                )
+//                toast("选中：$position,total：${selectAdapter.selectedItems.size}")
             }
         })
     }

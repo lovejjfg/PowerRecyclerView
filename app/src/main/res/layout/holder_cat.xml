@@ -14,7 +14,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="3:2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/catCheckState"
+        app:layout_constraintStart_toStartOf="parent"
         tools:src="@mipmap/cat1"/>
 
     <CheckedTextView
@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:gravity="center"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:textSize="14sp"
         android:visibility="gone"

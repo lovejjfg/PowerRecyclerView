@@ -4,7 +4,7 @@ import com.lovejjfg.powerrecycle.model.ISelect
 
 data class Cat(
     val src: Int,
-    val name: String,
+    var name: String,
     var selectedd: Boolean = false
 ) : ISelect {
     override fun isSelected(): Boolean {
