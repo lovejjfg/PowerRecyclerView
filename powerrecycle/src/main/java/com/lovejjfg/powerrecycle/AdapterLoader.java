@@ -303,8 +303,11 @@ public interface AdapterLoader<T> {
     boolean performLongClick(@NonNull PowerHolder<T> holder, int position, @NonNull T item);
 
     /**
-     * call this method after init RecyclerView(set LayoutManager)
+     * call this method after init RecyclerView (set LayoutManager at first).
+     * <p><b>Deprecated in v2.0.0 ,you just need to  call recyclerView.setAdapter() as usually. But you should
+     * always setup LayoutManager at first.</b></p>
      */
+    @Deprecated
     void attachRecyclerView(@NonNull RecyclerView recyclerView);
 
     /**

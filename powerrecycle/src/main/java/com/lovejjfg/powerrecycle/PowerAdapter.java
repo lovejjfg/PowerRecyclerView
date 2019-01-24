@@ -66,6 +66,8 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     private Runnable loadMoreAction;
 
+    private Runnable loadMoreErrorAction;
+
     public PowerAdapter() {
         list = new ArrayList<>();
     }
@@ -325,7 +327,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                     int currentPos = holder.getAdapterPosition();
                     //noinspection ConstantConditions
                     return !checkIllegalPosition(currentPos) && performLongClick(
-                        holder, holder.getAdapterPosition(), getItem(currentPos));
+                        holder, currentPos, getItem(currentPos));
                 }
             });
         }
@@ -399,12 +401,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (loadState == STATE_LOADING) {
             return;
         }
-        loadState = STATE_LOADING;
         //fix crash :https://github.com/lovejjfg/PowerRecyclerView/issues/2
         if (loadMoreAction == null) {
             loadMoreAction = new Runnable() {
                 @Override
                 public void run() {
+                    loadState = STATE_LOADING;
                     notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
                 }
             };
@@ -531,8 +533,22 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     public final void loadMoreError() {
-        loadState = STATE_ERROR;
-        notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
+        if (loadState == STATE_ERROR) {
+            return;
+        }
+        if (loadMoreErrorAction == null) {
+            loadMoreErrorAction = new Runnable() {
+                @Override
+                public void run() {
+                    loadState = STATE_ERROR;
+                    notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
+                }
+            };
+        }
+        if (recyclerView == null) {
+            throw new NullPointerException("Did you forget call attachRecyclerView() at first?");
+        }
+        recyclerView.post(loadMoreErrorAction);
     }
 
     @Override
@@ -544,9 +560,8 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public final void attachRecyclerView(@NonNull RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
-        recyclerView.setAdapter(this);
         recyclerView.addOnScrollListener(new LoadMoreScrollListener(recyclerView));
         final RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager == null) {
@@ -560,6 +575,11 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 }
             });
         }
+    }
+
+    @Override
+    public final void attachRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.setAdapter(this);
     }
 
     private int initSpanSize(int position, GridLayoutManager manager) {

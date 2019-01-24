@@ -93,8 +93,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     @Override
     public void setCurrentPositions(@NonNull int... positions) {
-        int length = positions.length;
-        if (length == 0) {
+        if (positions.length == 0) {
             return;
         }
         for (int position : positions) {
@@ -152,7 +151,7 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
                         int currentPos = holder.getAdapterPosition();
                         //noinspection ConstantConditions
                         return !checkIllegalPosition(currentPos)
-                            && performLongClick(holder, holder.getAdapterPosition(), getItem(currentPos));
+                            && performLongClick(holder, currentPos, getItem(currentPos));
                     }
                 });
             }
