@@ -50,7 +50,8 @@ class NormalActivity : AppCompatActivity() {
         //1.setLayoutManager
         mRecycleView.layoutManager = manager
         //2.setAdapter after setLayoutManager
-        adapter.attachRecyclerView(mRecycleView)
+//        adapter.attachRecyclerView(mRecycleView)
+        mRecycleView.adapter = adapter
         //3.setLoadMoreScrollListener
         adapter.setOnItemClickListener { v, p, item -> Log.e(TAG, "onItemClick: $p") }
         //4.setTotalCount

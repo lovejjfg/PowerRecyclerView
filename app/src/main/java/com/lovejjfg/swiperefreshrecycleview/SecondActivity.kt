@@ -82,7 +82,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
             .create()
         recycleView.addItemDecoration(decor)
         recycleView.itemAnimator = DefaultItemAnimator()
-        adapter.attachRecyclerView(recycleView)
+        recycleView.adapter = adapter
         refresh.setOnRefreshListener { recycleView.postDelayed(refreshAction, DEFAULT_TIME.toLong()) }
         ////初始化一个TouchHelperCallback
         //TouchHelperCallback callback = new TouchHelperCallback();
@@ -136,7 +136,10 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
         }
         Log.e("TAG", "onLoadMore: ")
         isRun = true
-        recycleView.postDelayed(loadMoreAction, DEFAULT_TIME.toLong())
+//        recycleView.postDelayed(loadMoreAction, DEFAULT_TIME.toLong())
+        adapter.loadMoreError()
+        adapter.loadMoreError()
+        isRun = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

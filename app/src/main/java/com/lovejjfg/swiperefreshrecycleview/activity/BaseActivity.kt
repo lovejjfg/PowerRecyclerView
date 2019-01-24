@@ -24,7 +24,7 @@ abstract class BaseActivity<T> : AppCompatActivity() {
         adapter = initAdapter()
         manager = initManager()
         recycleView.layoutManager = manager
-        adapter.attachRecyclerView(recycleView)
+        recycleView.adapter = adapter
         adapter.setOnItemClickListener { _, position, _ ->
             toast("点击了：$position")
         }
