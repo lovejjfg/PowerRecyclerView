@@ -310,6 +310,9 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     @Override
     public boolean updateItem(@NonNull Select item, @Nullable Object payload) {
+        if (!isSelectMode) {
+            return super.updateItem(item, payload);
+        }
         int index = list.indexOf(item);
         if (checkIllegalPosition(index)) {
             return false;
@@ -346,6 +349,9 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
 
     @Override
     public Select removeItem(int position) {
+        if (!isSelectMode) {
+            return super.removeItem(position);
+        }
         if (checkIllegalPosition(position)) {
             return null;
         }
