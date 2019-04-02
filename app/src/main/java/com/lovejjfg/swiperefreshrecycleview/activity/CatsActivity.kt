@@ -82,6 +82,9 @@ class CatsActivity : BaseSelectActivity<Cat>() {
             list.add(Cat(cats[i % cats.size], "黑猫$i"))
         }
         selectAdapter.setList(list)
+        selectAdapter.setOnItemClickListener { holder, position, item ->
+            selectAdapter.removeItem(position)
+        }
     }
 
     class CatsAdapter : SelectPowerAdapter<Cat>(ISelect.MULTIPLE_MODE, true) {

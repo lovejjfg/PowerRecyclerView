@@ -61,8 +61,36 @@
 * `onBottomViewHolderBind()` 修改，增加 listener
 * DefaultAnimator 废除，理论上不需要再设置这个解决相关crash。
 
+### V2.0.0
 
---------
+#### bugfix:
+1. 默认 loadingmore 的 loading 状态显示异常
+2. 调用 `updateLoadingMore()` 方法更新 加载更多 状态异常
+3. Kotlin 中，data class 使用时，选择状态异常
+
+
+#### `PowerAdapter` changes:
+1. `attachRecyclerView()` 废除，直接使用 `recyclerView.setAdapter()` 即可
+2. `setLoadMoreView()` 废除，新增 `createLoadMoreView()`
+3. `setEmptyView()` 废除，新增 `createEmptyView()`
+4. `setErrorView()` 废除，新增 `createErrorView()`
+5. 新增 `onViewHolderBind(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads)` 支持局部刷新
+6. itemClick itemLongClick 回调方法参数调整（view -> PowerHolder）
+7. 新增 `updateItem()` 用于刷新 Item.
+
+#### `SelectPowerAdapter` changes:
+0. 实现接口 `AdapterSelect`
+1. `OnItemSelectedListener.onItemSelectChange(@NonNull PowerHolder<S> holder, int position, boolean isSelected)`参数变化
+2. 新增 `setCurrentPos(int position)`  `setCurrentPositions(@NonNull int... position)` 两方法设置默认选中 `items`(**注意，setList() 方法目前并不会直接触发选择状态**)
+3. 新增 `getMaxSelectCount()` 和 `onReceivedMaxSelectCount(int count)` 控制最大选择数量
+4. 新增 `deleteSelectedItems()`  移除选中items
+5. 新增 `revertAllSelected()` 反选 items 反选上限受 `getMaxSelectCount()` 影响
+
+#### `PowerHolder` changes:
+1. 新增 `onPartBind(@NonNull T t, @NonNull List<Object> payloads)` 和 `onPartBind(@NonNull T t, boolean isSelectMode, @NonNull List<Object> payloads)` 用于局部数据刷新
+
+
+## Examples
 
 0、创建：（Adapter 继承 RefreshRecycleAdapter<T>）
 

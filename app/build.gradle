@@ -58,9 +58,9 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${SUPPORT_V7_VERSION}"
     implementation "com.android.support:recyclerview-v7:${SUPPORT_V7_VERSION}"
     implementation "com.andkulikov:transitionseverywhere:1.8.0"
-    implementation project(':powerrecycle')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.core:core-ktx:0.3'
+    implementation project(':powerrecycle')
 
 
 }

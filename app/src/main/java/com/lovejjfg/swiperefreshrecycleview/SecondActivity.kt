@@ -44,7 +44,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
     private var loadMoreAction: Runnable? = null
     private var isRun: Boolean = false
     private var enable = true
-    private var decor: SpacesItemDecoration? = null
+    private lateinit var decor: SpacesItemDecoration
     private var flag: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
