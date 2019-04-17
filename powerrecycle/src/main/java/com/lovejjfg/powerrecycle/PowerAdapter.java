@@ -42,7 +42,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
     public final List<T> list;
-    public boolean enableLoadMore;
+    public boolean enableLoadMore = true;
     private int totalCount;
     private int currentType;
     @LayoutRes
@@ -97,8 +97,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
 
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
-        enableLoadMore = totalCount > list.size();
-        notifyDataSetChanged();
     }
 
     public List<T> getList() {
@@ -112,7 +110,6 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         }
         clearList(false);
         appendList(data);
-        enableLoadMore = totalCount > data.size();
     }
 
     @Override
@@ -565,7 +562,11 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     public void enableLoadMore(boolean loadMore) {
         if (enableLoadMore != loadMore) {
             enableLoadMore = loadMore;
-            notifyDataSetChanged();
+            if (enableLoadMore) {
+                notifyItemInserted(getItemRealCount());
+            } else {
+                notifyItemRemoved(getItemRealCount());
+            }
         }
     }
 
