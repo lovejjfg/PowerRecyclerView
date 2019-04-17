@@ -56,6 +56,15 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     private RecyclerView recyclerView;
     private Runnable loadMoreAction;
     private Runnable loadMoreErrorAction;
+    private OnLoadMoreListener innerLoadMoreListener = new OnLoadMoreListener() {
+        @Override
+        public void onLoadMore() {
+            updateLoadingMore();
+            if (loadMoreListener != null) {
+                loadMoreListener.onLoadMore();
+            }
+        }
+    };
 
     public OnLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
@@ -308,9 +317,9 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
         try {
             if (loadMoreLayout != -1) {
-                onBottomViewHolderBind((AbsBottomViewHolder) holder, loadMoreListener, loadState);
+                onBottomViewHolderBind((AbsBottomViewHolder) holder, innerLoadMoreListener, loadState);
             } else {
-                ((NewBottomViewHolder) holder).onBind(loadMoreListener, loadState);
+                ((NewBottomViewHolder) holder).onBind(innerLoadMoreListener, loadState);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -367,12 +376,12 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         if (loadState == STATE_LOADING) {
             return;
         }
-        loadState = STATE_LOADING;
         //fix crash :https://github.com/lovejjfg/PowerRecyclerView/issues/2
         if (loadMoreAction == null) {
             loadMoreAction = new Runnable() {
                 @Override
                 public void run() {
+                    loadState = STATE_LOADING;
                     notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
                 }
             };
