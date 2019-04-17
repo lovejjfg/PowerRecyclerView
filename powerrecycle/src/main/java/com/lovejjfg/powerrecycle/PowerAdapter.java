@@ -55,6 +55,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     private int currentType;
     private RecyclerView recyclerView;
     private Runnable loadMoreAction;
+    private Runnable loadMoreErrorAction;
 
     public OnLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
@@ -485,8 +486,22 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     public final void loadMoreError() {
-        loadState = STATE_ERROR;
-        notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
+        if (loadState == STATE_ERROR) {
+            return;
+        }
+        if (loadMoreErrorAction == null) {
+            loadMoreErrorAction = new Runnable() {
+                @Override
+                public void run() {
+                    loadState = STATE_ERROR;
+                    notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
+                }
+            };
+        }
+        if (recyclerView == null) {
+            throw new NullPointerException("Did you forget call attachRecyclerView() at first?");
+        }
+        recyclerView.post(loadMoreErrorAction);
     }
 
     @Override
