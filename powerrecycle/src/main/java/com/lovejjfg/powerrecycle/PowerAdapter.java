@@ -96,7 +96,14 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     public void setTotalCount(int totalCount) {
+        setTotalCount(totalCount, false);
+    }
+
+    public void setTotalCount(int totalCount, boolean notify) {
         this.totalCount = totalCount;
+        if (notify && enableLoadMore) {
+            updateBottomItem();
+        }
     }
 
     public List<T> getList() {
