@@ -93,7 +93,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
         ////关联相关的RecycleView
         //itemTouchHelper.attachToRecyclerView(recycleView);
         adapter.setLoadMoreListener(this)
-        adapter.totalCount = 10
+        adapter.totalCount = 3
         refreshAction = Runnable {
             val list = ArrayList<TestBean>()
             for (i in 0..14) {
@@ -136,9 +136,9 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
         }
         Log.e("TAG", "onLoadMore: ")
         isRun = true
-//        recycleView.postDelayed(loadMoreAction, DEFAULT_TIME.toLong())
-        adapter.loadMoreError()
-        adapter.loadMoreError()
+        recycleView.postDelayed(loadMoreAction, DEFAULT_TIME.toLong())
+//        adapter.loadMoreError()
+//        adapter.loadMoreError()
         isRun = false
     }
 

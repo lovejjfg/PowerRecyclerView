@@ -55,7 +55,7 @@ public interface AdapterLoader<T> {
      * @param loadState the current state.
      */
     void onBottomViewHolderBind(@NonNull AbsBottomViewHolder holder,
-        @Nullable OnLoadMoreListener listener,
+        @NonNull OnLoadMoreListener listener,
         @LoadState int loadState);
 
     /**

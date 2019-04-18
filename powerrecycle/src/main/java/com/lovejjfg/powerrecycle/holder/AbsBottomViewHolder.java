@@ -17,5 +17,5 @@ public abstract class AbsBottomViewHolder extends PowerHolder {
         super(itemView, false);
     }
 
-    public abstract void onBind(@Nullable OnLoadMoreListener loadMoreListener, @LoadState int loadState);
+    public abstract void onBind(@NonNull OnLoadMoreListener loadMoreListener, @LoadState int loadState);
 }

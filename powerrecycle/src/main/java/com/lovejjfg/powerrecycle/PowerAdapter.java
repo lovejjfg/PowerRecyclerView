@@ -63,6 +63,16 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     private OnItemLongClickListener<T> longClickListener;
     @Nullable
     OnItemClickListener<T> clickListener;
+    @NonNull
+    private OnLoadMoreListener innerLoadMoreListener = new OnLoadMoreListener() {
+        @Override
+        public void onLoadMore() {
+            updateLoadingMore();
+            if (loadMoreListener != null) {
+                loadMoreListener.onLoadMore();
+            }
+        }
+    };
 
     private Runnable loadMoreAction;
 
@@ -257,7 +267,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public void onBottomViewHolderBind(@NonNull AbsBottomViewHolder holder, @Nullable OnLoadMoreListener listener,
+    public void onBottomViewHolderBind(@NonNull AbsBottomViewHolder holder, @NonNull OnLoadMoreListener listener,
         @LoadState int loadState) {
         holder.onBind(listener, loadState);
     }
@@ -341,9 +351,9 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
         try {
             if (loadMoreLayout != -1) {
-                onBottomViewHolderBind((AbsBottomViewHolder) holder, loadMoreListener, loadState);
+                onBottomViewHolderBind((AbsBottomViewHolder) holder, innerLoadMoreListener, loadState);
             } else {
-                ((NewBottomViewHolder) holder).onBind(loadMoreListener, loadState);
+                ((NewBottomViewHolder) holder).onBind(innerLoadMoreListener, loadState);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -407,7 +417,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 @Override
                 public void run() {
                     loadState = STATE_LOADING;
-                    notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
+                    updateBottomItem();
                 }
             };
         }
@@ -541,7 +551,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
                 @Override
                 public void run() {
                     loadState = STATE_ERROR;
-                    notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
+                    updateBottomItem();
                 }
             };
         }
@@ -557,6 +567,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
             enableLoadMore = loadMore;
             notifyDataSetChanged();
         }
+    }
+
+    private void updateBottomItem() {
+        notifyItemRangeChanged(getItemRealCount(), 1, PAYLOAD_REFRESH_BOTTOM);
     }
 
     @Override
