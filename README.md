@@ -67,6 +67,7 @@
 1. 默认 loadingmore 的 loading 状态显示异常
 2. 调用 `updateLoadingMore()` 方法更新 加载更多 状态异常
 3. Kotlin 中，data class 使用时，选择状态异常
+4. 加载更多刷新状态异常
 
 
 #### `PowerAdapter` changes:
