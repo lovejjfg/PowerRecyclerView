@@ -138,6 +138,8 @@ public interface AdapterLoader<T> {
      */
     void enableLoadMore(boolean loadMore);
 
+    boolean isEnableLoadMore();
+
     /**
      * Called by RecyclerView to display the error view.
      */

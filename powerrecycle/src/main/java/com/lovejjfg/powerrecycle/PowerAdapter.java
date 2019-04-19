@@ -42,7 +42,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
     public final List<T> list;
-    public boolean enableLoadMore = true;
+    private boolean enableLoadMore = true;
     private int totalCount;
     private int currentType;
     @LayoutRes
@@ -99,6 +99,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         setTotalCount(totalCount, false);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setTotalCount(int totalCount, boolean notify) {
         this.totalCount = totalCount;
         if (notify && enableLoadMore) {
@@ -425,7 +426,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
             };
         }
         if (recyclerView == null) {
-            throw new NullPointerException("Did you forget call attachRecyclerView() at first?");
+            throw new NullPointerException("Did you forget to call RecyclerView.setAdapter() at first?");
         }
         recyclerView.post(loadMoreAction);
     }
@@ -559,21 +560,30 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
             };
         }
         if (recyclerView == null) {
-            throw new NullPointerException("Did you forget call attachRecyclerView() at first?");
+            throw new NullPointerException("Did you forget to call RecyclerView.setAdapter() at first?");
         }
         recyclerView.post(loadMoreErrorAction);
     }
 
     @Override
     public void enableLoadMore(boolean loadMore) {
-        if (enableLoadMore != loadMore) {
-            enableLoadMore = loadMore;
-            if (enableLoadMore) {
-                notifyItemInserted(getItemRealCount());
-            } else {
-                notifyItemRemoved(getItemRealCount());
-            }
+        if (this.enableLoadMore == loadMore) {
+            return;
         }
+        this.enableLoadMore = loadMore;
+        if (getItemRealCount() <= 0) {
+            return;
+        }
+        if (this.enableLoadMore) {
+            notifyItemInserted(getItemRealCount());
+        } else {
+            notifyItemRemoved(getItemRealCount());
+        }
+    }
+
+    @Override
+    public boolean isEnableLoadMore() {
+        return enableLoadMore;
     }
 
     private void updateBottomItem() {

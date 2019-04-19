@@ -185,7 +185,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
             R.id.unselect_all -> adapter.resetAll()
             R.id.default_select -> adapter.isCancelAble = !adapter.isCancelAble
 
-            R.id.showNoData -> adapter.enableLoadMore(!adapter.enableLoadMore)
+            R.id.showNoData -> adapter.enableLoadMore(!adapter.isEnableLoadMore)
             R.id.error -> try {
                 val inflate = LayoutInflater.from(this).inflate(R.layout.layout_error, recycleView, false)
                 inflate.findViewById<View>(R.id.iv_empty)
