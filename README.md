@@ -78,6 +78,7 @@
 5. 新增 `onViewHolderBind(@NonNull PowerHolder<T> holder, int position, @NonNull List<Object> payloads)` 支持局部刷新
 6. itemClick itemLongClick 回调方法参数调整（view -> PowerHolder）
 7. 新增 `updateItem()` 用于刷新 Item.
+8. enableLoadMore 默认为 true 并且私有化
 
 #### `SelectPowerAdapter` changes:
 0. 实现接口 `AdapterSelect`
