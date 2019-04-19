@@ -243,26 +243,25 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     private PowerHolder<T> createBottomHolder(@NonNull ViewGroup parent) {
-        if (loadMoreLayout != -1) {
+        PowerHolder<T> bottomHolder;
+        View loadMoreView = createLoadMoreView(parent);
+        if (loadMoreView != null) {
+            bottomHolder = onBottomViewHolderCreate(loadMoreView);
+        } else if (loadMoreLayout != -1) {
             View view =
                 LayoutInflater.from(parent.getContext()).inflate(loadMoreLayout, parent, false);
-            AbsBottomViewHolder holder = onBottomViewHolderCreate(view);
-            if (holder == null) {
-                throw new RuntimeException(
-                    "You must impl onBottomViewHolderCreate() and return your own holder ");
-            }
-            return holder;
+            bottomHolder = onBottomViewHolderCreate(view);
         } else {
-            View loadMoreView = createLoadMoreView(parent);
-            if (loadMoreView != null) {
-                return onBottomViewHolderCreate(loadMoreView);
-            } else {
-                //noinspection unchecked
-                return new NewBottomViewHolder(
-                    LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.recycler_footer_new, parent, false));
-            }
+            //noinspection unchecked
+            bottomHolder = new NewBottomViewHolder(
+                LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recycler_footer_new, parent, false));
         }
+        if (bottomHolder == null) {
+            throw new RuntimeException(
+                "You must impl onBottomViewHolderCreate() and return your own holder ");
+        }
+        return bottomHolder;
     }
 
     @Override
@@ -354,10 +353,10 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
         }
         loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
         try {
-            if (loadMoreLayout != -1) {
-                onBottomViewHolderBind((AbsBottomViewHolder) holder, innerLoadMoreListener, loadState);
-            } else {
+            if (holder instanceof NewBottomViewHolder) {
                 ((NewBottomViewHolder) holder).onBind(innerLoadMoreListener, loadState);
+            } else {
+                onBottomViewHolderBind((AbsBottomViewHolder) holder, innerLoadMoreListener, loadState);
             }
         } catch (Exception e) {
             e.printStackTrace();
