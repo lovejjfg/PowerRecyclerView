@@ -74,13 +74,15 @@ import java.util.List;
  *
  * </pre>
  */
-@SuppressWarnings({ "unused", "unchecked", "JavadocReference" })
+@SuppressWarnings({ "unused", "unchecked", "JavadocReference", "WeakerAccess" })
 public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements AdapterLoader<T>,
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
     public final List<T> list;
     private boolean enableLoadMore = true;
     private int totalCount;
+    private int totalPage;
+    private int currentPage;
     private int currentType;
     @LayoutRes
     private int loadMoreLayout = RecyclerView.INVALID_TYPE;
@@ -133,14 +135,47 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     public void setTotalCount(int totalCount) {
+        checkNumber(totalCount, "totalCount");
         setTotalCount(totalCount, false);
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setTotalCount(int totalCount, boolean notify) {
+        checkNumber(totalCount, "totalCount");
         this.totalCount = totalCount;
         if (notify && enableLoadMore) {
             updateBottomItem();
+        }
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        checkNumber(currentPage, "currentPage");
+        this.currentPage = currentPage;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(int totalPage) {
+        checkNumber(totalPage, "totalPage");
+        setTotalPage(totalPage, false);
+    }
+
+    public void setTotalPage(int totalPage, boolean notify) {
+        checkNumber(totalPage, "totalPage");
+        this.totalPage = totalPage;
+        if (notify && enableLoadMore) {
+            updateBottomItem();
+        }
+    }
+
+    private void checkNumber(int currentPage, String name) {
+        if (currentPage < 0) {
+            throw new IllegalArgumentException(name + " must > 0");
         }
     }
 
