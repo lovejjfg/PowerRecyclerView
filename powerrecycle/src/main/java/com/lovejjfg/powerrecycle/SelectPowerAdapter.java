@@ -32,8 +32,57 @@ import java.util.Set;
  * {@link ISelect#SINGLE_MODE} or {@link ISelect#MULTIPLE_MODE}
  * and you can decide whether it's enableSelect the longTouch to jump to  SelectMode, you can call
  * {@link #longTouchSelectModeEnable(boolean)} to change ,by the way,the default was disable
+ * <pre>
+ *      // 1.set LayoutManager at first
+ *     recycleView.layoutManager = GridLayoutManager(this, 2)
+ *     adapter = CatsAdapter().apply {
+ *         // 2. set adapter to recyclerView
+ *         recycleView.adapter = this
+ *         // 允许加载更多 显示底部 item 默认为true
+ *         this.enableLoadMore(false)
+ *     }
+ *     // 3. set ItemClickListener
+ *     adapter.setOnItemClickListener { holder, position, item ->
+ *        // perform item click
+ *     }
+ *     // 4. set LoadMoreListener
+ *     adapter.setLoadMoreListener {
+ *            // start to load more
+ *     }
+ *     // 5. DaDaSelectAdapter setItemSelectListener
+ *     adapter.setOnItemSelectListener(object : OnItemSelectedListener<Cat> {
+ *         override fun onNothingSelected() {
+ *         }
+ *
+ *         override fun onItemSelectChange(holder: DaDaViewHolder<Cat>, position: Int, isSelected: Boolean) {
+ *         }
+ *     })
+ *
+ *     //DaDaSelectAdapter 创建
+ *     class CatsAdapter : AbsDaDaSelectAdapter<Cat>(ISelect.MULTIPLE_MODE, true) {
+ *         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): DaDaViewHolder<Cat> {
+ *             return CatHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_cat, parent, false))
+ *         }
+ *
+ *         override fun onViewHolderBind(holder: DaDaViewHolder<Cat>, position: Int) {
+ *             holder.onBind(list[position], isSelectMode)
+ *         }
+ *
+ *         override fun onViewHolderBind(holder: DaDaViewHolder<Cat>, position: Int, payloads: MutableList<Any>) {
+ *             holder.onPartBind(list[position], isSelectMode, payloads)
+ *         }
+ *
+ *         override fun getMaxSelectCount(): Int {
+ *             return 3
+ *         }
+ *
+ *         override fun onReceivedMaxSelectCount(count: Int) {
+ *             Log.e("CatsAdapter", "onReceivedMaxSelectCount:$count")
+ *         }
+ *     }
+ * </pre>
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAdapter<Select> implements
     AdapterSelect<Select> {
     private int currentMode;

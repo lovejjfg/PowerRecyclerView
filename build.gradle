@@ -37,6 +37,9 @@ allprojects { project ->
     repositories {
         jcenter()
         google()
+        maven {
+            url "https://dl.bintray.com/lovejjfg/maven"
+        }
     }
 }
 subprojects {
@@ -46,16 +49,8 @@ subprojects {
     }
 }
 subprojects { project ->
-////    repositories {
-////        jcenter()
-////        maven {
-////            url "https://oss.sonatype.org/content/repositories/snapshots"
-////        }
-////    }
     apply plugin: 'checkstyle'
     apply from: rootProject.getRootDir().getAbsolutePath() + "/util.gradle"
-//
-//
     task checkstyle(type: Checkstyle) {
         configFile file("${project.rootDir}/checkstyle.xml")
         source 'src'

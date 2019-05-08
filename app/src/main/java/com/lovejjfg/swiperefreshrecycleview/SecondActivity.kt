@@ -137,8 +137,6 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
         Log.e("TAG", "onLoadMore: ")
         isRun = true
         recycleView.postDelayed(loadMoreAction, DEFAULT_TIME.toLong())
-//        adapter.loadMoreError()
-//        adapter.loadMoreError()
         isRun = false
     }
 

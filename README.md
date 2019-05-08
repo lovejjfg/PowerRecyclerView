@@ -11,11 +11,11 @@
 
 ### 快速使用
 
-    implementation 'com.lovejjfg.powerrecycle:powerrecycle:lastedVersion'
+    implementation 'com.lovejjfg.powerrecycle:powerrecycle:latestVersion'
 
 因为 lib 已经依赖了 v7 和 `RecyclerView` ,当前版本是 27 ，可以移除。
 
-    implementation ('com.lovejjfg.powerrecycle:powerrecycle:1.2.6'){
+    implementation ('com.lovejjfg.powerrecycle:powerrecycle:latestVersion'){
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }

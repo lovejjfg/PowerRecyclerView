@@ -129,4 +129,6 @@ class CatsActivity : BaseSelectActivity<Cat>() {
             catState.text = t.name
         }
     }
+
+
 }

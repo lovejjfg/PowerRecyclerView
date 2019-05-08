@@ -50,12 +50,10 @@ class NormalActivity : AppCompatActivity() {
         //1.setLayoutManager
         mRecycleView.layoutManager = manager
         //2.setAdapter after setLayoutManager
-//        adapter.attachRecyclerView(mRecycleView)
+        //adapter.attachRecyclerView(mRecycleView)
         mRecycleView.adapter = adapter
+
         //3.setLoadMoreScrollListener
-        adapter.setOnItemClickListener { v, p, item -> Log.e(TAG, "onItemClick: $p") }
-        //4.setTotalCount
-        adapter.totalCount = 100
         adapter.setLoadMoreListener {
             if (isRun) {
                 Log.e("TAG", "onLoadMore:正在执行，直接返回。。。 ")
@@ -65,6 +63,8 @@ class NormalActivity : AppCompatActivity() {
             isRun = true
             mRecycleView.postDelayed(loadMoreAction, DEFAULT_TIME.toLong())
         }
+        //4.setClickListener
+        adapter.setOnItemClickListener { v, p, item -> Log.e(TAG, "onItemClick: $p") }
         //        mRecycleView.setOnRefreshListener(this);
         this.list = ArrayList()
         for (i in 0..29) {

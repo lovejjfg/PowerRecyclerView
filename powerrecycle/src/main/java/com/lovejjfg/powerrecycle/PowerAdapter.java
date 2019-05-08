@@ -34,10 +34,47 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Joe on 2016-03-11
- * Email: lovejjfg@gmail.com
+ * {@link PowerAdapter} is the adapter for {@link RecyclerView} ,You can use it to load more show error or empty
+ * view and so on. It warps some notify functions form {@link RecyclerView.Adapter} such as
+ * {@link PowerAdapter#removeItem(int)}
+ * {@link PowerAdapter#updateItem(Object)} and {@link PowerAdapter#insertItem(int, Object)}
+ * and so on.  If you'd like to have select function, you'd better to use {@link SelectPowerAdapter}.
+ * <pre>
+ *     // 1.set LayoutManager at first
+ *     recycleView.layoutManager = GridLayoutManager(this, 2)
+ *     adapter = CatsAdapter().apply {
+ *         // 2. set adapter to recyclerView
+ *         recycleView.adapter = this
+ *         // allow to show load more item default is true
+ *         this.enableLoadMore(false)
+ *     }
+ *     // 3. set ItemClickListener
+ *     adapter.setOnItemClickListener { holder, position, item ->
+ *        // perform item click
+ *     }
+ *     // 4. set LoadMoreListener
+ *     adapter.setLoadMoreListener {
+ *            // start to load more
+ *     }
+ *
+ *      //DaDaAdapter create
+ *     class CatsAdapter : PowerAdapter<Cat>() {
+ *         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): DaDaViewHolder<Cat> {
+ *             return CatHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_cat, parent, false))
+ *         }
+ *
+ *         override fun onViewHolderBind(holder: DaDaViewHolder<Cat>, position: Int) {
+ *             holder.onBind(list[position])
+ *         }
+ *
+ *         override fun onViewHolderBind(holder: DaDaViewHolder<Cat>, position: Int, payloads: MutableList<Any>) {
+ *             holder.onPartBind(list[position], payloads)
+ *         }
+ *     }
+ *
+ * </pre>
  */
-@SuppressWarnings({ "unused", "unchecked" })
+@SuppressWarnings({ "unused", "unchecked", "JavadocReference" })
 public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T>> implements AdapterLoader<T>,
     SpanSizeCallBack, TouchHelperCallback.ItemDragSwipeCallBack {
     private static final String TAG = PowerAdapter.class.getSimpleName();
@@ -566,23 +603,24 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public void enableLoadMore(boolean loadMore) {
+    public final void enableLoadMore(boolean loadMore) {
         if (this.enableLoadMore == loadMore) {
             return;
         }
         this.enableLoadMore = loadMore;
-        if (getItemRealCount() <= 0) {
+        int lastPosition = getItemRealCount();
+        if (lastPosition <= 0) {
             return;
         }
         if (this.enableLoadMore) {
-            notifyItemInserted(getItemRealCount());
+            notifyItemInserted(lastPosition);
         } else {
-            notifyItemRemoved(getItemRealCount());
+            notifyItemRemoved(lastPosition);
         }
     }
 
     @Override
-    public boolean isEnableLoadMore() {
+    public final boolean isEnableLoadMore() {
         return enableLoadMore;
     }
 
