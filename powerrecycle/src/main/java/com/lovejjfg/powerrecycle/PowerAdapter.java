@@ -217,7 +217,7 @@ public abstract class PowerAdapter<T> extends RecyclerView.Adapter<PowerHolder<T
     }
 
     @Override
-    public final void appendList(@NonNull List<T> data) {
+    public void appendList(@NonNull List<T> data) {
         if (data.isEmpty()) {
             return;
         }

@@ -83,7 +83,7 @@
 #### `SelectPowerAdapter` changes:
 0. 实现接口 `AdapterSelect`
 1. `OnItemSelectedListener.onItemSelectChange(@NonNull PowerHolder<S> holder, int position, boolean isSelected)`参数变化
-2. 新增 `setCurrentPos(int position)`  `setCurrentPositions(@NonNull int... position)` 两方法设置默认选中 `items`(**注意，setList() 方法目前并不会直接触发选择状态**)
+2. 新增 `setCurrentPos(int position)`  `setCurrentPositions(@NonNull int... position)` 两方法设置默认选中 `items`(~~注意，setList() 方法目前并不会直接触发选择状态~~)
 3. 新增 `getMaxSelectCount()` 和 `onReceivedMaxSelectCount(int count)` 控制最大选择数量
 4. 新增 `deleteSelectedItems()`  移除选中items
 5. 新增 `revertAllSelected()` 反选 items 反选上限受 `getMaxSelectCount()` 影响

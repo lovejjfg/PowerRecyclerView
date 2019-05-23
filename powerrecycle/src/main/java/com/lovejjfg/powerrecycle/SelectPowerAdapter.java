@@ -25,6 +25,7 @@ import com.lovejjfg.powerrecycle.holder.PowerHolder;
 import com.lovejjfg.powerrecycle.model.ISelect;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -101,6 +102,17 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         this.isCancelAble = currentMode != ISelect.SINGLE_MODE;
     }
 
+    @Override
+    public void appendList(@NonNull List<Select> data) {
+        super.appendList(data);
+        for (Select select : data) {
+            if (select.isSelected()) {
+                select.setSelected(false);
+                setCurrentPos(list.indexOf(select));
+            }
+        }
+    }
+
     @NonNull
     @Override
     public Set<Select> getSelectedItems() {
@@ -133,6 +145,9 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
             return;
         }
         Select select = list.get(position);
+        if (checkMaxCount(select)) {
+            return;
+        }
         handlePrePos(position);
         if (select(select)) {
             checkAndDispatchHolder(position, select);
@@ -146,12 +161,6 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
             return;
         }
         for (int position : positions) {
-            if (checkIllegalPosition(position)) {
-                continue;
-            }
-            if (checkMaxCount(list.get(position))) {
-                return;
-            }
             setCurrentPos(position);
         }
     }
@@ -439,18 +448,18 @@ public abstract class SelectPowerAdapter<Select extends ISelect> extends PowerAd
         if (item == null) {
             return false;
         }
-        if (item.isSelected()) {
+        if (item.isSelected() && selectedList.contains(item)) {
             return false;
         }
         item.setSelected(true);
-        return !selectedList.contains(item) && selectedList.add(item);
+        return selectedList.add(item);
     }
 
     private boolean unSelect(Select item) {
         if (item == null) {
             return false;
         }
-        if (!item.isSelected()) {
+        if (!item.isSelected() && !selectedList.contains(item)) {
             return false;
         }
         item.setSelected(false);

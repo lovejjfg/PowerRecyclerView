@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.lovejjfg.powerrecycle.AdapterSelect.OnItemSelectedListener
 import com.lovejjfg.powerrecycle.PowerAdapter
 import com.lovejjfg.powerrecycle.SelectPowerAdapter
 import com.lovejjfg.powerrecycle.holder.PowerHolder
@@ -27,7 +28,6 @@ class CatsActivity : BaseSelectActivity<Cat>() {
     override fun startRefresh() {
         recycleView.postDelayed(
             {
-                adapter.clearList()
                 initData()
                 refresh.isRefreshing = false
             }, 1000
@@ -79,12 +79,21 @@ class CatsActivity : BaseSelectActivity<Cat>() {
         val cats = arrayOf(R.mipmap.cat1, R.mipmap.cat2, R.mipmap.cat3, R.mipmap.cat4, R.mipmap.cat5, R.mipmap.cat6)
         val list = ArrayList<Cat>(30)
         for (i in 0..29) {
-            list.add(Cat(cats[i % cats.size], "黑猫$i"))
+            list.add(Cat(cats[i % cats.size], "黑猫$i", i % 2 == 0))
         }
         selectAdapter.setList(list)
         selectAdapter.setOnItemClickListener { holder, position, item ->
             selectAdapter.removeItem(position)
         }
+        selectAdapter.setOnItemSelectListener(object : OnItemSelectedListener<Cat?> {
+            override fun onNothingSelected() {
+                println("onNothingSelected...")
+            }
+
+            override fun onItemSelectChange(holder: PowerHolder<Cat?>, position: Int, isSelected: Boolean) {
+                println("onItemSelectChange:position$position;isSelected:$isSelected")
+            }
+        })
     }
 
     class CatsAdapter : SelectPowerAdapter<Cat>(ISelect.MULTIPLE_MODE, true) {
@@ -129,6 +138,4 @@ class CatsActivity : BaseSelectActivity<Cat>() {
             catState.text = t.name
         }
     }
-
-
 }
