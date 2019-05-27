@@ -39,7 +39,7 @@ import java.util.Set;
  *     adapter = CatsAdapter().apply {
  *         // 2. set adapter to recyclerView
  *         recycleView.adapter = this
- *         // 允许加载更多 显示底部 item 默认为true
+ *         // allow to show loadmore item default is true
  *         this.enableLoadMore(false)
  *     }
  *     // 3. set ItemClickListener
@@ -50,26 +50,26 @@ import java.util.Set;
  *     adapter.setLoadMoreListener {
  *            // start to load more
  *     }
- *     // 5. DaDaSelectAdapter setItemSelectListener
+ *     // 5. SelectPowerAdapter setItemSelectListener
  *     adapter.setOnItemSelectListener(object : OnItemSelectedListener<Cat> {
  *         override fun onNothingSelected() {
  *         }
  *
- *         override fun onItemSelectChange(holder: DaDaViewHolder<Cat>, position: Int, isSelected: Boolean) {
+ *         override fun onItemSelectChange(holder: PowerHolder<Cat>, position: Int, isSelected: Boolean) {
  *         }
  *     })
  *
- *     //DaDaSelectAdapter 创建
- *     class CatsAdapter : AbsDaDaSelectAdapter<Cat>(ISelect.MULTIPLE_MODE, true) {
- *         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): DaDaViewHolder<Cat> {
+ *     // create SelectPowerAdapter
+ *     class CatsAdapter : SelectPowerAdapter<Cat>(ISelect.MULTIPLE_MODE, true) {
+ *         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): PowerHolder<Cat> {
  *             return CatHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_cat, parent, false))
  *         }
  *
- *         override fun onViewHolderBind(holder: DaDaViewHolder<Cat>, position: Int) {
+ *         override fun onViewHolderBind(holder: PowerHolder<Cat>, position: Int) {
  *             holder.onBind(list[position], isSelectMode)
  *         }
  *
- *         override fun onViewHolderBind(holder: DaDaViewHolder<Cat>, position: Int, payloads: MutableList<Any>) {
+ *         override fun onViewHolderBind(holder: PowerHolder<Cat>, position: Int, payloads: MutableList<Any>) {
  *             holder.onPartBind(list[position], isSelectMode, payloads)
  *         }
  *

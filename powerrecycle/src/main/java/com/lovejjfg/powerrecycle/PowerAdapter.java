@@ -57,17 +57,17 @@ import java.util.List;
  *            // start to load more
  *     }
  *
- *      //DaDaAdapter create
+ *      //PowerAdapter create
  *     class CatsAdapter : PowerAdapter<Cat>() {
- *         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): DaDaViewHolder<Cat> {
+ *         override fun onViewHolderCreate(parent: ViewGroup, viewType: Int): PowerHolder<Cat> {
  *             return CatHolder(LayoutInflater.from(parent.context).inflate(R.layout.holder_cat, parent, false))
  *         }
  *
- *         override fun onViewHolderBind(holder: DaDaViewHolder<Cat>, position: Int) {
+ *         override fun onViewHolderBind(holder: PowerHolder<Cat>, position: Int) {
  *             holder.onBind(list[position])
  *         }
  *
- *         override fun onViewHolderBind(holder: DaDaViewHolder<Cat>, position: Int, payloads: MutableList<Any>) {
+ *         override fun onViewHolderBind(holder: PowerHolder<Cat>, position: Int, payloads: MutableList<Any>) {
  *             holder.onPartBind(list[position], payloads)
  *         }
  *     }
