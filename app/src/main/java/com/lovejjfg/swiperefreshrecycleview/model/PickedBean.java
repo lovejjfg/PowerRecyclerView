@@ -16,7 +16,7 @@
 
 package com.lovejjfg.swiperefreshrecycleview.model;
 
-import com.lovejjfg.powerrecycle.model.ISelect;
+import com.lovejjfg.powerrecyclerx.model.ISelect;
 
 /**
  * Created by Joe on 2016/10/14.

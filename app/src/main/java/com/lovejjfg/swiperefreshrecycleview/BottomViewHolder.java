@@ -16,11 +16,11 @@
 
 package com.lovejjfg.swiperefreshrecycleview;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
-import com.lovejjfg.powerrecycle.AdapterLoader;
-import com.lovejjfg.powerrecycle.OnLoadMoreListener;
-import com.lovejjfg.powerrecycle.holder.AbsBottomViewHolder;
+import com.lovejjfg.powerrecyclerx.AbsBottomViewHolder;
+import com.lovejjfg.powerrecyclerx.AdapterLoader;
+import com.lovejjfg.powerrecyclerx.OnLoadMoreListener;
 
 /**
  * Created by Joe on 2016/12/5.

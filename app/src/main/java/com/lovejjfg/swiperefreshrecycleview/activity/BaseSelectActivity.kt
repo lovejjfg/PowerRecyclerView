@@ -2,11 +2,11 @@ package com.lovejjfg.swiperefreshrecycleview.activity
 
 import android.os.Bundle
 import android.util.Log
-import androidx.core.widget.toast
-import com.lovejjfg.powerrecycle.AdapterSelect.OnItemSelectedListener
-import com.lovejjfg.powerrecycle.SelectPowerAdapter
-import com.lovejjfg.powerrecycle.holder.PowerHolder
-import com.lovejjfg.powerrecycle.model.ISelect
+import com.lovejjfg.powerrecyclerx.AdapterSelect.OnItemSelectedListener
+import com.lovejjfg.powerrecyclerx.PowerHolder
+import com.lovejjfg.powerrecyclerx.SelectPowerAdapter
+import com.lovejjfg.powerrecyclerx.model.ISelect
+import com.lovejjfg.swiperefreshrecycleview.toast
 
 /**
  * Created by joe on 2018/11/20.

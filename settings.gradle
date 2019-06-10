@@ -1,1 +1,1 @@
-include ':app', ':powerrecycle'
+include ':app', ':powerrecyclerx'

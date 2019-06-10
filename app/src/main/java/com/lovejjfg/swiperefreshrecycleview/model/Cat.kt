@@ -1,6 +1,6 @@
 package com.lovejjfg.swiperefreshrecycleview.model
 
-import com.lovejjfg.powerrecycle.model.ISelect
+import com.lovejjfg.powerrecyclerx.model.ISelect
 
 data class Cat(
     val src: Int,

@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 
-package com.lovejjfg.swiperefreshrecycleview.model;
-
-import com.lovejjfg.powerrecyclerx.model.AbsSelect;
+package com.lovejjfg.powerrecyclerx;
 
 /**
- * Created by Joe on 2016/11/17.
+ * Created by Joe on 2017/6/3..
  * Email lovejjfg@gmail.com
  */
 
-public class TestBean extends AbsSelect {
-    private String name;
-
-    public TestBean(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+public interface SpanSizeCallBack {
+    int getSpanSize(int position);
 }

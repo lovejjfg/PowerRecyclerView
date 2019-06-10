@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package com.lovejjfg.swiperefreshrecycleview.model;
+package com.lovejjfg.powerrecyclerx;
 
-import com.lovejjfg.powerrecyclerx.model.AbsSelect;
+import androidx.annotation.IntDef;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.PARAMETER;
 
 /**
- * Created by Joe on 2016/11/17.
+ * Created by Joe on 2016/12/1.
  * Email lovejjfg@gmail.com
  */
-
-public class TestBean extends AbsSelect {
-    private String name;
-
-    public TestBean(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+@IntDef(flag = true, value = {
+    AdapterLoader.STATE_LOADING,
+    AdapterLoader.STATE_LASTED,
+    AdapterLoader.STATE_ERROR
+})
+@Target({ PARAMETER, FIELD })
+@Retention(RetentionPolicy.SOURCE)
+public @interface LoadState {
 }

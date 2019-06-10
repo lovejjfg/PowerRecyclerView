@@ -18,20 +18,19 @@ package com.lovejjfg.swiperefreshrecycleview
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import com.lovejjfg.powerrecycle.AdapterSelect
-import com.lovejjfg.powerrecycle.OnLoadMoreListener
-import com.lovejjfg.powerrecycle.SelectPowerAdapter
-import com.lovejjfg.powerrecycle.SpacesItemDecoration
-import com.lovejjfg.powerrecycle.holder.PowerHolder
-import com.lovejjfg.powerrecycle.model.ISelect
+import androidx.appcompat.app.AppCompatActivity
+import com.lovejjfg.powerrecyclerx.AdapterSelect
+import com.lovejjfg.powerrecyclerx.OnLoadMoreListener
+import com.lovejjfg.powerrecyclerx.PowerHolder
+import com.lovejjfg.powerrecyclerx.SelectPowerAdapter
+import com.lovejjfg.powerrecyclerx.SpacesItemDecoration
+import com.lovejjfg.powerrecyclerx.model.ISelect
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean
 import kotlinx.android.synthetic.main.activity_list.recycleView
 import kotlinx.android.synthetic.main.activity_list.refresh
@@ -73,7 +72,7 @@ class SecondActivity : AppCompatActivity(), OnLoadMoreListener {
         adapter.setOnItemClickListener { _, position, _ -> showToast("click：$position") }
         adapter.updateSelectMode(false)
         //        HashSet<TestBean> selectedBeans = adapter.getSelectedBeans();
-        val manager = GridLayoutManager(this, 1)
+        val manager = androidx.recyclerview.widget.GridLayoutManager(this, 1)
         recycleView.layoutManager = manager
         //recycleView.setHasFixedSize(true);
 

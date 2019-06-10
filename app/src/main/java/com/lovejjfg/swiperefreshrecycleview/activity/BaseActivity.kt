@@ -1,12 +1,12 @@
 package com.lovejjfg.swiperefreshrecycleview.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView.LayoutManager
 import android.view.MenuItem
-import androidx.core.widget.toast
-import com.lovejjfg.powerrecycle.PowerAdapter
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.lovejjfg.powerrecyclerx.PowerAdapter
 import com.lovejjfg.swiperefreshrecycleview.R
+import com.lovejjfg.swiperefreshrecycleview.toast
 import kotlinx.android.synthetic.main.activity_list.recycleView
 import kotlinx.android.synthetic.main.activity_list.refresh
 import kotlinx.android.synthetic.main.activity_list.toolbar

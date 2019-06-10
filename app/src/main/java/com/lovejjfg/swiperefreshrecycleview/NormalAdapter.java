@@ -16,17 +16,17 @@
 
 package com.lovejjfg.swiperefreshrecycleview;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import com.lovejjfg.powerrecycle.PowerAdapter;
-import com.lovejjfg.powerrecycle.holder.PowerHolder;
+import androidx.recyclerview.widget.RecyclerView;
+import com.lovejjfg.powerrecyclerx.PowerAdapter;
+import com.lovejjfg.powerrecyclerx.PowerHolder;
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.TransitionManager;

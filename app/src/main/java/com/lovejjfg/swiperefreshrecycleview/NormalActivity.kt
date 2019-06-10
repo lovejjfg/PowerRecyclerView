@@ -17,17 +17,17 @@
 package com.lovejjfg.swiperefreshrecycleview
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import com.lovejjfg.swiperefreshrecycleview.model.TestBean
 import java.util.ArrayList
 
 class NormalActivity : AppCompatActivity() {
     //@BindView(R.id.recyclerview)
-    lateinit var mRecycleView: RecyclerView
+    lateinit var mRecycleView: androidx.recyclerview.widget.RecyclerView
     //@BindView(R.id.toolbar)
     lateinit var mToolBar: Toolbar
     lateinit var adapter: NormalAdapter

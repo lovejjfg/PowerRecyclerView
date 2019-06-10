@@ -18,7 +18,7 @@ package com.lovejjfg.swiperefreshrecycleview
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import com.lovejjfg.swiperefreshrecycleview.activity.CatsActivity
 import kotlinx.android.synthetic.main.activity_guide.btCats

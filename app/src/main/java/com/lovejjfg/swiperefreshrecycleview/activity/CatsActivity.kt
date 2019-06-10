@@ -1,18 +1,18 @@
 package com.lovejjfg.swiperefreshrecycleview.activity
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView.LayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.lovejjfg.powerrecycle.AdapterSelect.OnItemSelectedListener
-import com.lovejjfg.powerrecycle.PowerAdapter
-import com.lovejjfg.powerrecycle.SelectPowerAdapter
-import com.lovejjfg.powerrecycle.holder.PowerHolder
-import com.lovejjfg.powerrecycle.model.ISelect
+import com.lovejjfg.powerrecyclerx.AdapterSelect.OnItemSelectedListener
+import com.lovejjfg.powerrecyclerx.PowerAdapter
+import com.lovejjfg.powerrecyclerx.PowerHolder
+import com.lovejjfg.powerrecyclerx.SelectPowerAdapter
+import com.lovejjfg.powerrecyclerx.model.ISelect
 import com.lovejjfg.swiperefreshrecycleview.R
 import com.lovejjfg.swiperefreshrecycleview.model.Cat
 import kotlinx.android.synthetic.main.activity_list.recycleView
@@ -35,7 +35,7 @@ class CatsActivity : BaseSelectActivity<Cat>() {
     }
 
     override fun initManager(): LayoutManager {
-        return GridLayoutManager(this, 2)
+        return androidx.recyclerview.widget.GridLayoutManager(this, 2)
     }
 
     override fun initAdapter(): PowerAdapter<Cat> {
